@@ -1,1 +1,4 @@
-frontend-dashboard
+# **Plani**
+###Run
+npm install 
+npm run serve
