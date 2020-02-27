@@ -23,6 +23,3 @@ yarn-error.log*
 
 #binaries
 package-lock.json
-
-#assets
-/src/assets/
