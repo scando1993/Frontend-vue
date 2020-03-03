@@ -1,0 +1,576 @@
+<template>
+    <div>
+        <calendar-nav-bar/>
+        <calendar_task_view v-if="showTaskView"></calendar_task_view>
+        <div v-else class="main-content">
+
+
+            <div class="wrapper">
+                <div class="no-card-shadow container " id="card-drag-area-1" v-dragula="colOne" bag="first-bag">
+                    <div class="task chip-primary mr-1">
+                        <div class="task-body">
+                            <span class="task-text">Primary chip</span>
+                            <div class="avatar ml-auto">
+                                <div class="avatar-content">
+                                    LD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task chip-success mr-1">
+                        <div class="task-body">
+                            <span class="task-text">Avatar Text</span>
+                            <div class="avatar ml-auto">
+                                <div class="avatar-content">
+                                    LD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task chip-info mr-1">
+                        <div class="task-body">
+                            <span class="task-text">Avatar Icon</span>
+                            <div class="avatar ml-auto">
+                                <span><i class="bx bx-user"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task chip-warning mr-1">
+                        <div class="task-body">
+                            <span class="task-text">Avatar Image</span>
+                            <div class="avatar ml-auto">
+                                LI
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <b-row>
+                <b-col lg="9" xl="9" md="8" sm="11">
+                    <b-card>
+                        <div class="d-flex">
+                            <calendar style="height: 800px;"
+                                      class="w-100"
+                                      ref="tuiCalendar"
+                                      :calendars="calendarList"
+                                      :schedules="scheduleList"
+                                      :view="view"
+                                      :taskView="taskView"
+                                      :scheduleView="scheduleView"
+                                      :theme="theme"
+                                      :week="week"
+                                      :month="month"
+                                      :timezones="timezones"
+                                      :disableDblClick="disableDblClick"
+                                      :isReadOnly="isReadOnly"
+                                      :template="template"
+                                      :useCreationPopup="useCreationPopup"
+                                      :useDetailPopup="useDetailPopup"
+                                      @afterRenderSchedule="onAfterRenderSchedule"
+                                      @beforeCreateSchedule="onBeforeCreateSchedule"
+                                      @beforeDeleteSchedule="onBeforeDeleteSchedule"
+                                      @beforeUpdateSchedule="onBeforeUpdateSchedule"
+                                      @clickDayname="onClickDayname"
+                                      @clickSchedule="onClickSchedule"
+                                      @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
+                            />
+                            <l-map
+                                v-show="showMap"
+                                style="height: 800px; width: 100%"
+                                :zoom="mapConfigurations.zoom"
+                                :center="mapConfigurations.center"
+                                @update:zoom="zoomUpdated"
+                                @update:center="centerUpdated"
+                                @update:bounds="boundsUpdated"
+                                >
+                                    <l-tile-layer :url="mapConfigurations.url"></l-tile-layer>
+                                </l-map>
+                        </div>
+                        <div>
+
+                        </div>
+                    </b-card>
+                </b-col>
+                <b-col lg="2" xl="2" md="3" sm="11">
+                    <b-row class="d-flex flex-column">
+                        <b-card class="box-shadow-1 card flex-fill">
+                            <b-card-header class="align-items-center d-flex">
+                                <h4 class="card-title flex-grow-1">
+                                    Expiradas
+                                </h4>
+                                <b-dropdown
+                                        id="dropdown-2"
+                                        left
+                                        class="m-md-2  ml-auto"
+                                        toggle-class="text-decoration-none"
+                                        no-caret
+                                        variant="button"
+                                >
+                                    <template slot="button-content">
+                                        <i class="i-Bell text-muted header-icon"></i>
+                                        <span>New order received</span>
+                                    </template>
+                                    <div class="dropdown-item d-flex">
+                                        <div class="notification-icon">
+                                            <i class="i-Speach-Bubble-6 text-primary mr-1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item d-flex">
+                                        <div class="notification-icon">
+                                            <i class="i-Receipt-3 text-success mr-1"></i>
+                                        </div>
+                                        <div class="notification-details flex-grow-1">
+                                            <p class="m-0 d-flex align-items-center">
+                                                <span>New order received</span>
+                                                <!-- <span class="badge badge-pill badge-success ml-1 mr-1">new</span> -->
+                                                <span class="flex-grow-1"></span>
+                                                <span class="text-small text-muted ml-auto">2 hours ago</span>
+                                            </p>
+                                            <p class="text-small text-muted m-0">1 Headphone, 3 iPhone x</p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item d-flex">
+                                        <div class="notification-icon">
+                                            <i class="i-Empty-Box text-danger mr-1"></i>
+                                        </div>
+                                        <div class="notification-details flex-grow-1">
+                                            <p class="m-0 d-flex align-items-center">
+                                                <span>Product out of stock</span>
+                                                <!-- <span class="badge badge-pill badge-danger ml-1 mr-1">3</span> -->
+                                                <span class="flex-grow-1"></span>
+                                                <span class="text-small text-muted ml-auto"
+                                                >10 hours ago</span
+                                                >
+                                            </p>
+                                            <p class="text-small text-muted m-0">
+                                                Headphone E67, R98, XL90, Q77
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-item d-flex">
+                                        <div class="notification-icon">
+                                            <i class="i-Data-Power text-success mr-1"></i>
+                                        </div>
+                                        <div class="notification-details flex-grow-1">
+                                            <p class="m-0 d-flex align-items-center">
+                                                <span>Server Up!</span>
+                                                <!-- <span class="badge badge-pill badge-success ml-1 mr-1">3</span> -->
+                                                <span class="flex-grow-1"></span>
+                                                <span class="text-small text-muted ml-auto"
+                                                >14 hours ago</span
+                                                >
+                                            </p>
+                                            <p class="text-small text-muted m-0">
+                                                Server rebooted successfully
+                                            </p>
+                                        </div>
+                                    </div>
+                                </b-dropdown>
+                            </b-card-header>
+                            <b-card-body >
+
+                                <div class="card-body wrapper" >
+                                    <ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula="colTwo" bag="first-bag">
+                                        <div class="task chip-primary mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Primary chip</span>
+                                                <div class="avatar ml-auto">
+                                                    <div class="avatar-content">
+                                                        LD
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-success mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Text</span>
+                                                <div class="avatar ml-auto">
+                                                    <div class="avatar-content">
+                                                        LD
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-info mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Icon</span>
+                                                <div class="avatar ml-auto">
+                                                    <span><i class="bx bx-user"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-warning mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Image</span>
+                                                <div class="avatar ml-auto">
+                                                    LI
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+
+                            </b-card-body>
+                        </b-card>
+                    </b-row>
+                    <b-row class="d-flex flex-column">
+                        <b-card class="box-shadow-1 card flex-fill">
+                            <b-card-header class="align-items-center d-flex">
+                                <h4 class="card-title flex-grow-1">
+                                    Pendientes
+                                </h4>
+                            </b-card-header>
+                            <b-card-body>
+                                <div class="card-body wrapper">
+                                    <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula="colThree" bag="first-bag">
+                                        <div class="task chip-primary mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Primary chip</span>
+                                                <div class="avatar ml-auto">
+                                                    <div class="avatar-content">
+                                                        LD
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-success mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Text</span>
+                                                <div class="avatar ml-auto">
+                                                    <div class="avatar-content">
+                                                        LD
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-info mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Icon</span>
+                                                <div class="avatar ml-auto">
+                                                    <span><i class="bx bx-user"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="task chip-warning mr-1">
+                                            <div class="task-body">
+                                                <span class="task-text">Avatar Image</span>
+                                                <div class="avatar ml-auto">
+                                                    LI
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+
+                            </b-card-body>
+                        </b-card>
+                    </b-row>
+                </b-col>
+            </b-row>
+
+
+
+
+            <b-modal id="newTask_modal" title="Agregar nueva tarea" centered size="lg" >
+                <div>
+                    <b-row>
+                        <b-col md="7">
+                            <b-form-group
+                                label="Categoria de tarea"
+                            >
+                                <b-form-select v-model="newTaskForm.type" :options="taskOptions"></b-form-select>
+                            </b-form-group>
+
+                            <b-form-group
+                                    label="Actividad"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.activity" ></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Ubicación"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.address" ></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Asignar vendedr"
+                            >
+                                <b-form-select v-model="newTaskForm.vendor" :options="vendorOptions"></b-form-select>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Notas"
+                            >
+                                <b-form-textarea v-model="newTaskForm.notes"></b-form-textarea>
+                            </b-form-group>
+
+                        </b-col>
+                        <b-col md="5">
+                            <b-form-group
+                                    label="Cliente"
+                            >
+                                <b-form-select v-model="newTaskForm.client" :options="clientOptions"></b-form-select>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Fecha"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.date" ></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Hora"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.startTime" ></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Recordatorio"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.reminder" ></b-form-input>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Rutina"
+                            >
+                                <b-form-select v-model="newTaskForm.routine" :options="routineOptions"></b-form-select>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+                </div>
+            </b-modal>
+        </div>
+
+
+    </div>
+</template>
+
+<script>
+    import { CalendarVerticalTopbar } from './calendar.vertical.topbar';
+    import { Calendar } from '@toast-ui/vue-calendar';
+    import 'tui-calendar/dist/tui-calendar.css';
+
+    import 'tui-date-picker/dist/tui-date-picker.css';
+    import 'tui-time-picker/dist/tui-time-picker.css';
+    import CalendarNavBar from "./calendarNavbar/calendarNavBar";
+    import {mapActions, mapGetters} from 'vuex';
+    import {LMap, LTileLayer, LMarker } from 'vue2-leaflet';
+    import  {calendarList,
+        scheduleList,
+        view,
+        taskView,
+        scheduleView,
+        theme,
+        week,
+        month,
+        timezones,
+        disableDblClick,
+        isReadOnly,
+        template,
+        useCreationPopup,
+        useDetailPopup} from "./data/calendarConfiguration";
+    import {taskCategories, vendors, clients, routines} from "./data/formData";
+    import Calendar_task_view from "./calendar.tasks.view";
+
+    export default {
+        metaInfo: {
+            // if no subcomponents specify a metaInfo.title, this title will be used
+            title: "Calendar v1"
+        },
+        name: "calendar.dashboard.v1",
+        components: {
+            Calendar_task_view,
+            CalendarNavBar,
+            Calendar,
+            'calendar': Calendar,
+            LMap,
+            LTileLayer,
+            LMarker
+        },
+        computed: {
+            ...mapGetters(["getSelectedMapView", "getSelectedComponentView", "getShowNewTaskModal", "getSearchText"]),
+            showMap() {
+                return this.getSelectedComponentView === "Map";
+            },
+            showTaskView() {
+                return this.getSelectedComponentView === 'Tasks';
+            }
+
+        },
+        data() {
+            return {
+                timeNow: (new Date()).toString(),
+                taskOptions: taskCategories,
+                vendorOptions: vendors,
+                clientOptions: clients,
+                routineOptions: routines,
+                mapConfigurations: {
+                    currentZoom: 11.5,
+                    url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                    zoom: 6,
+                    center: [ -1.224882, -78.601685],
+                    bounds: null,
+                },
+                newTaskForm: {
+                    type: "",
+                    activity: "",
+                    address: "",
+                    vendor: "",
+                    notes: "",
+                    client: "",
+                    date: "",
+                    startTime: "",
+                    durationTime: "",
+                    reminder: "",
+                    routine: ""
+                },
+                tuiCalendar: "",
+                calendarList,
+                scheduleList,
+                view,
+                taskView,
+                scheduleView,
+                theme,
+                week,
+                month,
+                timezones,
+                disableDblClick,
+                isReadOnly,
+                template,
+                useCreationPopup,
+                useDetailPopup
+
+            }
+        },
+        mounted() {
+            this.setTuiCalendarRef();
+            // this.view = this. this.getSelectedMapView();
+            this.$store.subscribe((mutation, state) => {
+                if (mutation.type === 'setSelectedMapView') {
+                    setTimeout(() => {
+                        this.setTuiCalendarRef();
+                        // var options = this.tuiCalendar.invoke("getOptions");
+                        this.tuiCalendar.invoke("changeView", this.getSelectedMapView);
+                    }, 0 );
+                }
+                else if(mutation.type === 'setShowNewTaskModal') {
+                    if(mutation.payload){
+                        this.$bvModal.show("newTask_modal");
+                    }
+                    else {
+                        this.$bvModal.hide("newTask_modal");
+                    }
+                }
+            });
+        },
+        methods: {
+            // map functions
+            zoomUpdated (zoom) {
+                this.mapConfigurations.zoom = zoom;
+            },
+            centerUpdated (center) {
+                this.mapConfigurations.center = center;
+            },
+            boundsUpdated (bounds) {
+                this.mapConfigurations.bounds = bounds;
+            },
+            //
+            setTuiCalendarRef() {
+                this.tuiCalendar = this.$refs.tuiCalendar;
+            },
+            findCalendar(id) {
+                var found;
+                console.log(id);
+                console.log(this.CalendarList);
+                this.calendarList.forEach(function (calendar) {
+                    if (calendar.id === id) {
+                        found = calendar;
+                    }
+                });
+
+                return found || this.CalendarList[0];
+            },
+            saveNewSchedule(scheduleData) {
+                var calendar = scheduleData.calendar || this.findCalendar(scheduleData.calendarId);
+                var schedule = {
+                    id: String(this.scheduleList.length + 1),
+                    title: scheduleData.title,
+                    isAllDay: scheduleData.isAllDay,
+                    start: scheduleData.start,
+                    end: scheduleData.end,
+                    category: scheduleData.isAllDay ? 'allday' : 'time',
+                    dueDateClass: '',
+                    color: calendar.color,
+                    bgColor: calendar.bgColor,
+                    dragBgColor: calendar.bgColor,
+                    borderColor: calendar.borderColor,
+                    location: scheduleData.location,
+                    raw: {
+                        class: scheduleData.raw['class']
+                    },
+                    state: scheduleData.state
+                };
+                if (calendar) {
+                    schedule.calendarId = calendar.id;
+                    schedule.color = calendar.color;
+                    schedule.bgColor = calendar.bgColor;
+                    schedule.borderColor = calendar.borderColor;
+                }
+
+                this.tuiCalendar.invoke('createSchedules',[schedule]);
+
+                this.refreshScheduleVisibility();
+            },
+            refreshScheduleVisibility() {
+                var calendarElements = Array.prototype.slice.call(document.querySelectorAll('#calendarList input'));
+
+                this.calendarList.forEach((calendar) => {
+                    this.tuiCalendar.invoke("toggleSchedules", [calendar.id, !calendar.checked, false]);
+                });
+
+                this.tuiCalendar.invoke("render", true);
+                calendarElements.forEach(function (input) {
+                    var span = input.nextElementSibling;
+                    span.style.backgroundColor = input.checked ? span.style.borderColor : 'transparent';
+                });
+            },
+            onAfterRenderSchedule(e) {
+                // implement your code
+                console.log("AfterRender", e);
+            },
+            onBeforeCreateSchedule(e) {
+                // implement your code
+                console.log("BeforeCreate", e);
+                this.saveNewSchedule(e);
+            },
+            onBeforeDeleteSchedule(e) {
+                // implement your code
+                console.log("En el delete");
+                console.log('beforeDeleteSchedule', e);
+                this.tuiCalendar.invoke("deleteSchedule", e.schedule.id, e.schedule.calendarId);
+            },
+            onBeforeUpdateSchedule(e) {
+                // implement your code
+                console.log("Update", e);
+                e.schedule.start = e.start;
+                e.schedule.end = e.end;
+                if(e.changes.title)
+                    e.schedule.title = e.changes.title;
+                if(e.changes.location)
+                    e.schedule.location = e.changes.location;
+                if(e.changes.state)
+                    e.schedule.state = e.changes.state;
+                this.tuiCalendar.invoke("updateSchedule", e.schedule.id, e.schedule.calendarId, e.schedule);
+            },
+            onClickDayname(e) {
+                // implement your code
+            },
+            onClickSchedule(e) {
+                // implement your code
+            },
+            onClickTimezonesCollapseBtn(e) {
+                // implement your code
+            },
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>
