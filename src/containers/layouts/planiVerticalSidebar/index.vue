@@ -1,5 +1,5 @@
 <template>
-    <div class="app-admin-wrap layout-sidebar-vertical clearfix sidebar-full">
+    <div class="app-admin-wrap layout-plani-sidebar-vertical clearfix sidebar-full">
         <planiVerticalSidebar />
         <main>
             <div class="main-content-wrap mt-0 bg-off-white"
