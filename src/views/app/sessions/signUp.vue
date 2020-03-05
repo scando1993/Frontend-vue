@@ -148,9 +148,9 @@ export default {
     return {
       fName: "",
       email: "",
-      bgImage: require("@/assets/images/photo-wide-4.jpg"),
+      bgImage: require("@/assets/images/photo-wide-3.jpg"),
       logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-3.jpg"),
+      signInImage: require("@/assets/images/photo-long-2.jpg"),
       password: "",
       repeatPassword: "",
       submitStatus: null

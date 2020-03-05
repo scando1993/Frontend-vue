@@ -103,13 +103,13 @@ export default {
   },
   data() {
     return {
-      email: "ui-lib@gmail.com",
+      email: "test@plani.org",
       password: "123456",
       // // password: "vue006",
       userId: "",
-      bgImage: require("@/assets/images/photo-wide-4.jpg"),
+      bgImage: require("@/assets/images/photo-wide-3.jpg"),
       logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-3.jpg")
+      signInImage: require("@/assets/images/photo-long-2.jpg")
     };
   },
   computed: {
