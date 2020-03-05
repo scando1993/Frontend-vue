@@ -13,7 +13,7 @@ import VueGoodTablePlugin from "vue-good-table";
 import Meta from "vue-meta";
 import FlagIcon from "vue-flag-icon";
 
-import "@/assets/styles/sass/themes/lite-purple.scss";
+import "@/assets/styles/sass/themes/plani.scss";
 import "@/plugins/echarts";
 import "@/plugins/apexChart.js";
 import "@/plugins/sweetalert2.js";
