@@ -16,7 +16,7 @@
   /* sidebar */
   .gull-brand {
     padding-left: 25px;
-    min-width: 200px;
+    min-width: 230px;
   }
   .sidebar-panel {
     width: 240px;
@@ -31,11 +31,19 @@
     overflow-x: hidden;
     padding-top: 20px;
     transition: width 0.3s ease-in;
-    background: #36A5DD;
+    background: #fff;
   }
-  .gull-brand img {
+  .gull-brand-logo {
     width: 60px;
     margin-right: 5px;
+  }
+
+  .logo{
+    width: 90px;
+  }
+
+  .vertical-logo {
+    display: none;
   }
 
   ul {
