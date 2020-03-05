@@ -3,9 +3,6 @@
         <header class=" card d-flex p-2 justify-content-between header-topnav">
             <div class="header-toggle">
                 <div id="header" class="mb-3">
-                    <div id="Title">
-                        <h1>Plani</h1>
-                    </div>
                     <div id="pageTitle">
                         <h3>Monitoreo de rutas</h3>
                     </div>
@@ -34,10 +31,10 @@
                     <div class="date d-inline" style="margin-left: 20px">
                         <div class="d-inline" id="display_date">{{displayDate}}</div>
                         <div class="date d-inline" style="margin-left: 20px">
-                            <div class="d-inline" style="margin-right: 10px" id="display_date">May-12</div>
+                            <div class="d-inline" style="margin-right: 10px" id="display_current_date">May-12</div>
                             <div id="navigate_dates" class="d-inline">
-                                <b-button class="font-weight-bold" id="left_button"><</b-button>
-                                <b-button class="font-weight-bold"  id="rifgt_button">></b-button>
+                                <b-button class="font-weight-bold" id="left_button">&#60</b-button>
+                                <b-button class="font-weight-bold"  id="rifgt_button">&#62</b-button>
                             </div>
                         </div>
                     </div>

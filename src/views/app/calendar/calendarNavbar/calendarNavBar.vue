@@ -2,9 +2,6 @@
     <div>
         <b-card>
             <div id="header">
-                <div id="Title">
-                    <h1>Plani</h1>
-                </div>
                 <div id="pageTitle">
                     <h3>Calendario</h3>
                     <br>
@@ -21,7 +18,7 @@
                 <div id="calendar_selection" class="d-flex d-inline-block align-items-center">
                     <p class="text-16 font-weight-bold">05 Abril</p>
                     <span>
-                        <button class="btn planiButton mx-1 my-0"><</button>
+                        <button class="btn planiButton mx-1 my-0">&#60</button>
                     </span>
                     <span>
                         <button class="btn planiButton mx-1 my-0">></button>
@@ -111,10 +108,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .planiButton {
-        background-color: #00b3ee;
-        color: white;
-    }
-</style>
