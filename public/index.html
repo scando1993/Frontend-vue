@@ -24,10 +24,10 @@
       }
 
       .loader_logo {
-        height: 80px;
+        height: 75px;
         width: 80px;
         position: absolute;
-        left: calc(50% - 50px);
+        left: calc(50% - 140px);
         top: 38%;
       }
 
@@ -36,16 +36,58 @@
         width: 100%;
       }
 
+      .loader_logo {
+        -webkit-animation: spin 1.8s infinite linear;
+        animation: spin 1s infinite ease-in-out;
+      }
+      @-webkit-keyframes spin {
+        to {
+          -webkit-transform: rotate(360deg);
+          -webkit-transform-origin: center center;
+        }
+      }
+      @-moz-keyframes spin {
+        to {
+          -moz-transform: rotate(360deg);
+          -moz-transform-origin: center center;
+        }
+      }
+      @keyframes spin {
+        to {
+          -moz-transform:rotate(360deg);
+          -moz-transform-origin: center center;
+          -o-transform:rotate(360deg);
+          -o-transform-origin: center center;
+          transform:rotate(360deg);
+          transform-origin: center center;
+        }
+      }
+
+      .loader_name {
+        height: 75px;
+        width: 160px;
+        position: absolute;
+        left: calc(50% - 50px);
+        top: 38%;
+      }
+
+      .loader_name img {
+        height: 100%;
+        width: 100%;
+      }
+
       .loading {
 
-        border: 3px solid rgba(102, 51, 153, 0.45);
+        /*border: 3px solid rgba(102, 51, 153, 0.45);*/
+        border: 3px solid rgba(120, 153, 166, 0.45);
         position: absolute;
         left: calc(50% - 35px);
         top: 50%;
         width: 55px;
         height: 55px;
         border-radius: 50%;
-        border-top-color: #663399;
+        /*border-top-color: #663399;*/
+        border-top-color: #7899A6;
         animation: loader 1s ease-in-out infinite;
         -webkit-animation: loader 1s ease-in-out infinite;
       }
@@ -83,11 +125,12 @@
       <div class="loader_logo">
         <img src="<%= BASE_URL %>img/logo.png" class="" alt="logo">
       </div>
-
-      <div class="loading"></div>
+      <div class="loader_name">
+        <img src="<%= BASE_URL %>img/logo_name.png" class="" alt="logo">
+      </div>
+<!--      <div class="loading"></div>-->
     </div>
-
-    <div id="app"></div>
+<!--    <div id="app"></div>-->
   </body>
 
 </html>
