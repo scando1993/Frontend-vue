@@ -13,8 +13,8 @@ const state = {
     dark: false,
     light: true,
     semi_dark: false,
-    theme_color: "plani",
-    layout: "plani-vertical-sidebar",
+    theme_color: 'plani',
+    layout: 'plani-vertical-sidebar',
     rtl: false
   }
 };
@@ -24,14 +24,14 @@ const getters = {
 };
 
 const actions = {
-  changeThemeMode({commit}) {
-    commit("toggleThemeMode");
+  changeThemeMode({ commit }) {
+    commit('toggleThemeMode');
   },
-  changeThemeLayout({commit}, data) {
-    commit("toggleThemeLayout", data);
+  changeThemeLayout({ commit }, data) {
+    commit('toggleThemeLayout', data);
   },
-  changeThemeRtl({commit}) {
-    commit("toggleThemeRtl");
+  changeThemeRtl({ commit }) {
+    commit('toggleThemeRtl');
   }
 };
 

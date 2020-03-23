@@ -4,7 +4,7 @@ const state = {
 
     isActiveSecondarySideNav: false
   },
-  compactLeftSideBarBgColor: "sidebar-dark-purple"
+  compactLeftSideBarBgColor: 'sidebar-dark-purple'
 };
 
 const getters = {
@@ -14,12 +14,12 @@ const getters = {
 };
 
 const actions = {
-  changeCompactSidebarProperties({commit}) {
-    commit("toggleCompactSidebarProperties");
+  changeCompactSidebarProperties({ commit }) {
+    commit('toggleCompactSidebarProperties');
   },
 
-  changecompactLeftSideBarBgColor({commit}, data) {
-    commit("togglecompactLeftSideBarBgColor", data);
+  changecompactLeftSideBarBgColor({ commit }, data) {
+    commit('togglecompactLeftSideBarBgColor', data);
   }
 };
 

@@ -83,32 +83,32 @@
 </template>
 
 <script>
-    import { products } from '@/data/products.js'
-    export default {
-        props:[
-            'isSearchOpen'
-        ],
-        data() {
-            return {
-                issearchClose:false,
-                products: products,
-                search:''
-            }
-        },
-        methods: {
-            closeSearch(){
-                // this.issearchClose= !this.issearchClose;
-                this.$emit('closeSearch',{
-                    isSearchOpen:false,
-                });
-            }
-        },
-        computed: {
-            filterProducts(){
-                return this.products.filter(product => product.title.toLowerCase().match(this.search.toLowerCase()))
-            }
-        }
-        
+import { products } from '@/data/products.js';
+export default {
+  props:[
+    'isSearchOpen'
+  ],
+  data() {
+    return {
+      issearchClose:false,
+      products: products,
+      search:''
+    };
+  },
+  methods: {
+    closeSearch(){
+      // this.issearchClose= !this.issearchClose;
+      this.$emit('closeSearch',{
+        isSearchOpen:false,
+      });
     }
+  },
+  computed: {
+    filterProducts(){
+      return this.products.filter(product => product.title.toLowerCase().match(this.search.toLowerCase()));
+    }
+  }
+        
+};
 </script>
 

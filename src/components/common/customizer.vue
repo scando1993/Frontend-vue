@@ -239,7 +239,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -249,15 +249,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getThemeMode", "getcompactLeftSideBarBgColor"])
+    ...mapGetters(['getThemeMode', 'getcompactLeftSideBarBgColor'])
   },
 
   methods: {
     ...mapActions([
-      "changeThemeRtl",
-      "changeThemeLayout",
-      "changeThemeMode",
-      "changecompactLeftSideBarBgColor"
+      'changeThemeRtl',
+      'changeThemeLayout',
+      'changeThemeMode',
+      'changecompactLeftSideBarBgColor'
     ]),
     changeLang(lang) {
       console.log(lang);

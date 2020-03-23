@@ -40,25 +40,25 @@
 </template>
 <script>
 import {
-        basicColumnChart,
-        columnDataLabels,
-        stackedColumn,
-        negativeColumn,
-        distributedColumnChart
+  basicColumnChart,
+  columnDataLabels,
+  stackedColumn,
+  negativeColumn,
+  distributedColumnChart
         
-    } from '@/data/apexChart'
+} from '@/data/apexChart';
 
 
 export default {
-    data(){
-        return{
-            basicColumnChart,
-            columnDataLabels,
-            stackedColumn,
-            negativeColumn,
-            distributedColumnChart
+  data(){
+    return{
+      basicColumnChart,
+      columnDataLabels,
+      stackedColumn,
+      negativeColumn,
+      distributedColumnChart
             
-        }
-    }
-}
+    };
+  }
+};
 </script>

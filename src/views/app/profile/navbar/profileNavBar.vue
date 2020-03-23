@@ -11,9 +11,9 @@
 </template>
 
 <script>
-    export default {
-        name: "profileNavBar"
-    }
+export default {
+  name: 'profileNavBar'
+};
 </script>
 
 <style scoped>

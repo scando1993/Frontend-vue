@@ -136,23 +136,23 @@
   </div>
 </template>
 <script>
-import { required, sameAs, minLength } from "vuelidate/lib/validators";
-import { mapGetters, mapActions } from "vuex";
+import { required, sameAs, minLength } from 'vuelidate/lib/validators';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignUp"
+    title: 'SignUp'
   },
 
   data() {
     return {
-      fName: "",
-      email: "",
-      bgImage: require("@/assets/images/photo-wide-3.jpg"),
-      logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-2.jpg"),
-      password: "",
-      repeatPassword: "",
+      fName: '',
+      email: '',
+      bgImage: require('@/assets/images/photo-wide-3.jpg'),
+      logo: require('@/assets/images/logo.png'),
+      signInImage: require('@/assets/images/photo-long-2.jpg'),
+      password: '',
+      repeatPassword: '',
       submitStatus: null
     };
   },
@@ -168,7 +168,7 @@ export default {
       minLength: minLength(5)
     },
     repeatPassword: {
-      sameAsPassword: sameAs("password")
+      sameAsPassword: sameAs('password')
     }
 
     // add input
@@ -186,43 +186,43 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["loggedInUser", "loading", "error"])
+    ...mapGetters(['loggedInUser', 'loading', 'error'])
   },
 
   methods: {
-    ...mapActions(["signUserUp"]),
+    ...mapActions(['signUserUp']),
     //   validate form
     submit() {
-      console.log("submit!");
+      console.log('submit!');
 
       this.$v.$touch();
       if (this.$v.$invalid) {
-        this.submitStatus = "ERROR";
+        this.submitStatus = 'ERROR';
       } else {
         this.signUserUp({ email: this.email, password: this.password });
-        this.submitStatus = "PENDING";
+        this.submitStatus = 'PENDING';
         setTimeout(() => {
-          this.submitStatus = "OK";
+          this.submitStatus = 'OK';
         }, 1000);
       }
     },
     makeToast(variant = null) {
-      this.$bvToast.toast("Please fill the form correctly.", {
-        title: `Variant ${variant || "default"}`,
+      this.$bvToast.toast('Please fill the form correctly.', {
+        title: `Variant ${variant || 'default'}`,
         variant: variant,
         solid: true
       });
     },
     makeToastTwo(variant = null) {
-      this.$bvToast.toast("Successfully Created Account", {
-        title: `Variant ${variant || "default"}`,
+      this.$bvToast.toast('Successfully Created Account', {
+        title: `Variant ${variant || 'default'}`,
         variant: variant,
         solid: true
       });
     },
 
     inputSubmit() {
-      console.log("submitted");
+      console.log('submitted');
     }
   }
 };

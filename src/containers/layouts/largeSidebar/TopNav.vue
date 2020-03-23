@@ -293,22 +293,23 @@
     <search-component
       :isSearchOpen.sync="isSearchOpen"
       @closeSearch="toggleSearch"
-    ></search-component>
+    />
   </div>
 
   <!-- header top menu end -->
 </template>
 <script>
-import Util from "@/utils";
-import Sidebar from "./Sidebar";
-import searchComponent from "../common/search";
-import { isMobile } from "mobile-device-detect";
-import { mapGetters, mapActions } from "vuex";
-import { mixin as clickaway } from "vue-clickaway";
+import Util from '@/utils';
+import Sidebar from './Sidebar';
+import searchComponent from '../common/search';
+import { isMobile } from 'mobile-device-detect';
+import { mapGetters, mapActions } from 'vuex';
+import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
   mixins: [clickaway],
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     Sidebar,
     searchComponent
   },
@@ -327,16 +328,16 @@ export default {
     // document.addEventListener("click", this.closeMegaMenu);
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties"])
+    ...mapGetters(['getSideBarToggleProperties'])
   },
 
   methods: {
     ...mapActions([
-      "changeSecondarySidebarProperties",
+      'changeSecondarySidebarProperties',
 
-      "changeSidebarProperties",
-      "changeThemeMode",
-      "signOut"
+      'changeSidebarProperties',
+      'changeThemeMode',
+      'signOut'
     ]),
 
     // megaMenuToggle() {
@@ -351,7 +352,7 @@ export default {
     logoutUser() {
       this.signOut();
 
-      this.$router.push("/app/sessions/signIn");
+      this.$router.push('/app/sessions/signIn');
     },
 
     closeMegaMenu() {
@@ -367,7 +368,7 @@ export default {
     toggleSearch() {
       this.isSearchOpen = !this.isSearchOpen;
     },
-
+    // eslint-disable-next-line no-unused-vars
     sideBarToggle(el) {
       if (
         this.getSideBarToggleProperties.isSideNavOpen &&

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <team-navbar></team-navbar>
+        <team-navbar/>
         <div v-b-modal.m-new-admin id="list_header" class="d-flex justify-content-end btn">
             <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
             </i>
@@ -9,12 +9,12 @@
 
         <vue-perfect-scrollbar>
            <div id="list_body" class="scrollable">
-            <div class="container" v-for="(item, index) in teamData">
+            <div class="container" v-for="(item, index) in teamData" v-bind:key="index">
                 <b-row>
                     <div class="col-md-6">
                         <div class="ul-contact-page__profile">
                             <div class="user-profile-img">
-                                <img class="profile-picture mb-2" src="@/assets/images/faces/1.jpg" alt="">
+                                <img class="profile-picture mb-2" :src="getImageForUser(index + 1)" alt="">
                             </div>
                             <div class="ul-contact-page__info">
                                 <p class="m-0 text-24">{{item.name}} {{item.lastname}}</p>
@@ -29,7 +29,7 @@
                         <h3 class="d-inline">Miembro</h3>
                         <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
                             <template slot="button-content" >
-                                <i class="i-Arrow-Down"@click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"></i>
+                                <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
                             </template>
                             <b-dropdown-item>Ver calendario</b-dropdown-item>
                             <b-dropdown-item>Ver cliente</b-dropdown-item>
@@ -91,7 +91,7 @@
                                 type="email"
                                 v-model="newMemberForm.email"
                                 required
-                        ></b-form-input>
+                        />
                     </b-form-group>
                     <div class="d-flex justify-content-between mt-5">
                         <b-button  variant = "info " type="reset" size="sm" style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;">No</b-button>
@@ -104,61 +104,59 @@
 </template>
 
 <script>
-    import Icons from "../pages/icons";
-    import PlusCircleIcon from "vue-material-design-icons/PlusCircle";
-    import PlusCircleMultipleOutlineIcon from "vue-material-design-icons/PlusCircleMultipleOutline";
-    import SpaIcon from "vue-material-design-icons/Spa";
-    import ChevronDownIcon from "vue-material-design-icons/ChevronDown";
-    import TeamNavbar from "./navbar/teamNavbar";
-    import {teamDummyData} from "./data/teamData";
-    export default {
-        name: "team",
-        components: {TeamNavbar, ChevronDownIcon, SpaIcon, PlusCircleMultipleOutlineIcon, PlusCircleIcon, Icons},
-        data() {
-          return {
-              boxOne: "",
-              nameState: null,
-              teamData: teamDummyData,
-              newMemberForm: {
-                  name: "New Member",
-                  lastname: "",
-                  profile: "Programmer",
-                  email: ""
-              },
-              indexMember: 0
-          }
-        },
-        methods: {
-            leaveTeam() {
-                this.$bvModal.hide('m-confirm-leave');
-            },
-            cancelLeaveTeam() {
-                this.$bvModal.hide('m-confirm-leave');
-            },
-            cancelDeleteMember() {
-                this.$bvModal.hide('m-confirm-delete');
-            },
-            setIndexMember(index) {
-                this.indexMember = index;
-            },
-            deleteMember(){
-                this.teamData.splice(this.indexMember, 1);
-                this.$bvModal.hide('m-confirm-delete');
-            },
-            addNewMember() {
-                this.teamData.push(Object.assign({}, this.newMemberForm));
-                this.hideNewMemberModal();
-            },
-            showNewMemberModal () {
-                this.$modal.show('m-new-admin');
-            },
-            hideNewMemberModal () {
-                this.newMemberForm.email = "";
-                this.$bvModal.hide('m-new-admin');
-            },
-
-        }
+import TeamNavbar from './navbar/teamNavbar';
+import { teamDummyData } from './data/teamData';
+export default {
+  name: 'team',
+  components: { TeamNavbar },
+  data() {
+    return {
+      boxOne: '',
+      nameState: null,
+      teamData: teamDummyData,
+      newMemberForm: {
+        name: 'New Member',
+        lastname: '',
+        profile: 'Programmer',
+        email: ''
+      },
+      indexMember: 0
+    };
+  },
+  methods: {
+    leaveTeam() {
+      this.$bvModal.hide('m-confirm-leave');
+    },
+    cancelLeaveTeam() {
+      this.$bvModal.hide('m-confirm-leave');
+    },
+    cancelDeleteMember() {
+      this.$bvModal.hide('m-confirm-delete');
+    },
+    setIndexMember(index) {
+      this.indexMember = index;
+    },
+    deleteMember(){
+      this.teamData.splice(this.indexMember, 1);
+      this.$bvModal.hide('m-confirm-delete');
+    },
+    addNewMember() {
+      this.teamData.push(Object.assign({}, this.newMemberForm));
+      this.hideNewMemberModal();
+    },
+    showNewMemberModal () {
+      this.$modal.show('m-new-admin');
+    },
+    hideNewMemberModal () {
+      this.newMemberForm.email = '';
+      this.$bvModal.hide('m-new-admin');
+    },
+    getImageForUser (value){
+      let images = require.context('@/assets/images/faces/', false, /\.jpg$/);
+      return images('./' + value + '.jpg');
     }
+  }
+};
 
 </script>
 

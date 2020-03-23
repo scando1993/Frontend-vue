@@ -33,21 +33,21 @@
 <script>
 import{
 
-    lineColumn,
-    multipleYxis,
-    lineArea,
-    lineColumnArea
+  lineColumn,
+  multipleYxis,
+  lineArea,
+  lineColumnArea
 
-} from '@/data/apexChart.js'
+} from '@/data/apexChart.js';
 
 export default {
-    data(){
-        return{
-            lineColumn,
-            multipleYxis,
-            lineArea,
-            lineColumnArea
-        }
-    }
-}
+  data(){
+    return{
+      lineColumn,
+      multipleYxis,
+      lineArea,
+      lineColumnArea
+    };
+  }
+};
 </script>

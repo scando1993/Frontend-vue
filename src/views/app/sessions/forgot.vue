@@ -65,13 +65,13 @@
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Forgot Password"
+    title: 'Forgot Password'
   },
   data() {
     return {
-      bgImage: require("@/assets/images/photo-wide-4.jpg"),
-      logo: require("@/assets/images/logo.png"),
-      formImage: require("@/assets/images/photo-long-3.jpg")
+      bgImage: require('@/assets/images/photo-wide-4.jpg'),
+      logo: require('@/assets/images/logo.png'),
+      formImage: require('@/assets/images/photo-long-3.jpg')
     };
   }
 };

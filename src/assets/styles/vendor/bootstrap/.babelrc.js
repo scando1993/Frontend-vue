@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   presets: [
     [
@@ -14,7 +15,7 @@ module.exports = {
   ],
   env: {
     test: {
-      plugins: [ 'istanbul' ]
+      plugins: ['istanbul']
     }
   }
-};
+}

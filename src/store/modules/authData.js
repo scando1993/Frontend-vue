@@ -1,13 +1,13 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import firebase from 'firebase/app';
+import 'firebase/auth';
 const axios = require('axios');
 var jwtDecode = require('jwt-decode');
 
 export default {
   state: {
     loggedInUser:
-      localStorage.getItem("userInfo") != null
-        ? JSON.parse(localStorage.getItem("userInfo"))
+      localStorage.getItem('userInfo') != null
+        ? JSON.parse(localStorage.getItem('userInfo'))
         : null,
     loading: false,
     error: null
@@ -43,32 +43,32 @@ export default {
     }
   },
   actions: {
-    login({commit}, data) {
-      commit("clearError");
-      commit("setLoading", true);
-      const url = process.env.VUE_APP_THINGSBOARD_API + "/auth/login";
+    login({ commit }, data) {
+      commit('clearError');
+      commit('setLoading', true);
+      const url = process.env.VUE_APP_THINGSBOARD_API + '/auth/login';
       const body = {
         username: data.email,
         password: data.password
       };
 
       axios.post(url, body)
-          .then(function (response) {
-            console.log(response);
-            const token = response.data.token;
-            const refreshToken = response.data.refreshToken;
-            const tokenDecoded = jwtDecode(token);
-            const userId = tokenDecoded["userId"];
-            const newUser = {uid: userId};
-            localStorage.setItem("userInfo", JSON.stringify(newUser));
-            localStorage.setItem('token', token);
-            localStorage.setItem('refreshToken', refreshToken);
-            commit("setUser", newUser);
-          })
-          .catch(function (error) {
-            localStorage.removeItem("userInfo");
-            commit("setError", error);
-          });
+        .then(function (response) {
+          console.log(response);
+          const token = response.data.token;
+          const refreshToken = response.data.refreshToken;
+          const tokenDecoded = jwtDecode(token);
+          const userId = tokenDecoded['userId'];
+          const newUser = { uid: userId };
+          localStorage.setItem('userInfo', JSON.stringify(newUser));
+          localStorage.setItem('token', token);
+          localStorage.setItem('refreshToken', refreshToken);
+          commit('setUser', newUser);
+        })
+        .catch(function (error) {
+          localStorage.removeItem('userInfo');
+          commit('setError', error);
+        });
 
       /*
       firebase
@@ -92,39 +92,41 @@ export default {
         */
     },
 
-    signUserUp({commit}, data) {
-      commit("setLoading", true);
-      commit("clearError");
+    signUserUp({ commit }, data) {
+      commit('setLoading', true);
+      commit('clearError');
       firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password)
         .then(user => {
-          commit("setLoading", false);
+          commit('setLoading', false);
 
           const newUser = {
             uid: user.user.uid
           };
           console.log(newUser);
-          localStorage.setItem("userInfo", JSON.stringify(newUser));
-          commit("setUser", newUser);
+          localStorage.setItem('userInfo', JSON.stringify(newUser));
+          commit('setUser', newUser);
         })
         .catch(error => {
-          commit("setLoading", false);
-          commit("setError", error);
-          localStorage.removeItem("userInfo");
+          commit('setLoading', false);
+          commit('setError', error);
+          localStorage.removeItem('userInfo');
           console.log(error);
         });
     },
-    signOut({commit}) {
+    signOut({ commit }) {
       firebase
         .auth()
         .signOut()
         .then(
           () => {
-            localStorage.removeItem("userInfo");
-            commit("setLogout");
+            localStorage.removeItem('userInfo');
+            commit('setLogout');
           },
-          _error => {}
+          _error => {
+            console.log(_error);
+          }
         );
     }
   }

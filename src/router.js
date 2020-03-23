@@ -1,9 +1,9 @@
-import Vue from "vue";
-import store from "./store";
+import Vue from 'vue';
+import store from './store';
 // import {isMobile} from "mobile-device-detect";
-import Router from "vue-router";
-import NProgress from "nprogress";
-import authenticate from "./auth/authenticate";
+import Router from 'vue-router';
+import NProgress from 'nprogress';
+import authenticate from './auth/authenticate';
 
 Vue.use(Router);
 
@@ -11,69 +11,69 @@ Vue.use(Router);
 
 const routes = [
   {
-    path: "/",
-    component: () => import("./views/app"), //webpackChunkName app
+    path: '/',
+    component: () => import('./views/app'), //webpackChunkName app
     beforeEnter: authenticate,
-    redirect: "/app/calendar/calendar.dashboard.v1",
+    redirect: '/app/calendar/calendar.dashboard.v1',
 
     children: [
       {
-        path: "/app/calendar",
-        component: () => import("./views/app/calendar"), //dashboard
+        path: '/app/calendar',
+        component: () => import('./views/app/calendar'), //dashboard
         children: [
           {
-            path: "calendar.dashboard.v1",
-            component: () => import("./views/app/calendar/calendar.dashboard.v1")
+            path: 'calendar.dashboard.v1',
+            component: () => import('./views/app/calendar/calendar.dashboard.v1')
           },
         ]
       },
       {
-        path: "/app/reports",
-        component: () => import("./views/app/report"),
+        path: '/app/reports',
+        component: () => import('./views/app/report'),
         children: [
           {
-            path: "",
-            component: () => import("./views/app/report/report")
+            path: '',
+            component: () => import('./views/app/report/report')
           }
         ]
       },
       {
-        path: "/app/taskGrid",
-        component: () => import("./views/app/taskGrid"),
+        path: '/app/taskGrid',
+        component: () => import('./views/app/taskGrid'),
         children: [
           {
-            path: "",
-            component: () => import("./views/app/taskGrid/taskGrid")
+            path: '',
+            component: () => import('./views/app/taskGrid/taskGrid')
           }
         ]
       },
       {
-        path: "/app/monitor",
-        component: () => import("./views/app/monitor"),
+        path: '/app/monitor',
+        component: () => import('./views/app/monitor'),
         children: [
           {
-            path: "",
-            component: () => import("./views/app/monitor/monitor")
+            path: '',
+            component: () => import('./views/app/monitor/monitor')
           }
         ]
       },
       {
-        path: "/app/profile",
-        component: () => import("./views/app/profile"),
+        path: '/app/profile',
+        component: () => import('./views/app/profile'),
         children: [
           {
-            path: "",
-            component: () => import("./views/app/profile/profile")
+            path: '',
+            component: () => import('./views/app/profile/profile')
           }
         ]
       },
       {
-        path: "/app/team",
-        component: () => import("./views/app/team"),
+        path: '/app/team',
+        component: () => import('./views/app/team'),
         children: [
           {
-            path: "",
-            component: () => import("./views/app/team/team")
+            path: '',
+            component: () => import('./views/app/team/team')
           }
         ]
       },
@@ -82,45 +82,46 @@ const routes = [
   },
   // sessions
   {
-    path: "/app/sessions",
-    component: () => import("./views/app/sessions"),
-    redirect: "/app/sessions/signIn",
+    path: '/app/sessions',
+    component: () => import('./views/app/sessions'),
+    redirect: '/app/sessions/signIn',
     children: [
       {
-        path: "signIn",
-        component: () => import("./views/app/sessions/signIn")
+        path: 'signIn',
+        component: () => import('./views/app/sessions/signIn')
       },
       {
-        path: "signUp",
-        component: () => import("./views/app/sessions/signUp")
+        path: 'signUp',
+        component: () => import('./views/app/sessions/signUp')
       },
       {
-        path: "forgot",
-        component: () => import("./views/app/sessions/forgot")
+        path: 'forgot',
+        component: () => import('./views/app/sessions/forgot')
       }
     ]
   },
 
   {
-    path: "/vertical-sidebar",
-    component: () => import("./containers/layouts/verticalSidebar")
+    path: '/vertical-sidebar',
+    component: () => import('./containers/layouts/verticalSidebar')
   },
   {
-    path: "/plani-vertical-sidebar",
-    component: () => import("./containers/layouts/planiVerticalSidebar")
+    path: '/plani-vertical-sidebar',
+    component: () => import('./containers/layouts/planiVerticalSidebar')
   },
   {
-    path: "*",
-    component: () => import("./views/app/pages/notFound")
+    path: '*',
+    component: () => import('./views/app/pages/notFound')
   }
 ];
 
 const router = new Router({
-  mode: "history",
-  linkActiveClass: "open",
+  mode: 'history',
+  linkActiveClass: 'open',
   routes,
+  // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {
-    return {x: 0, y: 0};
+    return { x: 0, y: 0 };
   }
 });
 
@@ -137,9 +138,9 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   // Remove initial loading
-  const gullPreLoading = document.getElementById("loading_wrap");
+  const gullPreLoading = document.getElementById('loading_wrap');
   if (gullPreLoading) {
-    gullPreLoading.style.display = "none";
+    gullPreLoading.style.display = 'none';
   }
   // Complete the animation of the route progress bar.
   setTimeout(() => NProgress.done(), 500);
@@ -147,17 +148,17 @@ router.afterEach(() => {
   // if (isMobile) {
   if (window.innerWidth <= 1200) {
     // console.log("mobile");
-    store.dispatch("changeSidebarProperties");
+    store.dispatch('changeSidebarProperties');
     if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
-      store.dispatch("changeSecondarySidebarProperties");
+      store.dispatch('changeSecondarySidebarProperties');
     }
 
     if (store.getters.getCompactSideBarToggleProperties.isSideNavOpen) {
-      store.dispatch("changeCompactSidebarProperties");
+      store.dispatch('changeCompactSidebarProperties');
     }
   } else {
     if (store.getters.getSideBarToggleProperties.isSecondarySideNavOpen) {
-      store.dispatch("changeSecondarySidebarProperties");
+      store.dispatch('changeSecondarySidebarProperties');
     }
 
     // store.state.sidebarToggleProperties.isSecondarySideNavOpen = false;

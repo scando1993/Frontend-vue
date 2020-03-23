@@ -14,7 +14,7 @@
 </template>
 <script>
 export default {
-    props:['page','folder'],
+  props:['page','folder'],
    
-}
+};
 </script>

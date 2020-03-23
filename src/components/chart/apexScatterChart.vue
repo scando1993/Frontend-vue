@@ -18,16 +18,16 @@
 </template>
 <script>
 import {
-    simpleScatter,
-    scatterDatetime
-} from '@/data/apexChart.js'
+  simpleScatter,
+  scatterDatetime
+} from '@/data/apexChart.js';
 
 export default {
-    data(){
-       return{
-            simpleScatter,
-            scatterDatetime
-       }
-    }
-}
+  data(){
+    return{
+      simpleScatter,
+      scatterDatetime
+    };
+  }
+};
 </script>

@@ -2,7 +2,7 @@
     <div>
     <vue-perfect-scrollbar
         class="sidebar-panel   rtl-ps-none ps scroll"
-        @mouseleave.native="planiSidebarCompact(); returnSelectedParentMenu()"
+        @mouseleave.native="mouseLeaveNative"
 
         @mouseenter.native="planiRemoveSidebarCompact"
         :class="{
@@ -218,54 +218,58 @@
     </div>
 </template>
 <script>
-    import { mapGetters, mapActions } from "vuex";
-    import arrowIcon from "@/components/arrow/arrowIcon";
-    export default {
-        components: {
-        },
-        computed: {
-            ...mapGetters(["getPlaniVerticalCompact", "getPlaniVerticalSidebar"])
-        },
-        data() {
-            return {
-                selectedParentMenu: "",
-                showAlerts: true
-            };
-        },
-        mounted() {
-            this.toggleSelectedParentMenu();
-            document.addEventListener("click", this.returnSelectedParentMenu);
-        },
-        beforeDestroy() {
-            document.removeEventListener("click", this.returnSelectedParentMenu);
-
-        },
-        methods: {
-            ...mapActions([
-                "planiSwitchSidebar",
-                "planiSidebarCompact",
-                "planiRemoveSidebarCompact",
-                "planiMobileSidebar"
-            ]),
-
-            toggleSelectedParentMenu() {
-                const currentParentUrl = this.$route.path
-                    .split("/")
-                    .filter(x => x !== "")[1];
-
-                if (currentParentUrl !== undefined || currentParentUrl !== null) {
-                    this.selectedParentMenu = currentParentUrl.toLowerCase();
-                    console.log(currentParentUrl)
-                } else {
-                    this.selectedParentMenu = "dashboards";
-                }
-            },
-            returnSelectedParentMenu() {
-                this.toggleSelectedParentMenu();
-            },
-
-        }
+import { mapGetters, mapActions } from 'vuex';
+export default {
+  components: {
+  },
+  computed: {
+    ...mapGetters(['getPlaniVerticalCompact', 'getPlaniVerticalSidebar'])
+  },
+  data() {
+    return {
+      selectedParentMenu: '',
+      showAlerts: true
     };
+  },
+  mounted() {
+    this.toggleSelectedParentMenu();
+    document.addEventListener('click', this.returnSelectedParentMenu);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.returnSelectedParentMenu);
+
+  },
+  methods: {
+    ...mapActions([
+      'planiSwitchSidebar',
+      'planiSidebarCompact',
+      'planiRemoveSidebarCompact',
+      'planiMobileSidebar'
+    ]),
+
+    toggleSelectedParentMenu() {
+      const currentParentUrl = this.$route.path
+        .split('/')
+        .filter(x => x !== '')[1];
+
+      if (currentParentUrl !== undefined || currentParentUrl !== null) {
+        this.selectedParentMenu = currentParentUrl.toLowerCase();
+        console.log(currentParentUrl);
+      } else {
+        this.selectedParentMenu = 'dashboards';
+      }
+    },
+
+    returnSelectedParentMenu() {
+      this.toggleSelectedParentMenu();
+    },
+
+    mouseLeaveNative() {
+      this.planiSidebarCompact();
+      this.returnSelectedParentMenu();
+    }
+  }
+};
 </script>
 <style>
     .overrideCard {

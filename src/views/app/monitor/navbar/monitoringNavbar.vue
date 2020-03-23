@@ -26,15 +26,15 @@
                                 :isDark="false"
                                 :isModal="false"
                                 :transition="true"
-                        ></FunctionalCalendar>
+                        />
                     </div>
                     <div class="date d-inline" style="margin-left: 20px">
                         <div class="d-inline" id="display_date">{{displayDate}}</div>
                         <div class="date d-inline" style="margin-left: 20px">
                             <div class="d-inline" style="margin-right: 10px" id="display_current_date">May-12</div>
                             <div id="navigate_dates" class="d-inline">
-                                <b-button class="font-weight-bold" id="left_button">&#60</b-button>
-                                <b-button class="font-weight-bold"  id="rifgt_button">&#62</b-button>
+                                <b-button class="font-weight-bold" id="left_button">&#60;</b-button>
+                                <b-button class="font-weight-bold"  id="rifgt_button">&#62;</b-button>
                             </div>
                         </div>
                     </div>
@@ -48,35 +48,35 @@
 </template>
 
 <script>
-    export default {
-        name: "monitoringNavbar",
-        data() {
-            return {
-                showDatePicker: false
-            }
-        },
-        methods: {
-            openPicker () {
-                this.showDatePicker = true;
-            },
-            hidePicker(data){
-                this.showDatePicker = false;
-                console.log(data);
-                console.log("!!!!!!");
-            },
-            checkCloseDatePicker(){
-                console.log(this.calendarData);
+export default {
+  name: 'monitoringNavbar',
+  data() {
+    return {
+      showDatePicker: false
+    };
+  },
+  methods: {
+    openPicker () {
+      this.showDatePicker = true;
+    },
+    hidePicker(data){
+      this.showDatePicker = false;
+      console.log(data);
+      console.log('!!!!!!');
+    },
+    checkCloseDatePicker(){
+      console.log(this.calendarData);
 
-                if(this.calendarData.dateRange.start.date && this.calendarData.dateRange.end.date ){
-                    this.displayDate = this.calendarData.dateRange.start.date + "-" + this.calendarData.dateRange.end.date ;
-                    setTimeout(() => {
-                        this.showDatePicker = false;
-                    }, 300);
-                }
+      if(this.calendarData.dateRange.start.date && this.calendarData.dateRange.end.date ){
+        this.displayDate = this.calendarData.dateRange.start.date + '-' + this.calendarData.dateRange.end.date ;
+        setTimeout(() => {
+          this.showDatePicker = false;
+        }, 300);
+      }
 
-            }
-        }
     }
+  }
+};
 </script>
 
 <style scoped>

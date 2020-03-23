@@ -15,16 +15,16 @@
 
 
 import { 
-    chartOptionsBar,
-    chartOptionsLine
-} from '@/data/charts'
+  chartOptionsBar,
+  chartOptionsLine
+} from '@/data/charts';
 
 
 export default {
-  name: "demo",
+  name: 'demo',
   data: () => ({
-  chartOptionsBar,
-chartOptionsLine
+    chartOptionsBar,
+    chartOptionsLine
 
     // chartOptionsBar: {
     //   xAxis: {

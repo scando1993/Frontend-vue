@@ -38,53 +38,53 @@
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Icons"
+    title: 'Icons'
   },
   data() {
     return {
-      search: "",
+      search: '',
       searchList: [
         {
           id: 1,
-          title: "Vue.js",
-          link: "https://vuejs.org",
+          title: 'Vue.js',
+          link: 'https://vuejs.org',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         },
         {
           id: 2,
-          title: "React.js",
-          link: "https://reactjs.org",
+          title: 'React.js',
+          link: 'https://reactjs.org',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         },
         {
           id: 3,
-          title: "Angular.js",
-          link: "https://angular.io",
+          title: 'Angular.js',
+          link: 'https://angular.io',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         },
         {
           id: 4,
-          title: "pug.js",
-          link: "https://pugjs.org/",
+          title: 'pug.js',
+          link: 'https://pugjs.org/',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         },
         {
           id: 5,
-          title: "node.js",
-          link: "https://nodejs.org/",
+          title: 'node.js',
+          link: 'https://nodejs.org/',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         },
         {
           id: 6,
-          title: "express.js",
-          link: "https://express.com/",
+          title: 'express.js',
+          link: 'https://express.com/',
           text:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?"
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, minima autem quam exercitationem eos, obcaecati aperiam delectus quia sapiente, deserunt quis atque dolorem ducimus recusandae perspiciatis mollitia excepturi ea rerum?'
         }
       ]
     };

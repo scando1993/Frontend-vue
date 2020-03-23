@@ -58,18 +58,15 @@
 </template>
 <script>
 import { 
-         apexDemo,
-         basicArea,
-         splineArea,
-         dateTimeXaxis,
-         negativeArea,
-         stackedArea,
-         nullAreaChart,
-         
-  
-         
-
-        } from '@/data/apexChart'
+  apexDemo,
+  basicArea,
+  splineArea,
+  dateTimeXaxis,
+  negativeArea,
+  stackedArea,
+  nullAreaChart,
+  series
+} from '@/data/apexChart';
 
 export default {
   data(){
@@ -84,14 +81,11 @@ export default {
       stackedArea,
       nullAreaChart,
       series
-      
-      
-    }
-    
+    };
   },
   methods:{
  
   }
-}
+};
 </script>
 

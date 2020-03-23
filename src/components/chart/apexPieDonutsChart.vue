@@ -40,22 +40,22 @@
 </template>
 <script>
 import{
-    simplePie,
-    simpleDonut,
-    monochromePie,
-    gradientDonut,
-    donutwithPattern
-} from '@/data/apexChart.js'
+  simplePie,
+  simpleDonut,
+  monochromePie,
+  gradientDonut,
+  donutwithPattern
+} from '@/data/apexChart.js';
 
 export default{
-    data(){
-        return{
-            simplePie,
-            simpleDonut,
-            monochromePie,
-            gradientDonut,
-            donutwithPattern
-        }
-    }
-}
+  data(){
+    return{
+      simplePie,
+      simpleDonut,
+      monochromePie,
+      gradientDonut,
+      donutwithPattern
+    };
+  }
+};
 </script>

@@ -1,4 +1,4 @@
-import {user, contacts, chatCollection} from "../../data/chat";
+import { user, contacts, chatCollection } from '../../data/chat';
 
 const state = {
   currentUser: user,
@@ -16,8 +16,8 @@ const getters = {
 };
 
 const actions = {
-  changeSelectedUser({commit}, id) {
-    commit("updateSelectedUser", id);
+  changeSelectedUser({ commit }, id) {
+    commit('updateSelectedUser', id);
   }
 };
 

@@ -18,10 +18,10 @@
                 <div id="calendar_selection" class="d-flex d-inline-block align-items-center">
                     <p class="text-16 font-weight-bold">05 Abril</p>
                     <span>
-                        <button class="btn planiButton mx-1 my-0">&#60</button>
+                        <button class="btn planiButton mx-1 my-0">&lt;</button>
                     </span>
                     <span>
-                        <button class="btn planiButton mx-1 my-0">></button>
+                        <button class="btn planiButton mx-1 my-0">&gt;</button>
                     </span>
                 </div>
                 <spam class="">
@@ -71,40 +71,40 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex';
-    export default {
-        name: "calendarNavBar",
-        data() {
-            return {
-                selectedFilter: "month",
-                options: [
-                    { value: 'day', text: 'Día' },
-                    { value: 'week', text: 'Semana' },
-                    { value: 'month', text: 'Mes' },
-                    { value: 'Tasks', text: 'Tareas' },
-                    { value: 'Map', text: 'Mapa' },
-                    { value: 'Custom', text: 'Customizar' }
-                ]
-            }
-        },
-        methods: {
-            ...mapActions(["setSelectedComponentView", "setSelectedMapView", "setShowNewTaskModal"]),
-            onChangeFilter() {
-                if(this.selectedFilter === "day" || this.selectedFilter === "month" || this.selectedFilter === "week") {
-                    this.setSelectedComponentView(this.selectedFilter);
-                    this.setSelectedMapView(this.selectedFilter);
-                }
-                else if(this.selectedFilter === "Map") {
-                    this.setSelectedMapView("day");
-                    this.setSelectedComponentView(this.selectedFilter);
-                }
-                else {
-                    this.setSelectedComponentView(this.selectedFilter);
-                }
-            },
-            showNewTaskModal() {
-                this.setShowNewTaskModal(true);
-            }
-        }
+import { mapActions } from 'vuex';
+export default {
+  name: 'calendarNavBar',
+  data() {
+    return {
+      selectedFilter: 'month',
+      options: [
+        { value: 'day', text: 'Día' },
+        { value: 'week', text: 'Semana' },
+        { value: 'month', text: 'Mes' },
+        { value: 'Tasks', text: 'Tareas' },
+        { value: 'Map', text: 'Mapa' },
+        { value: 'Custom', text: 'Customizar' }
+      ]
+    };
+  },
+  methods: {
+    ...mapActions(['setSelectedComponentView', 'setSelectedMapView', 'setShowNewTaskModal']),
+    onChangeFilter() {
+      if(this.selectedFilter === 'day' || this.selectedFilter === 'month' || this.selectedFilter === 'week') {
+        this.setSelectedComponentView(this.selectedFilter);
+        this.setSelectedMapView(this.selectedFilter);
+      }
+      else if(this.selectedFilter === 'Map') {
+        this.setSelectedMapView('day');
+        this.setSelectedComponentView(this.selectedFilter);
+      }
+      else {
+        this.setSelectedComponentView(this.selectedFilter);
+      }
+    },
+    showNewTaskModal() {
+      this.setShowNewTaskModal(true);
     }
+  }
+};
 </script>

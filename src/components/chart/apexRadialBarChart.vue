@@ -47,24 +47,24 @@
 </template>
 <script>
 import {
-    simpleRadialBar,
-    multipleRadialBar,
-    customAngleCircleChart,
-    gradientRadial,
-    strokedangularGauge,
-    semiCircleGauge
-} from '@/data/apexChart.js'
+  simpleRadialBar,
+  multipleRadialBar,
+  customAngleCircleChart,
+  gradientRadial,
+  strokedangularGauge,
+  semiCircleGauge
+} from '@/data/apexChart.js';
 
 export default {
-    data(){
-        return{
-            simpleRadialBar,
-            multipleRadialBar,
-            customAngleCircleChart,
-            gradientRadial,
-            strokedangularGauge,
-            semiCircleGauge
-        }
-    }
-}
+  data(){
+    return{
+      simpleRadialBar,
+      multipleRadialBar,
+      customAngleCircleChart,
+      gradientRadial,
+      strokedangularGauge,
+      semiCircleGauge
+    };
+  }
+};
 </script>

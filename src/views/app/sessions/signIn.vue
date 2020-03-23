@@ -95,38 +95,38 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "SignIn"
+    title: 'SignIn'
   },
   data() {
     return {
-      email: "test@plani.org",
-      password: "123456",
+      email: 'test@plani.org',
+      password: '123456',
       // // password: "vue006",
-      userId: "",
-      bgImage: require("@/assets/images/photo-wide-3.jpg"),
-      logo: require("@/assets/images/logo.png"),
-      signInImage: require("@/assets/images/photo-long-2.jpg")
+      userId: '',
+      bgImage: require('@/assets/images/photo-wide-3.jpg'),
+      logo: require('@/assets/images/logo.png'),
+      signInImage: require('@/assets/images/photo-long-2.jpg')
     };
   },
   computed: {
     validation() {
       return this.userId.length > 4 && this.userId.length < 13;
     },
-    ...mapGetters(["loggedInUser", "loading", "error"])
+    ...mapGetters(['loggedInUser', 'loading', 'error'])
   },
 
   methods: {
-    ...mapActions(["login"]),
+    ...mapActions(['login']),
     formSubmit() {
       this.login({ email: this.email, password: this.password });
     },
     makeToast(variant = null, msg) {
       this.$bvToast.toast(msg, {
-        title: ` ${variant || "default"}`,
+        title: ` ${variant || 'default'}`,
         variant: variant,
         solid: true
       });
@@ -135,16 +135,16 @@ export default {
   watch: {
     loggedInUser(val) {
       if (val && val.uid && val.uid.length > 0) {
-        this.makeToast("success", "Successfully Logged In");
+        this.makeToast('success', 'Successfully Logged In');
 
         setTimeout(() => {
-          this.$router.push("/");
+          this.$router.push('/');
         }, 500);
       }
     },
     error(val) {
       if (val != null) {
-        this.makeToast("warning", val.message);
+        this.makeToast('warning', val.message);
       }
     }
   }

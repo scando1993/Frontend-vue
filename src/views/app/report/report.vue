@@ -38,17 +38,17 @@
 </template>
 
 <script>
-    import {basicPie,basicDoughnut, stackedArea} from "@/data/echarts";
-    import ReportsNavBar from "./navbar/reportsNavBar";
-    export default {
-        name: "report",
-        components: {ReportsNavBar},
-        data: () => ({
-            basicPie,
-            stackedArea,
-            basicDoughnut
-        })
-    }
+import { basicPie,basicDoughnut, stackedArea } from '@/data/echarts';
+import ReportsNavBar from './navbar/reportsNavBar';
+export default {
+  name: 'report',
+  components: { ReportsNavBar },
+  data: () => ({
+    basicPie,
+    stackedArea,
+    basicDoughnut
+  })
+};
 </script>
 
 <style lang="scss" scoped>

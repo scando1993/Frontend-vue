@@ -320,10 +320,10 @@
 
 <script>
 export default {
-     metaInfo: {
+  metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Profile"
+    title: 'Profile'
   },
-}
+};
 </script>
 

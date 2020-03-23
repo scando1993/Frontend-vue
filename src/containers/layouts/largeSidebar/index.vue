@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import TopNav from "./TopNav";
-import appFooter from "../common/footer";
-import { mapGetters, mapActions } from "vuex";
+import Sidebar from './Sidebar';
+import TopNav from './TopNav';
+import appFooter from '../common/footer';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -34,7 +34,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["getSideBarToggleProperties"])
+    ...mapGetters(['getSideBarToggleProperties'])
   },
   methods: {
 

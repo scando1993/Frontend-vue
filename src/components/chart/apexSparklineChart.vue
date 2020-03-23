@@ -17,19 +17,19 @@
 </template>
 <script>
 import { 
-    spark1
-        } from '@/data/apexChart'
+  spark1
+} from '@/data/apexChart';
 
 export default {
   data(){
     return{
-        spark1
+      spark1
       
-    }
+    };
     
   },
   methods:{
  
   }
-}
+};
 </script>
