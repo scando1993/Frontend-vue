@@ -296,11 +296,11 @@
   <!-- header top menu end -->
 </template>
 <script>
-import Util from "@/utils";
-import searchComponent from "../common/search";
-import { isMobile } from "mobile-device-detect";
-import { mapGetters, mapActions } from "vuex";
-import { mixin as clickaway } from "vue-clickaway";
+import Util from '@/utils';
+import searchComponent from '../common/search';
+import { isMobile } from 'mobile-device-detect';
+import { mapGetters, mapActions } from 'vuex';
+import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
   mixins: [clickaway],
@@ -322,19 +322,19 @@ export default {
     // document.addEventListener("click", this.closeMegaMenu);
   },
   computed: {
-    ...mapGetters(["getCompactSideBarToggleProperties"])
+    ...mapGetters(['getCompactSideBarToggleProperties'])
   },
 
   methods: {
     ...mapActions([
-      "changeCompactSidebarProperties",
-      "changeThemeMode",
-      "signOut"
+      'changeCompactSidebarProperties',
+      'changeThemeMode',
+      'signOut'
     ]),
     logoutUser() {
       this.signOut();
 
-      this.$router.push("/app/sessions/signIn");
+      this.$router.push('/app/sessions/signIn');
     },
     handleFullScreen() {
       Util.toggleFullScreen();
@@ -353,26 +353,21 @@ export default {
       this.isSearchOpen = !this.isSearchOpen;
     },
 
-    compactSideBarToggle(el) {
-      // console.log("test");
+    compactSideBarToggle() {
       if (this.getCompactSideBarToggleProperties.isSideNavOpen && isMobile) {
         this.changeCompactSidebarProperties();
-        // console.log("1");
       } else if (this.getCompactSideBarToggleProperties.isSideNavOpen) {
         this.changeCompactSidebarProperties();
-        // console.log("2");
       } else if (
         !this.getCompactSideBarToggleProperties.isSideNavOpen &&
         !this.getCompactSideBarToggleProperties.isActiveSecondarySideNav
       ) {
         this.changeCompactSidebarProperties();
-        // console.log("3");
       } else if (!this.getCompactSideBarToggleProperties.isSideNavOpen) {
-        // console.log("4");
 
         this.changeCompactSidebarProperties();
 
-        console.log("4");
+        console.log('4');
       }
     }
   }

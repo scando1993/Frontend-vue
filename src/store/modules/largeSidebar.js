@@ -11,17 +11,17 @@ const getters = {
 };
 
 const actions = {
-  changeSidebarProperties({commit}) {
-    commit("toggleSidebarProperties");
+  changeSidebarProperties({ commit }) {
+    commit('toggleSidebarProperties');
   },
-  changeSecondarySidebarProperties({commit}) {
-    commit("toggleSecondarySidebarProperties");
+  changeSecondarySidebarProperties({ commit }) {
+    commit('toggleSecondarySidebarProperties');
   },
-  changeSecondarySidebarPropertiesViaMenuItem({commit}, data) {
-    commit("toggleSecondarySidebarPropertiesViaMenuItem", data);
+  changeSecondarySidebarPropertiesViaMenuItem({ commit }, data) {
+    commit('toggleSecondarySidebarPropertiesViaMenuItem', data);
   },
-  changeSecondarySidebarPropertiesViaOverlay({commit}) {
-    commit("toggleSecondarySidebarPropertiesViaOverlay");
+  changeSecondarySidebarPropertiesViaOverlay({ commit }) {
+    commit('toggleSecondarySidebarPropertiesViaOverlay');
   }
 };
 

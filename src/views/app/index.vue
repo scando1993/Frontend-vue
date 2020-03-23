@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- <keep-alive> -->
-    <component :is="getThemeMode.layout"></component>
+    <component :is="getThemeMode.layout"/>
     <!-- </keep-alive> -->
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {},
@@ -15,7 +15,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["getThemeMode"])
+    ...mapGetters(['getThemeMode'])
   },
   methods: {}
 };

@@ -125,11 +125,10 @@
 }
 
 .ul-widget-card__img-bg {
-    background: url('../../../../assets/images/products/watch-2.jpg');
     // background:url('../../../../../../../public/assets/images/products/watch-2.jpg');
     background-size: cover;
     height: 500px;
-    background-repeat: no-repeat, repeat;
+    background: url('/src/assets/images/products/watch-2.jpg') no-repeat, repeat;
 }
 
 .ul-widget-card__cloud .ul-widget-card__head h1 {

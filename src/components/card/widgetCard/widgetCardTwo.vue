@@ -20,12 +20,12 @@
 </template>
 <script>
 export default {
-    props:['wiCardOneTitle','wiCardOneText','wiCardPriceOne','wiCardIncome','wiCardDateTwo','wiCardDeadLine','wiImageUrlTwo'],
-    data()
-    {
-        return{
-            // imgLink:require('@/assets/images/products/iphone-1.jpg')
-        }
-    }
-}
+  props:['wiCardOneTitle','wiCardOneText','wiCardPriceOne','wiCardIncome','wiCardDateTwo','wiCardDeadLine','wiImageUrlTwo'],
+  data()
+  {
+    return{
+      // imgLink:require('@/assets/images/products/iphone-1.jpg')
+    };
+  }
+};
 </script>

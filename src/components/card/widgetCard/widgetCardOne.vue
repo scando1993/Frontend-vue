@@ -15,12 +15,12 @@
 </template>
 <script>
 export default {
-    props:['wiCardOneTitle','wiCardOneText','wiCardLButton','wiCardRButton','wiImageUrlOne','wiCardLButtonColor','wiCardRButtonColor'],
-    data()
-    {
-        return{
-            // imgLink:require('@/assets/images/products/iphone-1.jpg')
-        }
-    }
-}
+  props:['wiCardOneTitle','wiCardOneText','wiCardLButton','wiCardRButton','wiImageUrlOne','wiCardLButtonColor','wiCardRButtonColor'],
+  data()
+  {
+    return{
+      // imgLink:require('@/assets/images/products/iphone-1.jpg')
+    };
+  }
+};
 </script>

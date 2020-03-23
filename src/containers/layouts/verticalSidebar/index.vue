@@ -19,10 +19,10 @@
   </div>
 </template>
 <script>
-import verticalSidebar from "./verticalSidebar";
-import verticalTopbar from "./verticalTopbar";
-import appFooter from "../common/footer";
-import { mapGetters } from "vuex";
+import verticalSidebar from './verticalSidebar';
+import verticalTopbar from './verticalTopbar';
+import appFooter from '../common/footer';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
     appFooter
   },
   computed: {
-    ...mapGetters(["getVerticalSidebar"])
+    ...mapGetters(['getVerticalSidebar'])
   },
   data() {
     return {};

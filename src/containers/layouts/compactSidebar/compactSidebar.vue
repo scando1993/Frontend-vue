@@ -825,34 +825,34 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { isMobile } from "mobile-device-detect";
+import { mapGetters, mapActions } from 'vuex';
+import { isMobile } from 'mobile-device-detect';
 export default {
   data() {
     return {
       isMenuOver: false,
-      selectedParentMenu: "",
+      selectedParentMenu: '',
       isMobile,
       windowWidth:window.innerWidth,
     };
   },
   mounted() {
     this.toggleSelectedParentMenu();
-    window.addEventListener("resize", this.handleWindowResize);
-    document.addEventListener("click", this.returnSelectedParentMenu);
+    window.addEventListener('resize', this.handleWindowResize);
+    document.addEventListener('click', this.returnSelectedParentMenu);
     this.handleWindowResize();
   },
 
   beforeDestroy() {
-    document.removeEventListener("click", this.returnSelectedParentMenu);
-    window.removeEventListener("resize", this.handleWindowResize);
+    document.removeEventListener('click', this.returnSelectedParentMenu);
+    window.removeEventListener('resize', this.handleWindowResize);
   },
   computed: {
-    ...mapGetters(["getCompactSideBarToggleProperties"])
+    ...mapGetters(['getCompactSideBarToggleProperties'])
   },
 
   methods: {
-    ...mapActions(["changeCompactSidebarProperties"]),
+    ...mapActions(['changeCompactSidebarProperties']),
 
     removeOverlay() {
       this.changeCompactSidebarProperties();
@@ -862,7 +862,7 @@ export default {
       this.toggleSelectedParentMenu();
     },
 
-    compactSideBarToggle(el) {
+    compactSideBarToggle() {
       // console.log("test");
       if (this.getCompactSideBarToggleProperties.isSideNavOpen) {
         this.changeCompactSidebarProperties();
@@ -883,17 +883,17 @@ export default {
     },
     toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path
-        .split("/")
-        .filter(x => x !== "")[1];
+        .split('/')
+        .filter(x => x !== '')[1];
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();
       } else {
-        this.selectedParentMenu = "dashboards";
+        this.selectedParentMenu = 'dashboards';
       }
     },
     toggleSubMenu(e) {
-      let childrens = this.$refs.sidebarChild.children;
+      // let childrens = this.$refs.sidebarChild.children;
       let parent = e.target.dataset.item;
 
       this.selectedParentMenu = parent;
@@ -905,12 +905,12 @@ export default {
     },
 
     toggleSidebarDropdwon(event) {
-      let dropdownMenus = this.$el.querySelectorAll(".dropdown-sidemenu.open");
+      let dropdownMenus = this.$el.querySelectorAll('.dropdown-sidemenu.open');
 
-      event.currentTarget.classList.toggle("open");
+      event.currentTarget.classList.toggle('open');
 
       dropdownMenus.forEach(dropdown => {
-        dropdown.classList.remove("open");
+        dropdown.classList.remove('open');
       });
     }
   }

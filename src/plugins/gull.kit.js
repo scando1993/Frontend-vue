@@ -1,63 +1,62 @@
-import BootstrapVue from "bootstrap-vue";
+import BootstrapVue from 'bootstrap-vue';
 // import vuePerfectScrollbar from "vue-perfect-scrollbar";
-import VueTour from "vue-tour";
 // import SmartTable from "vuejs-smart-table";
-import VueTagsInput from "@johmun/vue-tags-input";
-import VueTheMask from "vue-the-mask";
-import Vuelidate from "vuelidate";
-import VueFormWizard from "vue-form-wizard";
-import VueLazyload from "vue-lazyload";
+import VueTagsInput from '@johmun/vue-tags-input';
+import VueTheMask from 'vue-the-mask';
+import Vuelidate from 'vuelidate';
+import VueFormWizard from 'vue-form-wizard';
+import VueLazyload from 'vue-lazyload';
 // import VCalendar from "v-calendar";
-import VueGoodTablePlugin from "vue-good-table";
+import VueGoodTablePlugin from 'vue-good-table';
 // import VueSlider from "vue-slider-component";
-import Meta from "vue-meta";
-import FlagIcon from "vue-flag-icon";
+import Meta from 'vue-meta';
+import FlagIcon from 'vue-flag-icon';
 
-import "@/assets/styles/sass/themes/plani.scss";
-import "@/plugins/echarts";
-import "@/plugins/apexChart.js";
-import "@/plugins/sweetalert2.js";
+import '@/assets/styles/sass/theme.scss';
+import '@/plugins/echarts';
+import '@/plugins/apexChart.js';
+import '@/plugins/sweetalert2.js';
+import '@/plugins/tour.js';
 
 // locale.use(lang);
-
 export default {
   install(Vue) {
     Vue.use(BootstrapVue);
     Vue.component(
-      "large-sidebar",
+      'large-sidebar',
       // The `import` function returns a Promise.
-      () => import("../containers/layouts/largeSidebar")
+      () => import('../containers/layouts/largeSidebar')
     );
 
     Vue.component(
-      "compact-sidebar",
+      'compact-sidebar',
       // The `import` function returns a Promise.
-      () => import("../containers/layouts/compactSidebar")
+      () => import('../containers/layouts/compactSidebar')
     );
     Vue.component(
-      "vertical-sidebar",
+      'vertical-sidebar',
       // The `import` function returns a Promise.
-      () => import("../containers/layouts/verticalSidebar")
+      () => import('../containers/layouts/verticalSidebar')
     );
     Vue.component(
-        "plani-vertical-sidebar",
-        // The `import` function returns a Promise.
-        () => import("../containers/layouts/planiVerticalSidebar")
+      'plani-vertical-sidebar',
+      // The `import` function returns a Promise.
+      () => import('../containers/layouts/planiVerticalSidebar')
     );
     Vue.component(
-      "customizer",
+      'customizer',
       // The `import` function returns a Promise.
-      () => import("../components/common/customizer.vue")
+      () => import('../components/common/customizer.vue')
     );
-    Vue.component("vue-perfect-scrollbar", () =>
-      import("vue-perfect-scrollbar")
+    Vue.component('vue-perfect-scrollbar', () =>
+      import('vue-perfect-scrollbar')
     );
     // Vue.component(VueCropper);
     Vue.use(Meta, {
-      keyName: "metaInfo",
-      attribute: "data-vue-meta",
-      ssrAttribute: "data-vue-meta-server-rendered",
-      tagIDKeyName: "vmid",
+      keyName: 'metaInfo',
+      attribute: 'data-vue-meta',
+      ssrAttribute: 'data-vue-meta-server-rendered',
+      tagIDKeyName: 'vmid',
       refreshOnceOnNavigation: true
     });
 
@@ -86,18 +85,18 @@ export default {
 
     // import VueCropper from "./plugins/imageCropper";
 
+
     // Use v-calendar & v-date-picker components
     // Vue.use(VCalendar, {
     //   componentPrefix: "v" // Use <vc-calendar /> instead of <v-calendar />
     //   // ...other defaults
     // });
 
-    Vue.use(VueTour);
     Vue.use(VueLazyload, {
       observer: true,
       // optional
       observerOptions: {
-        rootMargin: "0px",
+        rootMargin: '0px',
         threshold: 0.1
       }
     });

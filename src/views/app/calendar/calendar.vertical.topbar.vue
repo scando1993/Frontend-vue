@@ -128,23 +128,23 @@
     </div>
 </template>
 <script>
-    import { mapGetters, mapActions } from "vuex";
-    import Util from "@/utils";
+import { mapGetters, mapActions } from 'vuex';
+import Util from '@/utils';
 
-    export default {
-        name: 'CalendarVerticalTopbar',
-        computed:{
-            ...mapGetters(["getPlaniVerticalCompact", "getPlaniVerticalSidebar", "getSideBarToggleProperties"])
-        },
-        data() {
-            return {};
-        },
-        methods: {
-            ...mapActions(["planiSwitchSidebar", "planSidebarCompact", "planiRemoveSidebarCompact", "planiMobileSidebar"]),
+export default {
+  name: 'CalendarVerticalTopbar',
+  computed:{
+    ...mapGetters(['getPlaniVerticalCompact', 'getPlaniVerticalSidebar', 'getSideBarToggleProperties'])
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    ...mapActions(['planiSwitchSidebar', 'planSidebarCompact', 'planiRemoveSidebarCompact', 'planiMobileSidebar']),
 
-            handleFullScreen() {
-                Util.toggleFullScreen();
-            },
-        }
-    };
+    handleFullScreen() {
+      Util.toggleFullScreen();
+    },
+  }
+};
 </script>

@@ -28,18 +28,18 @@
 </template>
 <script>
 import {
-    basicRadar,
-    radarMultiSeries,
-    radarwithPolygonFill
-} from '@/data/apexChart.js'
+  basicRadar,
+  radarMultiSeries,
+  radarwithPolygonFill
+} from '@/data/apexChart.js';
 
 export default {
-    data(){
-        return{
-            basicRadar,
-            radarMultiSeries,
-            radarwithPolygonFill
-        }
-    }
-}
+  data(){
+    return{
+      basicRadar,
+      radarMultiSeries,
+      radarwithPolygonFill
+    };
+  }
+};
 </script>

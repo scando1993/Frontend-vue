@@ -56,17 +56,17 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex'
-    export default {
-        name: "taskGridNavbar",
-        methods: {
-            ...mapActions(["changeShowFormClient", "showNewClientForm"]),
+import { mapActions, mapGetters } from 'vuex';
+export default {
+  name: 'taskGridNavbar',
+  methods: {
+    ...mapActions(['changeShowFormClient', 'showNewClientForm']),
 
-        },
-        computed: {
-            ...mapGetters(["getFormClientShow",])
-        }
-    }
+  },
+  computed: {
+    ...mapGetters(['getFormClientShow',])
+  }
+};
 </script>
 
 <style scoped>

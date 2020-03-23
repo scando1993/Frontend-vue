@@ -8,29 +8,29 @@
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {};
   },
   computed: {
-    ...mapGetters(["getThemeMode"]),
+    ...mapGetters(['getThemeMode']),
     themeName() {
-      return this.getThemeMode.dark ? "dark-theme" : " ";
+      return this.getThemeMode.dark ? 'dark-theme' : ' ';
     },
     rtl() {
-      return this.getThemeMode.rtl ? "rtl" : " ";
+      return this.getThemeMode.rtl ? 'rtl' : ' ';
     }
   },
   metaInfo() {
     return {
       // if no subcomponents specify a metaInfo.title, this title will be used
-      title: "Plani",
+      title: 'Plani',
       // all titles will be injected into this template
-      titleTemplate: "%s | Plani - Plani Admin Dashboard ",
+      titleTemplate: '%s | Plani - Plani Admin Dashboard ',
       bodyAttrs: {
-        class: [this.themeName, "text-left"]
+        class: [this.themeName, 'text-left']
       },
       htmlAttrs: {
         dir: this.rtl

@@ -1,21 +1,20 @@
-const path = require("path");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require('path');
 module.exports = {
   pages: {
     index: {
-      entry: "src/main.js",
-      template: "public/index.html",
-      filename: "index.html"
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html'
     }
   },
   devServer: {
-    clientLogLevel: "warning",
+    clientLogLevel: 'warning',
     hot: true,
-    contentBase: "dist",
+    contentBase: 'dist',
     compress: true,
     open: true,
-    overlay: {warnings: false, errors: true},
-    publicPath: "/",
+    overlay: { warnings: false, errors: true },
+    publicPath: '/',
     quiet: true,
     watchOptions: {
       poll: false,
@@ -24,13 +23,15 @@ module.exports = {
   },
   chainWebpack: config => {
     config.module
-      .rule("vue")
-      .use("vue-loader")
-      .loader("vue-loader")
+      .rule('vue')
+      .use('vue-loader')
+      .loader('vue-loader')
       .tap(options => {
         options.compilerOptions.preserveWhitespace = true;
         return options;
       });
+    config.resolve.alias
+      .set('@', path.join(__dirname, 'src'));
   },
   productionSourceMap: false,
   // assetsDir: "./assets/",
@@ -45,5 +46,5 @@ module.exports = {
   lintOnSave: false,
   pluginOptions: {},
 
-  transpileDependencies: ["vue-echarts", "resize-detector"]
+  transpileDependencies: ['vue-echarts', 'resize-detector']
 };

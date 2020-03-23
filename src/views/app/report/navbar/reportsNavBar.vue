@@ -24,8 +24,8 @@
                 <div class="date d-inline" style="margin-left: 20px">
                     <div class="d-inline" style="margin-right: 10px" id="display_date">May-12</div>
                     <div id="navigate_dates" class="d-inline">
-                        <b-button id="left_button">&#60</b-button>
-                        <b-button id="rifgt_button">&#62</b-button>
+                        <b-button id="left_button">&#60;</b-button>
+                        <b-button id="rifgt_button">&#62;</b-button>
                     </div>
                 </div>
             </div>
@@ -34,9 +34,9 @@
 </template>
 
 <script>
-    export default {
-        name: "reportsNavBar"
-    }
+export default {
+  name: 'reportsNavBar'
+};
 </script>
 
 <style scoped>

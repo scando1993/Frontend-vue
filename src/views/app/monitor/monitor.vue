@@ -1,6 +1,6 @@
 <template>
     <div>
-        <monitoring-navbar></monitoring-navbar>
+        <monitoring-navbar/>
 
         <div id="body_container">
             <b-row >
@@ -11,7 +11,7 @@
                                 <h3 style="color: #00b3ee" class="text-center">Actividad</h3>
                                 <div class="mt-3 mb-30 border-top"></div>
                                 <div id="task_card" class="text-11 ">
-                                    <div v-for="item in [1,2,3,4,5,6,7,8,9]">
+                                    <div v-for="item in [1,2,3,4,5,6,7,8,9]" :key="item" v-bind="item">
                                         <b-card class="" style="margin-bottom: 5px">
                                             <div v-if="item % 2 === 0">
                                                 <b-row>
@@ -87,10 +87,10 @@
                         <div class="mt-3 mb-30 border-top"></div>
 
                         <div id="task_card">
-                            <div v-for="item in [1,2,3,4,5,6,7,8,9]">
+                            <div v-for="item in [1,2,3,4,5,9,10,12,13,15]" v-bind:key="item">
                                 <div class="ul-contact-page__profile">
                                     <div class="user-profile-img">
-                                        <img class="profile-picture mb-12" src="@/assets/images/faces/1.jpg" alt="">
+                                        <img class="profile-picture mb-12" :src="require(`@/assets/images/faces/` + item + `.jpg`)" alt="">
                                     </div>
                                     <div class="ul-contact-page__info">
                                         <p class="m-0 text-13">Timothy Carlson</p>
@@ -109,49 +109,42 @@
 </template>
 
 <script>
-    import SpaIcon from "vue-material-design-icons/Spa";
-    import CheckCircleOutlineIcon from "vue-material-design-icons/CheckCircleOutline";
-    import { FunctionalCalendar } from 'vue-functional-calendar';
-    import {LMap, LTileLayer, LMarker } from 'vue2-leaflet';
-    import MonitoringNavbar from "./navbar/monitoringNavbar";
-    export default {
-        name: "monitor",
-        components: {
-            MonitoringNavbar,
-            CheckCircleOutlineIcon,
-            SpaIcon,
-            FunctionalCalendar,
-            LMap,
-            LTileLayer,
-            LMarker
-        },
-        data () {
-            return {
-                showDatePicker: false,
-                calendarData: {},
-                displayDate: "",
-                url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-                zoom: 6,
-                center: [ -1.224882, -78.601685],
-                bounds: null
+import { LMap, LTileLayer } from 'vue2-leaflet';
+import MonitoringNavbar from './navbar/monitoringNavbar';
+export default {
+  name: 'monitor',
+  components: {
+    MonitoringNavbar,
+    LMap,
+    LTileLayer
+  },
+  data () {
+    return {
+      showDatePicker: false,
+      calendarData: {},
+      displayDate: '',
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      zoom: 6,
+      center: [ -1.224882, -78.601685],
+      bounds: null
 
-            }
-        },
-        methods: {
-            // map functions
-            zoomUpdated (zoom) {
-                this.zoom = zoom;
-            },
-            centerUpdated (center) {
-                this.center = center;
-            },
-            boundsUpdated (bounds) {
-                this.bounds = bounds;
-            },
-            //
+    };
+  },
+  methods: {
+    // map functions
+    zoomUpdated (zoom) {
+      this.zoom = zoom;
+    },
+    centerUpdated (center) {
+      this.center = center;
+    },
+    boundsUpdated (bounds) {
+      this.bounds = bounds;
+    },
+    //
 
-        }
-    }
+  }
+};
 </script>
 
 <style scoped>

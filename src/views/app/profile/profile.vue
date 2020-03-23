@@ -150,54 +150,54 @@
 </template>
 
 <script >
-    import ProfileNavBar from "./navbar/profileNavBar";
-    import {dummyProfileData} from "./data/profileData";
-    export default {
-        name: "profiel",
-        components: {ProfileNavBar},
-        data() {
-            return {
-                user: dummyProfileData,
-                formData: {
-                    name: "",
-                    lastname: "",
-                    username: "",
-                    password: "",
-                    email: "",
-                    phoneNumber: "",
-                    company: {
-                        name: "",
-                        address: ""
-                    }
-                }
-            }
-        },
-        methods: {
-            initForm() {
-                this.setDummyData();
-            },
-            setDummyData() {
-                this.formData = {
-                    name: this.user.name,
-                    lastname: this.user.lastname,
-                    username: this.user.username,
-                    password: "",
-                    email: this.user.email,
-                    phoneNumber: this.user.phoneNumber,
-                    company: this.user.company
-                }
-            },
-            saveDummyData() {
-                dummyProfileData = this.formData;
-            }
-        },
-        created() {
-            console.log(dummyProfileData);
-            this.initForm();
-            console.log(this.formData);
+import ProfileNavBar from './navbar/profileNavBar';
+import { dummyProfileData } from './data/profileData';
+export default {
+  name: 'profiel',
+  components: { ProfileNavBar },
+  data() {
+    return {
+      user: dummyProfileData,
+      formData: {
+        name: '',
+        lastname: '',
+        username: '',
+        password: '',
+        email: '',
+        phoneNumber: '',
+        company: {
+          name: '',
+          address: ''
         }
-
+      }
+    };
+  },
+  methods: {
+    initForm() {
+      this.setDummyData();
+    },
+    setDummyData() {
+      this.formData = {
+        name: this.user.name,
+        lastname: this.user.lastname,
+        username: this.user.username,
+        password: '',
+        email: this.user.email,
+        phoneNumber: this.user.phoneNumber,
+        company: this.user.company
+      };
+    },
+    saveDummyData() {
+      dummyProfileData = this.formData;
     }
+  },
+  created() {
+    console.log(dummyProfileData);
+    this.initForm();
+    console.log(this.formData);
+  }
+
+};
 </script>
 
 <style scoped>

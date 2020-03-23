@@ -145,29 +145,29 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/line';
 import { 
-    echartPie,
-    echartBar,
-    basicLine,
-    multiLine,
-    basicBar,
-    multipleBar,
-    multipleBar2,
-    zoomBar,
-    basicDoughnut,
-    gaugeStart,
-    basicArea,
-    stackedArea,
-    stackedPointerArea,
-    solidArea,
-    basicPie,
-    stackedPie,
-    bubbleChart
+  echartPie,
+  echartBar,
+  basicLine,
+  multiLine,
+  basicBar,
+  multipleBar,
+  multipleBar2,
+  zoomBar,
+  basicDoughnut,
+  gaugeStart,
+  basicArea,
+  stackedArea,
+  stackedPointerArea,
+  solidArea,
+  basicPie,
+  stackedPie,
+  bubbleChart
    
-} from '@/data/echarts'
+} from '@/data/echarts';
 
 
 export default {
-  name: "demo",
+  name: 'demo',
   data: () => ({ 
     
     echartPie,

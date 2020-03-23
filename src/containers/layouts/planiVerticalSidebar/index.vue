@@ -15,23 +15,24 @@
     </div>
 </template>
 <script>
-    import planiVerticalSidebar from "./planiVerticalSidebar";
-    import planiVerticalTopbar from "./planiVerticalTopbar";
-    import appFooter from "../common/footer";
-    import { mapGetters } from "vuex";
+import planiVerticalSidebar from './planiVerticalSidebar';
+import planiVerticalTopbar from './planiVerticalTopbar';
+import appFooter from '../common/footer';
+import { mapGetters } from 'vuex';
 
-    export default {
-        components: {
-            planiVerticalSidebar,
-            planiVerticalTopbar,
-            appFooter
-        },
-        computed: {
-            ...mapGetters(["getPlaniVerticalSidebar"])
-        },
-        data() {
-            return {};
-        },
-        methods: {}
-    };
+export default {
+  components: {
+    planiVerticalSidebar,
+    // eslint-disable-next-line vue/no-unused-components
+    planiVerticalTopbar,
+    appFooter
+  },
+  computed: {
+    ...mapGetters(['getPlaniVerticalSidebar'])
+  },
+  data() {
+    return {};
+  },
+  methods: {}
+};
 </script>

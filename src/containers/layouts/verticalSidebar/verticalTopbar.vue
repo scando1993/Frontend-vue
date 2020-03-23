@@ -209,20 +209,20 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
-import Util from "@/utils";
+import { mapGetters, mapActions } from 'vuex';
+import Util from '@/utils';
 
 export default {
   computed:{
-    ...mapGetters(["getVerticalCompact", "getVerticalSidebar", "getSideBarToggleProperties"])
+    ...mapGetters(['getVerticalCompact', 'getVerticalSidebar', 'getSideBarToggleProperties'])
   },
   data() {
     return {};
   },
   methods: {
-    ...mapActions(["switchSidebar", "sidebarCompact", "removeSidebarCompact", "mobileSidebar"]),
+    ...mapActions(['switchSidebar', 'sidebarCompact', 'removeSidebarCompact', 'mobileSidebar']),
     
-     handleFullScreen() {
+    handleFullScreen() {
       Util.toggleFullScreen();
     },
   }

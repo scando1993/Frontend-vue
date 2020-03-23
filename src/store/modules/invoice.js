@@ -1,59 +1,59 @@
 const state = {
   rows: [
     {
-      invoiceId: "1",
-      billFrom: "John",
-      billTo: "UI Lib",
+      invoiceId: '1',
+      billFrom: 'John',
+      billTo: 'UI Lib',
       billFromAdress:
-        "rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ",
+        'rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ',
       billToAdress:
-        "sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ",
+        'sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ',
       status: '<span class="badge badge-primary">Primary</span>'
     },
     {
-      invoiceId: "2",
-      billFrom: "Wick",
-      billTo: "UI Lib",
+      invoiceId: '2',
+      billFrom: 'Wick',
+      billTo: 'UI Lib',
       billFromAdress:
-        "rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ",
+        'rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ',
       billToAdress:
-        "sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ",
+        'sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ',
       status: '<span class="badge badge-success">success</span>'
     },
     {
-      invoiceId: "3",
-      billFrom: "Gabriel",
-      billTo: "UI Lib",
+      invoiceId: '3',
+      billFrom: 'Gabriel',
+      billTo: 'UI Lib',
       billFromAdress:
-        "rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ",
+        'rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ',
       billToAdress:
-        "sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ",
+        'sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ',
       status: '<span class="badge badge-warning">Warning</span>'
     },
     {
-      invoiceId: "4",
-      billFrom: "John",
-      billTo: "UI Lib",
+      invoiceId: '4',
+      billFrom: 'John',
+      billTo: 'UI Lib',
       billFromAdress:
-        "rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ",
+        'rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ',
       billToAdress:
-        "sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ",
+        'sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ',
       status: '<span class="badge badge-info">Info</span>'
     },
     {
-      invoiceId: "5",
-      billFrom: "John",
-      billTo: "UI Lib",
+      invoiceId: '5',
+      billFrom: 'John',
+      billTo: 'UI Lib',
       billFromAdress:
-        "rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ",
+        'rodriguez.trent@senger.com 61 Johnson St. Shirley, NY 11967. ',
       billToAdress:
-        "sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ",
+        'sales@ui-lib.com 8254 S. Garfield Street. Villa Rica, GA 30180. ',
       status: '<span class="badge badge-danger">Danger</span>'
     }
   ],
-  newInvoice: "",
-  editInvoice: "",
-  updateInvoice: ""
+  newInvoice: '',
+  editInvoice: '',
+  updateInvoice: ''
 };
 
 const getters = {
@@ -64,21 +64,21 @@ const getters = {
 };
 
 const actions = {
-  addInvoice({commit}, data) {
-    commit("ADD_INVOICE", data);
+  addInvoice({ commit }, data) {
+    commit('ADD_INVOICE', data);
     // commit('GET_TODO', data.invoiceId);
   },
-  removeInvoice({commit}, data) {
-    commit("REMOVE_INVOICE", data);
+  removeInvoice({ commit }, data) {
+    commit('REMOVE_INVOICE', data);
   },
-  editInvoice({commit}, id) {
-    commit("EDIT_INVOICE", id);
+  editInvoice({ commit }, id) {
+    commit('EDIT_INVOICE', id);
   },
-  viewInvoice({commit}, id) {
-    commit("VIEW_INVOICE", id);
+  viewInvoice({ commit }, id) {
+    commit('VIEW_INVOICE', id);
   },
-  updateInvoice({commit}, payload) {
-    commit("UPDATE_INVOICE", payload);
+  updateInvoice({ commit }, payload) {
+    commit('UPDATE_INVOICE', payload);
   }
 };
 
@@ -87,6 +87,7 @@ const mutations = {
     state.editInvoice = data;
     // console.log(data)
   },
+  // eslint-disable-next-line no-unused-vars
   UPDATE_INVOICE(state, data) {
     state.rows.map(row => {
       if (row.invoiceId === state.editInvoice.invoiceId) {

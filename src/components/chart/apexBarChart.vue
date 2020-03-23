@@ -48,15 +48,15 @@
 </template>
 <script>
 import{
-    basicBarChart,
-    groupedBar,
-    stackedbar,
-    negativeBar,
-    customDataLabelBar,
-    patternedBar
-} from '@/data/apexChart'
+  basicBarChart,
+  groupedBar,
+  stackedbar,
+  negativeBar,
+  customDataLabelBar,
+  patternedBar
+} from '@/data/apexChart';
 export default {
-     data(){
+  data(){
    
     return{
       name:'apexBarChart',
@@ -67,8 +67,8 @@ export default {
       customDataLabelBar,
       patternedBar
       
-    }
+    };
     
   }
-}
+};
 </script>

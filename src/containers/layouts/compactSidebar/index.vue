@@ -18,10 +18,10 @@
   </div>
 </template>
 <script>
-import compactTopbar from "./compactTopbar";
-import compactSidebar from "./compactSidebar";
-import appFooter from "../common/footer";
-import { mapGetters, mapActions } from "vuex";
+import compactTopbar from './compactTopbar';
+import compactSidebar from './compactSidebar';
+import appFooter from '../common/footer';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     compactTopbar,
@@ -33,8 +33,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "getCompactSideBarToggleProperties",
-      "getcompactLeftSideBarBgColor"
+      'getCompactSideBarToggleProperties',
+      'getcompactLeftSideBarBgColor'
     ])
   }
 };

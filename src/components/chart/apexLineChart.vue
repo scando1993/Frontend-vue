@@ -54,29 +54,29 @@
 </template>
 <script>
 import {
-    basicLineChart,
-    lineChartWIthDataLabel,
-    zoomableLineChart,
-    gradientLineChart,
-    dashedLineChart,
-    brushLineChart
-} from '@/data/apexChart'
+  basicLineChart,
+  lineChartWIthDataLabel,
+  zoomableLineChart,
+  gradientLineChart,
+  dashedLineChart,
+  brushLineChart
+} from '@/data/apexChart';
 
 
 export default {
-    data(){
-        return{
-            basicLineChart,
-            lineChartWIthDataLabel,
-            zoomableLineChart,
-            gradientLineChart,
-            dashedLineChart,
-            brushLineChart,
+  data(){
+    return{
+      basicLineChart,
+      lineChartWIthDataLabel,
+      zoomableLineChart,
+      gradientLineChart,
+      dashedLineChart,
+      brushLineChart,
             
-        }
-    },
-    methods:{
+    };
+  },
+  methods:{
          
-    }
-}
+  }
+};
 </script>

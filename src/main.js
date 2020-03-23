@@ -1,26 +1,28 @@
 // import "babel-polyfill";
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
 // import VueRouter from "vue-router";
-import GullKit from "./plugins/gull.kit";
+import GullKit from './plugins/gull.kit';
 // import "babel-polyfill";
 // import es6Promise from "es6-promise";
 // es6Promise.polyfill();
-import store from "./store";
-import Breadcumb from "./components/breadcumb";
-import firebase from "firebase/app";
-import "firebase/auth";
-import {firebaseSettings} from "@/data/config";
-import i18n from "./lang/lang";
-import 'vue-material-design-icons/styles.css'
-import VModal from 'vue-js-modal'
+import store from './store';
+import Breadcumb from './components/breadcumb';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { firebaseSettings } from '@/data/config';
+import i18n from './lang/lang';
+import 'vue-material-design-icons/styles.css';
+import VModal from 'vue-js-modal';
 import FunctionalCalendar from 'vue-functional-calendar';
-import { Icon }  from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import { Icon }  from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
 Vue.use(FunctionalCalendar, {
   dayNames: ['L', 'M', 'Mi', 'J', 'V', 'S', 'D']
 });
+
 Vue.use(VModal);
 
 //leaflet configuration
@@ -34,15 +36,16 @@ Icon.Default.mergeOptions({
 });
 
 
-import VueDragula  from 'vue-dragula'
+import VueDragula  from 'vue-dragula';
 
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
+
 Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 
-Vue.component("breadcumb", Breadcumb);
+Vue.component('breadcumb', Breadcumb);
 // Vue.use(VueRouter);
 
 Vue.use(GullKit);
@@ -56,4 +59,4 @@ new Vue({
   router,
   i18n,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app');

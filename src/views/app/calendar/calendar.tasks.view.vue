@@ -3,7 +3,7 @@
         <b-row>
             <b-col md="4">
                 <b-card title="Expiradas">
-                    <div class="task chip-primary mr-1" v-for="(item, task) in [1,2,3,4,5]">
+                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
                         <div class="task-body">
                             <span class="task-text">Primary chip</span>
                             <div class="avatar ml-auto">
@@ -17,7 +17,7 @@
             </b-col>
             <b-col md="4">
                 <b-card title="Agendadas">
-                    <div class="task chip-primary mr-1" v-for="(item, task) in [1,2,3,4,5]">
+                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
                         <div class="task-body">
                             <span class="task-text">Primary chip</span>
                             <div class="avatar ml-auto">
@@ -31,7 +31,7 @@
             </b-col>
             <b-col md="4">
                 <b-card title="Pendientes">
-                    <div class="task chip-primary mr-1" v-for="(item, task) in [1,2,3,4,5]">
+                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
                         <div class="task-body">
                             <span class="task-text">Primary chip</span>
                             <div class="avatar ml-auto">
@@ -48,9 +48,9 @@
 </template>
 
 <script>
-    export default {
-        name: "calendar_task_view"
-    }
+export default {
+  name: 'calendar_task_view'
+};
 </script>
 
 <style scoped>

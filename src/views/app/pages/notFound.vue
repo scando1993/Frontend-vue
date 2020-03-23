@@ -20,7 +20,7 @@
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "404 Not Found"
+    title: '404 Not Found'
   }
 };
 </script>

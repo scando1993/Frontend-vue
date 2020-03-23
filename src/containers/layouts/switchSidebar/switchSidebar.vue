@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar-panel bg-white">
-            <div class="sidebar-compact-switch"><span></span></div>
+            <div class="sidebar-compact-switch"><span/></div>
 
 
             
@@ -115,13 +115,13 @@
         </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
+export default {
+  data() {
+    return {
         
-      }
-    }
+    };
   }
+};
 </script>
 <style>
  .sidebar-panel {

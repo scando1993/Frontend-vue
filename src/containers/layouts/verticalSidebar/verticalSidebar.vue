@@ -887,52 +887,52 @@
   </vue-perfect-scrollbar>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
-import arrowIcon from "@/components/arrow/arrowIcon";
+import { mapGetters, mapActions } from 'vuex';
+import arrowIcon from '@/components/arrow/arrowIcon';
 export default {
   components: {
     arrowIcon
   },
   computed: {
-    ...mapGetters(["getVerticalCompact", "getVerticalSidebar"])
+    ...mapGetters(['getVerticalCompact', 'getVerticalSidebar'])
   },
   data() {
     return {
-      selectedParentMenu: "",
+      selectedParentMenu: '',
     };
   },
-   mounted() {
+  mounted() {
     this.toggleSelectedParentMenu();
-     document.addEventListener("click", this.returnSelectedParentMenu);
-   },
-    beforeDestroy() {
-    document.removeEventListener("click", this.returnSelectedParentMenu);
+    document.addEventListener('click', this.returnSelectedParentMenu);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.returnSelectedParentMenu);
     
   },
   methods: {
     ...mapActions([
-      "switchSidebar",
-      "sidebarCompact",
-      "removeSidebarCompact",
-      "mobileSidebar"
+      'switchSidebar',
+      'sidebarCompact',
+      'removeSidebarCompact',
+      'mobileSidebar'
     ]),
 
 
-     toggleSelectedParentMenu() {
+    toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path
-        .split("/")
-        .filter(x => x !== "")[1];
+        .split('/')
+        .filter(x => x !== '')[1];
 
       if (currentParentUrl !== undefined || currentParentUrl !== null) {
         this.selectedParentMenu = currentParentUrl.toLowerCase();
-        console.log(currentParentUrl)
+        console.log(currentParentUrl);
       } else {
-        this.selectedParentMenu = "dashboards";
+        this.selectedParentMenu = 'dashboards';
       }
     },
-      returnSelectedParentMenu() {
+    returnSelectedParentMenu() {
      
-        this.toggleSelectedParentMenu();
+      this.toggleSelectedParentMenu();
       
     },
     
