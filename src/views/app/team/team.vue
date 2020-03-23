@@ -14,7 +14,7 @@
                     <div class="col-md-6">
                         <div class="ul-contact-page__profile">
                             <div class="user-profile-img">
-                                <img class="profile-picture mb-2" :src="require(`@/assets/images/faces/` + index + `.jpg`)" alt="">
+                                <img class="profile-picture mb-2" :src="getImageForUser(index + 1)" alt="">
                             </div>
                             <div class="ul-contact-page__info">
                                 <p class="m-0 text-24">{{item.name}} {{item.lastname}}</p>
@@ -91,7 +91,7 @@
                                 type="email"
                                 v-model="newMemberForm.email"
                                 required
-                        ></b-form-input>
+                        />
                     </b-form-group>
                     <div class="d-flex justify-content-between mt-5">
                         <b-button  variant = "info " type="reset" size="sm" style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;">No</b-button>
@@ -151,7 +151,10 @@ export default {
       this.newMemberForm.email = '';
       this.$bvModal.hide('m-new-admin');
     },
-
+    getImageForUser (value){
+      let images = require.context('@/assets/images/faces/', false, /\.jpg$/);
+      return images('./' + value + '.jpg');
+    }
   }
 };
 
