@@ -46,14 +46,15 @@ export default {
     login({ commit }, data) {
       commit('clearError');
       commit('setLoading', true);
-      const url = process.env.VUE_APP_THINGSBOARD_API + '/auth/login';
+      const url = process.env.VUE_APP_API + '/Account/login';
       const body = {
-        username: data.email,
+        email: data.email,
         password: data.password
       };
 
       axios.post(url, body)
         .then(function (response) {
+          response = response.data;
           console.log(response);
           const token = response.data.token;
           const refreshToken = response.data.refreshToken;
