@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-content">
         <profile-nav-bar/>
         <div id="avatarProfile" class="d-flex justify-content-center">
             <div class="user-profile-img">
@@ -13,9 +13,9 @@
                     <b-col md="12">
                         <b-form @submit.prevent>
 
-                            <div class="mt-3 mb-30 border-top"></div>
+							<div class="mt-3 mb-30 border-top"></div>
 
-                            <b-row>
+							<b-row>
 
                                 <b-form-group
                                         class="col-md-6 mb-3"
@@ -148,17 +148,19 @@
     </div>
 </template>
 
-<script >
+<script>
 import ProfileNavBar from './navbar/profileNavBar';
 import { dummyProfileData } from './data/profileData';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'profiel',
+  name: 'profile',
   components: { ProfileNavBar },
   data() {
     return {
       user: dummyProfileData,
+      background_image: '@/assets/images/photo-wide-5.jpeg',
+      image_profile: '@/assets/images/faces/1.jpg',
       formData: {
         name: '',
         lastname: '',
@@ -173,27 +175,33 @@ export default {
       }
     };
   },
-    computed: {
-      ...mapGetters(['PROFILE'])
+  computed: {
+    getBackgroundImage: function () {
+      return require('@/assets/images/photo-wide-5.jpeg');
     },
-    mounted() {
-      this.$store.dispatch('GET_PROFILE');
+    getProfileImage: function () {
+      return require('@/assets/images/faces/1.jpg');
     },
+    ...mapGetters(['PROFILE'])
+  },
+  mounted() {
+    this.$store.dispatch('GET_PROFILE');
+  },
   methods: {
-      save() {
-          const form = {
-              "email": this.PROFILE.additionalInfo.email,
-              "firstName": this.PROFILE.additionalInfo.firstName,
-              "lastName": this.PROFILE.additionalInfo.lastName,
-              "name": this.PROFILE.additionalInfo.name,
-              "role": this.PROFILE.additionalInfo.role,
-              "phone": this.PROFILE.additionalInfo.phone,
-              "company": this.PROFILE.additionalInfo.company,
-              "company_address": this.PROFILE.additionalInfo.company_address
-          };
-          console.log('in save', form);
-          this.$store.dispatch('UPDATE_PROFILE', form);
-      },
+    save() {
+      const form = {
+        'email': this.PROFILE.additionalInfo.email,
+        'firstName': this.PROFILE.additionalInfo.firstName,
+        'lastName': this.PROFILE.additionalInfo.lastName,
+        'name': this.PROFILE.additionalInfo.name,
+        'role': this.PROFILE.additionalInfo.role,
+        'phone': this.PROFILE.additionalInfo.phone,
+        'company': this.PROFILE.additionalInfo.company,
+        'company_address': this.PROFILE.additionalInfo.company_address
+      };
+      console.log('in save', form);
+      this.$store.dispatch('UPDATE_PROFILE', form);
+    },
     initForm() {
       this.setDummyData();
     },
