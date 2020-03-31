@@ -417,19 +417,37 @@
                 this.resetModal();
                 this.hideClientForm();
             },
-            editForm() {
-                var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
+            async editForm() {
+                this.formData['client_id'] = this.client_id_selected;
+                const result = await this.$store.dispatch('UPDATE_CLIENT', this.formData)
+                    .then(result => {
+                        return result;
+                    });
+                const toSent = {
+                    client_id: this.client_id_selected,
+                    vendor_id: this.vendor_id_selected
+                };
+                this.$store.dispatch('SET_CLIENT_VENDOR', toSent)
+                    .then(response2 => {
+                        this.$store.dispatch('GET_CLIENTS_TASK');
+                    })
+                    .catch(e2 => {
+                        console.log(e2);
+                    })
+
+                /*var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
                 this.updateTask(task);
                 console.log(this.vendorSelectedInGrid);
                 console.log(this.vendorSelected);
                 console.log(this.clientSelecteIndex);
-                if (this.vendorSelectedInGrid !== this.vendorSelected){
+                if (this.vendorSelectedInGrid !== this.vendorSelected) {
                     task = this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1)[0];
                     console.log(task);
                     this.membersTasks[this.vendorSelected].tasks.push(task);
                 }
                 console.log(task);
                 console.log(this.clients);
+                */
                 this.hideForm();
             },
             updateTask(task) {
