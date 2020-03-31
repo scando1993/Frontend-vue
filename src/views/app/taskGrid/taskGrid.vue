@@ -6,16 +6,21 @@
         <div id="body" class="d-flex">
             <vue-perfect-scrollbar class="scrollable d-flex justify-content-betweend-flex justify-content-between mr-3" ref="scrollable_content">
                 <div v-for="(vendor, indexVendor) in VENDOR_TASKS" class="mr-4" style="min-width: 550px" v-bind:key="indexVendor">
-                    <h3 class="text-center">{{vendor.additionalInfo.firstName + '' + vendor.additionalInfo.lastName}}</h3>
+                    <h3 class="text-center">{{vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName}}</h3>
                     <div style="max-width: 1000px" class="text-13">
                         <b-row>
-                            <b-col md="6" v-for="(task, indextask) in vendor.Tasks" :key="indextask">
+                            <b-col md="12" v-for="(client, indexcClient) in vendor.Clients" :key="indexcClient">
+                                <b-row>
+                                    <b-col md="6" v-for="(task, indexTask) in client.tasks"
+                                           :key="indexTask">
+
                                 <b-card
                                         header=" " Contac
                                         header-text-variant="white"
                                         header-tag="card_header"
-                                        v-on:click="showFormClientB(indexVendor, indextask)"
+                                        v-on:click="showFormClientB(indexVendor, indexcClient)"
                                         class="mb-2 mr-0"
+
                                 >
                                     <div slot="header"
                                          :style="{'background-color': getHeaderNgVariant('Active')}"
@@ -24,8 +29,8 @@
                                     <b-row>
                                         <b-col md="8">
                                             <p>
-                                                <b class="font-weight-bold">{{task.Client.social_reason}}</b>
-                                                <br>{{task.Client.client_name}}
+                                                <b class="font-weight-bold">{{client.client_info.client_info.social_reason}}</b>
+                                                <br>{{client.client_info.client_info.name}}
                                             </p>
                                         </b-col>
                                         <b-col md="4">
@@ -37,10 +42,12 @@
                                         <i class="i-Circular-Point"
                                            :style="{'background-color': getHeaderNgVariant('Active')}"
                                         />
-                                        <br>{{task.name}}
+                                        <br>{{task.task_info.name}}
                                     </p>
-                                    <p class="mb-0">Ultima acción: {{formatDate(task.additionalInfo.start_date)}}</p>
+                                    <p class="mb-0">Ultima acción: {{task.task_info.start_date}}</p>
                                 </b-card>
+                                    </b-col>
+                                </b-row>
                             </b-col>
                         </b-row>
                     </div>
