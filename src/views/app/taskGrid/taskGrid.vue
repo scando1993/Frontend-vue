@@ -9,10 +9,8 @@
                     <h3 class="text-center">{{vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName}}</h3>
                     <div style="max-width: 1000px" class="text-13">
                         <b-row>
-                            <b-col md="12" v-for="(client, indexcClient) in vendor.Clients" :key="indexcClient">
-                                <b-row>
-                                    <b-col md="6" v-for="(task, indexTask) in client.tasks"
-                                           :key="indexTask">
+                            <b-col md="6" v-for="(client, indexcClient) in vendor.Clients" :key="indexcClient">
+
 
                                 <b-card
                                         header=" " Contac
@@ -42,12 +40,11 @@
                                         <i class="i-Circular-Point"
                                            :style="{'background-color': getHeaderNgVariant('Active')}"
                                         />
-                                        <br>{{task.task_info.name}}
+                                        <br>{{getTaskName(client.tasks)}}
                                     </p>
-                                    <p class="mb-0">Ultima acción: {{task.task_info.start_date}}</p>
+                                    <p class="mb-0">Ultima acción: {{getTaskLastStatus(client.tasks)}}</p>
                                 </b-card>
-                                    </b-col>
-                                </b-row>
+
                             </b-col>
                         </b-row>
                     </div>
@@ -89,7 +86,7 @@
                                             id="clientSocial"
                                             placeholder=""
                                             type="text"
-                                            v-model="formData.bussinessName"
+                                            v-model="formData.social_reason"
                                             required
                                     />
                                 </b-form-group>
@@ -112,8 +109,8 @@
                                         label = "Asignar vendedor"
                                 >
                                     <b-form-select
-                                            v-model="vendorSelected"
-                                            :options="VENDOR_TASKS.map( function(element, index) {return {value: index, text: element.name}})"
+                                            v-model="vendor_id_selected"
+                                            :options="VENDOR_TASKS.map( function(element, index) {return {value: element.id.id, text: element.name}})"
                                             id="inline-form-custom-select-pref"
                                             required
                                     >
@@ -252,6 +249,8 @@
                 newClientName: '',
                 clientFormTitle: 'Cliente',
                 newClientForm: false,
+                client_id_selected: '',
+                vendor_id_selected: '',
                 formTitle: '',
                 vendorSelected: '',
                 clientSelecteIndex: '',
@@ -301,26 +300,49 @@
         },
         methods: {
             ...mapActions(['showNewClientForm','showClientForm', 'hideClientForm', 'GET_CLIENTS_TASK', 'POST_CLIENT', 'SET_CLIENT_VENDOR']),
-            addNewCliente() {
+
+            getTaskName(tasks) {
+                var name = 'N/A';
+                try {
+                    name = tasks[0].task_info.name;
+                }
+                catch (e) {
+
+                }
+                return name;
+            },
+            getTaskLastStatus(tasks) {
+                var name = 'N/A';
+                try {
+                    name = tasks[0].task_info.start_date;
+                }
+                catch (e) {
+
+                }
+                return name;
+            },
+            async addNewCliente() {
                 // console.log(this.vendorSelected);
                 // this.vendorSelectedInGrid.
                 //this.clients.push(this.formData);
                 console.log(this.formData);
-                this.$store.dispatch('POST_CLIENT', this.formData)
+                console.log('asas', this.vendor_id_selected);
+                const response = await this.$store.dispatch('POST_CLIENT', this.formData)
                     .then(response => {
-                        console.log('response, post', response);
-                        const toSent = {
-                            client_id: response.data.data.id.id,
-                            vendor_id: this.vendorSelected
-                        };
-                        this.$store.dispatch(('SET_CLIENT_VENDOR', toSent))
-                            .then(response2 => {
-                                this.$store.dispatch('GET_CLIENTS_TASK');
-                            })
-                            .catch(e => {
-                                console.log(e);
-                            })
+                        return response;
                     });
+                console.log('response, post', response);
+                const toSent = {
+                    client_id: response.data.data.id.id,
+                    vendor_id: this.vendor_id_selected
+                };
+                this.$store.dispatch('SET_CLIENT_VENDOR', toSent)
+                    .then(response2 => {
+                        this.$store.dispatch('GET_CLIENTS_TASK');
+                    })
+                    .catch(e2 => {
+                        console.log(e2);
+                    })
                 // const clientId = this.clients.length - 1;
                 //this.addNewTask(this.vendorSelected, clientId);
                 this.hideForm();
@@ -354,13 +376,32 @@
             setFormClientData(data) {
                 this.formData = data;
             },
-            showFormClientB(vendorIndex, taskIndex) {
+            async showFormClientB(vendorIndex, indexcClient) {
+                console.log('index', vendorIndex, indexcClient)
                 this.vendorSelectedInGrid = vendorIndex;
+                const selectedVendor = this.VENDOR_TASKS[vendorIndex];
+                const selectedClient = await selectedVendor.Clients[indexcClient];
+                const clientInfo = selectedClient.client_info.client_info;
+                console.log(clientInfo.name);
+
+                this.formData['name'] = clientInfo.name;
+                this.formData['social_reason'] = clientInfo.social_reason;
+                this.formData['address'] = clientInfo.lat.toString() + " " + clientInfo.lng.toString();
+                this.formData['notes'] = clientInfo.notes;
+                this.formData['contacts'] = clientInfo.contacts || this.formData['contacts'];
+                this.formData['lat'] = clientInfo.lat;
+                this.formData['lng'] = clientInfo.lng;
+                this.vendor_id_selected = selectedVendor.id.id;
+
+
+
+                /*
                 this.clientSelecteIndex = taskIndex;
                 this.vendorSelected = vendorIndex;
                 const clientId = this.membersTasks[vendorIndex].tasks[taskIndex].client_id;
                 const clientData = this.clients[clientId];
                 this.setFormClientData(clientData);
+                */
                 this.showClientForm();
             },
             deleteClient() {
@@ -395,16 +436,18 @@
                 task.client_name = this.formData.name;
             },
             resetModal() {
-                this.vendorSelected = '';
+                this.vendor_id_selected = '';
                 this.formData = {
                     name: '',
-                    bussinessName: '',
+                    social_reason: '',
                     address: '',
                     vendor: {
-                        id: '',
-                        name: ''
+                        id: '1',
+                        name: 'Jose Jose'
                     },
                     notes: '',
+                    lat: '',
+                    lng: '',
                     contacts: [
                         {
                             name: '',
@@ -417,7 +460,7 @@
                             phoneNumber: null
                         },
                     ]
-                };
+                }
             }
         },
         mounted() {
