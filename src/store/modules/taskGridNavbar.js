@@ -1,31 +1,55 @@
 const state = {
-  showFormClient: false,
-  isNewClientformClient: false,
-  formTitle: ''
+  clients: {
+    showFormClient: false,
+    isNewClientFormClient: false,
+    formTitle: '',
+    searchFilter: '',
+    clients_filters: {
+      active: true,
+      inactive: true,
+      not_contact: true
+    }
+  }
 };
 
 const getters = {
-  getFormClientShow: state => state.showFormClient,
-  getFormClientNewClient: state => state.isNewClientformClient,
-  getFormTitle: state => state.formTitle,
+  getFormClientShow: state => state.clients.showFormClient,
+  getFormClientNewClient: state => state.clients.isNewClientFormClient,
+  getFormTitle: state => state.clients.formTitle,
+  getSearchText: state => state.clients.searchFilter,
+  getActiveClients: state => state.clients.clients_filters.active,
+  getInactiveClients: state => state.clients.clients_filters.inactive,
+  getNotContactClients: state => state.clients.clients_filters.not_contact,
 };
+
 const mutations = {
   setFormTitle: (state, payload) => {
-    state.formTitle = payload;
+    state.clients.formTitle = payload;
   },
   toggleFormClientShow: state => {
-    state.showFormClient = !state.showFormClient;
+    state.clients.showFormClient = !state.clients.showFormClient;
   },
   setToNewClientForm: state => {
-    state.isNewClientformClient = true;
+    state.clients.isNewClientformClient = true;
   },
-  unsetNewClienteForm: state => {
-    state.isNewClientformClient = false;
+  unsetNewClientForm: state => {
+    state.clients.isNewClientformClient = false;
   },
   setShowFormClientForm: (state, payload) => {
-    state.showFormClient = payload;
-  }
-
+    state.clients.showFormClient = payload;
+  },
+  setSearchText: (state, payload) => {
+    state.clients.searchFilter = payload;
+  },
+  toggleActiveClients: () => {
+    state.clients.clients_filters.active = !state.clients.clients_filters.active;
+  },
+  toggleInactiveClients: () => {
+    state.clients.clients_filters.inactive = !state.clients.clients_filters.inactive;
+  },
+  toggleNotContactClients: () => {
+    state.clients.clients_filters.not_contact = !state.clients.clients_filters.not_contact;
+  },
 };
 const actions = {
   changeShowFormClient({ commit }) {
@@ -37,16 +61,27 @@ const actions = {
     commit('setShowFormClientForm', true);
   },
   showClientForm({ commit }) {
-    commit('unsetNewClienteForm');
+    commit('unsetNewClientForm');
     commit('setFormTitle', 'Cliente');
     commit('setShowFormClientForm', true);
   },
   hideClientForm({ commit }) {
     console.log('en hide');
     commit('setShowFormClientForm', false);
-  }
-
-
+  },
+  setSearchText( { commit }, data ){
+    console.log(data);
+    commit('setSearchText', data);
+  },
+  toggleActiveClients( { commit }, data ){
+    commit('toggleActiveClients', data);
+  },
+  toggleInactiveClients( { commit }, data ){
+    commit('toggleInactiveClients', data);
+  },
+  toggleNotContactClients( { commit }, data ){
+    commit('toggleNotContactClients', data);
+  },
 };
 
 
