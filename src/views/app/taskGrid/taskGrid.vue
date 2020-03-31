@@ -381,6 +381,7 @@
                 this.vendorSelectedInGrid = vendorIndex;
                 const selectedVendor = this.VENDOR_TASKS[vendorIndex];
                 const selectedClient = await selectedVendor.Clients[indexcClient];
+                this.client_id_selected = selectedClient.client_info.id;
                 const clientInfo = selectedClient.client_info.client_info;
                 console.log(clientInfo.name);
 
@@ -405,26 +406,48 @@
                 this.showClientForm();
             },
             deleteClient() {
-                this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
+                this.$store.dispatch('DELETE_CLIENT', this.client_id_selected)
+                    .then(response => {
+                        this.$store.dispatch('GET_CLIENTS_TASK');
+                    })
+                //this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
                 this.hideForm();
             },
             hideForm() {
                 this.resetModal();
                 this.hideClientForm();
             },
-            editForm() {
-                var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
+            async editForm() {
+                this.formData['client_id'] = this.client_id_selected;
+                const result = await this.$store.dispatch('UPDATE_CLIENT', this.formData)
+                    .then(result => {
+                        return result;
+                    });
+                const toSent = {
+                    client_id: this.client_id_selected,
+                    vendor_id: this.vendor_id_selected
+                };
+                this.$store.dispatch('SET_CLIENT_VENDOR', toSent)
+                    .then(response2 => {
+                        this.$store.dispatch('GET_CLIENTS_TASK');
+                    })
+                    .catch(e2 => {
+                        console.log(e2);
+                    })
+
+                /*var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
                 this.updateTask(task);
                 console.log(this.vendorSelectedInGrid);
                 console.log(this.vendorSelected);
                 console.log(this.clientSelecteIndex);
-                if (this.vendorSelectedInGrid !== this.vendorSelected){
+                if (this.vendorSelectedInGrid !== this.vendorSelected) {
                     task = this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1)[0];
                     console.log(task);
                     this.membersTasks[this.vendorSelected].tasks.push(task);
                 }
                 console.log(task);
                 console.log(this.clients);
+                */
                 this.hideForm();
             },
             updateTask(task) {
