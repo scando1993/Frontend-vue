@@ -1,6 +1,6 @@
 <template>
     <div>
-        <team-navbar/>
+<!--        <team-navbar/>-->
         <div v-b-modal.m-new-admin id="list_header" class="d-flex justify-content-end btn">
             <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
             </i>
@@ -38,7 +38,7 @@
                         </b-dropdown>
                     </div>
                 </b-row>
-                <div class="mt-3 mb-30 border-top"></div>
+<!--                <div class="mt-3 mb-30 border-top"></div>-->
             </div>
         </div>
         </vue-perfect-scrollbar>

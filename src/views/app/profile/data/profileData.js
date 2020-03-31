@@ -1,12 +1,12 @@
 export var dummyProfileData = {
-  name: 'Plani',
-  lastname: 'Plani-lastname',
-  username: 'Plani-username',
+  name: 'Kevin',
+  lastname: 'Cando',
+  username: 'kevin@plani.io',
   password: '',
-  email: 'some@plani.com',
+  email: 'kevin@plani.com',
   phoneNumber: 91221920318,
   company: {
-    name: 'Homa',
+    name: 'Plani.org',
     address: 'Guayaquil'
   }
 };
