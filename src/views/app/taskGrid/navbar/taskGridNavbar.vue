@@ -10,12 +10,13 @@
 			<div id="options_headers" class="d-flex justify-content-between align-items-center">
 				<div
 					class="d-lg-inline-flex d-xl-inline-flex d-md-flex d-sm-flex flex-md-wrap flex-sm-wrap justify-content-lg-around">
-					<b-dropdown variant="outline-primary" id="dropdown-1" text="Día" class="mx-1 mb-sm-1 mb-md-1">
-						<b-dropdown-item>Día</b-dropdown-item>
-						<b-dropdown-item>Semana</b-dropdown-item>
-						<b-dropdown-item>Mes</b-dropdown-item>
-						<b-dropdown-item>Customizar</b-dropdown-item>
-					</b-dropdown>
+					<b-form-select
+						variant="outline-primary"
+						text="Día"
+						class="mx-1 mb-sm-1 mb-md-1 w-auto"
+						v-model="groupBy"
+						:options="group_options"
+					/>
 					<button class="planiButton btn mx-1">Ver Equipo</button>
 				</div>
 				<b-form-input
@@ -67,7 +68,12 @@ export default {
   name: 'taskGridNavbar',
   data() {
     return {
-      group_models: ['Día', 'Semana', 'Mes', 'Customizar']
+      group_options: [
+        { value: 'day', text: 'Día' },
+	      { value: 'week', text: 'Semana' },
+	      { value: 'month', text: 'Mes' },
+	      { value: 'custom', text: 'Customizar' }
+      ]
     };
   },
   methods: {
@@ -77,14 +83,16 @@ export default {
         'setSearchText',
         'toggleActiveClients',
         'toggleInactiveClients',
-        'toggleNotContactClients'
+        'toggleNotContactClients',
+	      'currentGroupByFilter'
       ]),
     ...mapGetters(
       ['getFormClientShow',
         'getSearchText',
         'getActiveClients',
         'getInactiveClients',
-        'getNotContactClients'
+        'getNotContactClients',
+	      'getGroupByFilter'
       ]),
   },
   computed: {
@@ -119,8 +127,15 @@ export default {
       set() {
         this.toggleNotContactClients();
       }
-    }
-
+    },
+		groupBy: {
+      get(){
+        return this.getGroupByFilter();
+      },
+			set(value){
+        this.currentGroupByFilter(value);
+			}
+		}
   }
 };
 </script>

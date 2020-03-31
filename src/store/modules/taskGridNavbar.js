@@ -4,6 +4,7 @@ const state = {
     isNewClientFormClient: false,
     formTitle: '',
     searchFilter: '',
+    groupBy: '',
     clients_filters: {
       active: true,
       inactive: true,
@@ -20,6 +21,7 @@ const getters = {
   getActiveClients: state => state.clients.clients_filters.active,
   getInactiveClients: state => state.clients.clients_filters.inactive,
   getNotContactClients: state => state.clients.clients_filters.not_contact,
+  getGroupByFilter: state => state.clients.groupBy
 };
 
 const mutations = {
@@ -50,6 +52,9 @@ const mutations = {
   toggleNotContactClients: () => {
     state.clients.clients_filters.not_contact = !state.clients.clients_filters.not_contact;
   },
+  setGroupByFilter: (state, payload) => {
+    state.clients.groupBy = payload;
+  }
 };
 const actions = {
   changeShowFormClient({ commit }) {
@@ -82,6 +87,9 @@ const actions = {
   toggleNotContactClients( { commit }, data ){
     commit('toggleNotContactClients', data);
   },
+  currentGroupByFilter( { commit }, data ){
+    commit('setGroupByFilter', data);
+  }
 };
 
 
