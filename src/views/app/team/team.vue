@@ -9,7 +9,7 @@
 
         <vue-perfect-scrollbar>
            <div id="list_body" class="scrollable">
-            <div class="container" v-for="(item, index) in teamData" v-bind:key="index">
+            <div class="container" v-for="(item, index) in TEAM" v-bind:key="index">
                 <b-row>
                     <div class="col-md-6">
                         <div class="ul-contact-page__profile">
@@ -17,9 +17,9 @@
                                 <img class="profile-picture mb-2" :src="getImageForUser(index + 1)" alt="">
                             </div>
                             <div class="ul-contact-page__info">
-                                <p class="m-0 text-24">{{item.name}} {{item.lastname}}</p>
-                                <p class="text-muted m-0">{{item.profile}}</p>
-                                <p class="text-muted mt-3">{{item.email}}</p>
+                                <p class="m-0 text-24">{{item.additionalInfo.firstName}} {{item.additionalInfo.lastname}}</p>
+                                <p class="text-muted m-0">{{'DEV'}}</p>
+                                <p class="text-muted mt-3">{{item.additionalInfo.email}}</p>
                             </div>
                         </div>
                     </div>
@@ -31,9 +31,9 @@
                             <template slot="button-content" >
                                 <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
                             </template>
-                            <b-dropdown-item>Ver calendario</b-dropdown-item>
-                            <b-dropdown-item>Ver cliente</b-dropdown-item>
-                            <b-dropdown-item>Ver reportes</b-dropdown-item>
+                            <b-dropdown-item @click="changeToCalendar">Ver calendario</b-dropdown-item>
+                            <b-dropdown-item @click="changeToClients">Ver cliente</b-dropdown-item>
+                            <b-dropdown-item @click="changeToReports">Ver reportes</b-dropdown-item>
                             <b-dropdown-item class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
                         </b-dropdown>
                     </div>
@@ -106,6 +106,8 @@
 <script>
 import TeamNavbar from './navbar/teamNavbar';
 import { teamDummyData } from './data/teamData';
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'team',
   components: { TeamNavbar },
@@ -123,7 +125,26 @@ export default {
       indexMember: 0
     };
   },
+    mounted() {
+      this.$store.dispatch('GET_TEAM');
+    },
+    computed: {
+      ...mapGetters(['TEAM'])
+    },
   methods: {
+      changeToCalendar() {
+          this.$router.push('calendar/calendar.dashboard.v1');
+
+      },
+      changeToClients() {
+          this.$router.push('taskGrid');
+
+
+      },
+      changeToReports() {
+          this.$router.push('reports');
+
+      },
     leaveTeam() {
       this.$bvModal.hide('m-confirm-leave');
     },
@@ -137,7 +158,10 @@ export default {
       this.indexMember = index;
     },
     deleteMember(){
-      this.teamData.splice(this.indexMember, 1);
+        console.log('deleting', this.indexMember);
+      this.TEAM.splice(this.indexMember, 1);
+      const selectedMember_id = this.TEAM[this.indexMember].id.id;
+      this.$store.dispatch('DELETE_MEMBER',selectedMember_id );
       this.$bvModal.hide('m-confirm-delete');
     },
     addNewMember() {

@@ -152,6 +152,8 @@
 <script >
 import ProfileNavBar from './navbar/profileNavBar';
 import { dummyProfileData } from './data/profileData';
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'profiel',
   components: { ProfileNavBar },
@@ -172,6 +174,7 @@ export default {
       }
     };
   },
+
   methods: {
     initForm() {
       this.setDummyData();
