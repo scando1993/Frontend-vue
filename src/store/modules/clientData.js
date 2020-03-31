@@ -80,6 +80,22 @@ export default {
                 .catch( error => {
                     reject(error);
                 })
+        },
+        DELETE_CLIENT: ({commit}, client_id) => {
+            const config = {
+                headers: {'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'},
+            };
+            console.log('in set vendor')
+            axios
+                .delete(process.env.VUE_APP_API + '/Client/delete?client_id=' + client_id, config)
+                .then(({data, status}) => {
+                    console.log(data, status);
+                    resolve({data, status});
+                })
+                .catch( error => {
+                    reject(error);
+                })
         }
 
     }

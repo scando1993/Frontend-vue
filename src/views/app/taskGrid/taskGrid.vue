@@ -381,6 +381,7 @@
                 this.vendorSelectedInGrid = vendorIndex;
                 const selectedVendor = this.VENDOR_TASKS[vendorIndex];
                 const selectedClient = await selectedVendor.Clients[indexcClient];
+                this.client_id_selected = selectedClient.client_info.id;
                 const clientInfo = selectedClient.client_info.client_info;
                 console.log(clientInfo.name);
 
@@ -405,7 +406,11 @@
                 this.showClientForm();
             },
             deleteClient() {
-                this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
+                this.$store.dispatch('DELETE_CLIENT', this.client_id_selected)
+                    .then(response => {
+                        this.$store.dispatch('GET_CLIENTS_TASK');
+                    })
+                //this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
                 this.hideForm();
             },
             hideForm() {
