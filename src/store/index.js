@@ -13,7 +13,7 @@ import taskGridNavbar from './modules/taskGridNavbar';
 import planiVerticalSidebar from './modules/planiVerticalSidebar';
 import calendarNavbar from './modules/calendarNavBar';
 import clientData from './modules/clientData'
-
+import profileData from './modules/profileData';
 
 // Load Vuex
 Vue.use(Vuex);
@@ -33,6 +33,7 @@ export default new Vuex.Store({
     planiVerticalSidebar,
     calendarNavbar,
     taskGridNavbar,
-    clientData
+    clientData,
+    profileData
   }
 });

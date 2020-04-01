@@ -28,7 +28,7 @@
                                             type="text"
                                             required
                                             placeholder="Nombre "
-                                            v-model = "formData.name"
+                                            v-model = "PROFILE.additionalInfo.firstName"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -42,7 +42,7 @@
                                             type="text"
                                             required
                                             placeholder="Apellido"
-                                            v-model = "formData.lastname"
+                                            v-model = "PROFILE.additionalInfo.lastName"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -56,7 +56,7 @@
                                             type="email"
                                             required
                                             placeholder="usuario"
-                                            v-model = "formData.username"
+                                            v-model = "PROFILE.additionalInfo.email"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -68,9 +68,8 @@
                                     <b-form-input
                                             id="input-1"
                                             type="password"
-                                            required
                                             placeholder="Contraseña"
-                                            v-model = "formData.password"
+                                            v-model = "PROFILE.additionalInfo.password"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -87,7 +86,7 @@
                                             type="text"
                                             required
                                             placeholder="Nombre Compañia"
-                                            v-model = "formData.company.name"
+                                            v-model = "PROFILE.additionalInfo.company"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -101,7 +100,7 @@
                                             type="text"
                                             required
                                             placeholder="Dirección Compañia"
-                                            v-model = "formData.company.address"
+                                            v-model = "PROFILE.additionalInfo.company_address"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -119,7 +118,7 @@
                                             type="email"
                                             required
                                             placeholder="usuario@mail.com"
-                                            v-model = "formData.email"
+                                            v-model = "PROFILE.additionalInfo.email"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -133,7 +132,7 @@
                                             type="number"
                                             required
                                             placeholder="Télefono"
-                                            v-model = "formData.phoneNumber"
+                                            v-model = "PROFILE.additionalInfo.phone"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -152,6 +151,8 @@
 <script >
 import ProfileNavBar from './navbar/profileNavBar';
 import { dummyProfileData } from './data/profileData';
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'profiel',
   components: { ProfileNavBar },
@@ -172,6 +173,12 @@ export default {
       }
     };
   },
+    computed: {
+      ...mapGetters(['PROFILE'])
+    },
+    mounted() {
+      this.$store.dispatch('GET_PROFILE');
+    },
   methods: {
     initForm() {
       this.setDummyData();
