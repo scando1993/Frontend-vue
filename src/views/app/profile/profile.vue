@@ -11,7 +11,7 @@
             <div id="basicForm">
                 <b-row>
                     <b-col md="12">
-                        <b-form>
+                        <b-form @submit.prevent>
 
                             <div class="mt-3 mb-30 border-top"></div>
 
@@ -69,7 +69,7 @@
                                             id="input-1"
                                             type="password"
                                             placeholder="Contraseña"
-                                            v-model = "PROFILE.additionalInfo.password"
+                                            v-model = "password"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -137,7 +137,7 @@
                                 </b-form-group>
                             </b-row>
                             <b-col md="12" class="d-flex justify-content-end ">
-                                <b-button class="mr-2 " type="submit" v-on:click="saveDummyData" variant="primary">Guardar</b-button>
+                                <b-button class="mr-2 " type="submit" v-on:click="save" variant="primary">Guardar</b-button>
                                 <b-button class="" type="cancel" variant="outline-secondary">Cancelar</b-button>
                             </b-col>
                         </b-form>
@@ -180,6 +180,20 @@ export default {
       this.$store.dispatch('GET_PROFILE');
     },
   methods: {
+      save() {
+          const form = {
+              "email": this.PROFILE.additionalInfo.email,
+              "firstName": this.PROFILE.additionalInfo.firstName,
+              "lastName": this.PROFILE.additionalInfo.lastName,
+              "name": this.PROFILE.additionalInfo.name,
+              "role": this.PROFILE.additionalInfo.role,
+              "phone": this.PROFILE.additionalInfo.phone,
+              "company": this.PROFILE.additionalInfo.company,
+              "company_address": this.PROFILE.additionalInfo.company_address
+          };
+          console.log('in save', form);
+          this.$store.dispatch('UPDATE_PROFILE', form);
+      },
     initForm() {
       this.setDummyData();
     },

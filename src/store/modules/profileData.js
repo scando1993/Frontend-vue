@@ -25,6 +25,25 @@ export default {
           else{
               console.log(response);
           }
+      },
+      UPDATE_PROFILE: ({commit}, data) => {
+          return new Promise((resolve, reject) => {
+              const config = {
+                  headers: {'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                      'Content-Type': 'application/json'},
+              };
+              axios
+                  .put(process.env.VUE_APP_API + '/Profile/edit', data, config)
+                  .then(({data, status}) => {
+                      console.log(data, status);
+                      // commit('ADD_CLIENT', data);
+                      commit('SET_PROFILE', response.data.data);
+                      resolve({data, status});
+                  })
+                  .catch( error => {
+                      reject(error);
+                  })
+          })
       }
   }
 };
