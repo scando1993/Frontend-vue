@@ -11,15 +11,20 @@ export default {
         : null,
     loading: false,
     error: null,
-      loggedUserScope: null
+      loggedUserScope: null,
+      loggedUserEmail: null
   },
   getters: {
+      loggedUserEmail: state => state.loggedUserEmail,
     loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
     error: state => state.error,
       loggedUserScope: state => state.loggedUserScope
   },
   mutations: {
+      setLoggedUserEmail(state, data) {
+          state.loggedUserEmail = data;
+      },
       setUserScope(state, data) {
           state.loggedUserScope = data;
       },
@@ -87,6 +92,7 @@ export default {
           localStorage.setItem('refreshToken', refreshToken);
           commit('setUserScope', scope);
           commit('setUser', newUser);
+          commit('setLoggedUserEmail', data.email);
         })
         .catch(function (error) {
           localStorage.removeItem('userInfo');
