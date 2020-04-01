@@ -85,15 +85,39 @@
       "eslint:recommended"
     ],
     "rules": {
-      "indent": [ 2, 2 ],
-      "quotes": [ 2, "single" ],
-      "linebreak-style": [ 0, "windows" ],
-      "object-curly-spacing": ["error", "always"],
-      "semi": [ 2, "always" ],
-      "no-console": [ 0 ],
-      "no-underscore-dangle": [ 0 ],
-      "no-unused-vars": [ 2 ],
-      "no-undef": [ 2 ]},
+      "indent": [
+        2,
+        2
+      ],
+      "quotes": [
+        2,
+        "single"
+      ],
+      "linebreak-style": [
+        0,
+        "windows"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "semi": [
+        2,
+        "always"
+      ],
+      "no-console": [
+        0
+      ],
+      "no-underscore-dangle": [
+        0
+      ],
+      "no-unused-vars": [
+        2
+      ],
+      "no-undef": [
+        2
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

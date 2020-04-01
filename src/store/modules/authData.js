@@ -10,14 +10,19 @@ export default {
         ? JSON.parse(localStorage.getItem('userInfo'))
         : null,
     loading: false,
-    error: null
+    error: null,
+      loggedUserScope: null
   },
   getters: {
     loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
-    error: state => state.error
+    error: state => state.error,
+      loggedUserScope: state => state.loggedUserScope
   },
   mutations: {
+      setUserScope(state, data) {
+          state.loggedUserScope = data;
+      },
     setUser(state, data) {
       state.loggedInUser = data;
       state.loading = false;
@@ -60,10 +65,27 @@ export default {
           const refreshToken = response.data.refreshToken;
           const tokenDecoded = jwtDecode(token);
           const userId = tokenDecoded['userId'];
-          const newUser = { uid: userId };
-          localStorage.setItem('userInfo', JSON.stringify(newUser));
+          var scope = tokenDecoded['scopes'][0];
+
+          switch (scope) {
+              case 'TENANT_ADMIN': {
+                  scope = 'TEAM_ADMIN';
+                  break;
+              };
+              case 'CUSTOMER_USER': {
+                  scope = 'VENDOR'
+              };
+              case 'SYS_ADMIN': {
+                  break;
+              };
+          }
+            const newUser = { uid: userId, scope: scope };
+
+
+            localStorage.setItem('userInfo', JSON.stringify(newUser));
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
+          commit('setUserScope', scope);
           commit('setUser', newUser);
         })
         .catch(function (error) {
