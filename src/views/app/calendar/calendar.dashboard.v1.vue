@@ -296,7 +296,7 @@
                             <b-form-group
                                     label="Asignar vendedr"
                             >
-                                <b-form-select v-model="newTaskForm.vendor" :options="vendorOptions"/>
+                                <b-form-select v-model="newTaskForm.vendor" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Notas"
@@ -309,22 +309,24 @@
                             <b-form-group
                                     label="Cliente"
                             >
-                                <b-form-select v-model="newTaskForm.client" :options="clientOptions"/>
+                                <b-form-select v-model="newTaskForm.client" :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Fecha"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.date" />
+
+                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.date" class="mb-2"></b-form-datepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Hora"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.startTime" />
+                                <vue-timepicker v-model="newTaskForm.startTime"></vue-timepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Recordatorio"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.reminder" />
+                                <vue-timepicker v-model="newTaskForm.reminder" ></vue-timepicker>
+
                             </b-form-group>
                             <b-form-group
                                     label="Rutina"
@@ -334,6 +336,20 @@
                         </b-col>
                     </b-row>
                 </div>
+                <template v-slot:modal-footer="{ ok, cancel, hide }">
+                    <b>Custom Footer</b>
+                    <!-- Emulate built in modal footer ok and cancel button actions -->
+                    <b-button size="sm" variant="success" @click="ok()">
+                        OK
+                    </b-button>
+                    <b-button size="sm" variant="danger" @click="cancel()">
+                        Cancel
+                    </b-button>
+                    <!-- Button with custom close trigger value -->
+                    <b-button size="sm" variant="outline-secondary" @click="hide('forget')">
+                        Forget it
+                    </b-button>
+                </template>
             </b-modal>
         </div>
 
@@ -344,11 +360,13 @@
 <script>
 import { Calendar } from '@toast-ui/vue-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
+import VueTimepicker from 'vue2-timepicker'
+
 
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import CalendarNavBar from './calendarNavbar/calendarNavBar';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import  { calendarList,
   scheduleList,
@@ -374,7 +392,8 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
-    // eslint-disable-next-line vue/no-unused-components
+      VueTimepicker,
+      // eslint-disable-next-line vue/no-unused-components
     Calendar_task_view,
     CalendarNavBar,
     Calendar,
@@ -383,7 +402,7 @@ export default {
     LTileLayer,
   },
   computed: {
-    ...mapGetters(['getSelectedMapView', 'getSelectedComponentView', 'getShowNewTaskModal', 'getSearchText']),
+    ...mapGetters(['getSelectedMapView', 'getSelectedComponentView', 'getShowNewTaskModal', 'getSearchText', 'VENDOR_LIST', 'CLIENTS_LIST', "TASKS_LIST"]),
     showMap() {
       return this.getSelectedComponentView === 'Map';
     },
@@ -438,6 +457,9 @@ export default {
     };
   },
   mounted() {
+      this.$store.dispatch('GET_VENDOR_LIST');
+      this.$store.dispatch('GET_CLIENTS_LIST');
+      this.$store.dispatch('GET_TASKS_LIST');
     this.setTuiCalendarRef();
     // this.view = this. this.getSelectedMapView();
     // eslint-disable-next-line no-unused-vars
@@ -460,6 +482,11 @@ export default {
     });
   },
   methods: {
+      ...mapActions(['GET_VENDOR_LIST', 'GET_CLIENTS_LIST', 'POST_TASK']),
+      postTask() {
+
+      },
+
     // map functions
     zoomUpdated (zoom) {
       this.mapConfigurations.zoom = zoom;
