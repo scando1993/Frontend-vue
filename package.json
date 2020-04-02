@@ -52,6 +52,7 @@
     "vue-tour": "^1.1.0",
     "vue2-editor": "^2.9.1",
     "vue2-leaflet": "^2.5.2",
+    "vue2-timepicker": "^1.0.8",
     "vuedraggable": "^2.23.1",
     "vuejs-smart-table": "0.0.5",
     "vuelidate": "^0.7.4",
@@ -85,15 +86,39 @@
       "eslint:recommended"
     ],
     "rules": {
-      "indent": [ 2, 2 ],
-      "quotes": [ 2, "single" ],
-      "linebreak-style": [ 0, "windows" ],
-      "object-curly-spacing": ["error", "always"],
-      "semi": [ 2, "always" ],
-      "no-console": [ 0 ],
-      "no-underscore-dangle": [ 0 ],
-      "no-unused-vars": [ 2 ],
-      "no-undef": [ 2 ]},
+      "indent": [
+        2,
+        2
+      ],
+      "quotes": [
+        2,
+        "single"
+      ],
+      "linebreak-style": [
+        0,
+        "windows"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "semi": [
+        2,
+        "always"
+      ],
+      "no-console": [
+        0
+      ],
+      "no-underscore-dangle": [
+        0
+      ],
+      "no-unused-vars": [
+        2
+      ],
+      "no-undef": [
+        2
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
