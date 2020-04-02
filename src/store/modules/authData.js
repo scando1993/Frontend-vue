@@ -70,20 +70,9 @@ export default {
           const refreshToken = response.data.refreshToken;
           const tokenDecoded = jwtDecode(token);
           const userId = tokenDecoded['userId'];
-          var scope = tokenDecoded['scopes'][0];
+          const scope = response.data.scope;
 
-          switch (scope) {
-              case 'TENANT_ADMIN': {
-                  scope = 'TEAM_ADMIN';
-                  break;
-              };
-              case 'CUSTOMER_USER': {
-                  scope = 'VENDOR'
-              };
-              case 'SYS_ADMIN': {
-                  break;
-              };
-          }
+
             const newUser = { uid: userId, scope: scope };
 
 
