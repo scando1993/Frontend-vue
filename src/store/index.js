@@ -12,7 +12,8 @@ import scrumboard from './modules/scrumboard';
 import taskGridNavbar from './modules/taskGridNavbar';
 import planiVerticalSidebar from './modules/planiVerticalSidebar';
 import calendarNavbar from './modules/calendarNavBar';
-import clientData from './modules/clientData'
+import clientData from './modules/clientData';
+import vendorData from './modules/VendorData';
 
 
 // Load Vuex
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     planiVerticalSidebar,
     calendarNavbar,
     taskGridNavbar,
-    clientData
+    clientData,
+    vendorData
   }
 });
