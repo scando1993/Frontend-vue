@@ -55,7 +55,7 @@
                                       class="w-100"
                                       ref="tuiCalendar"
                                       :calendars="calendarList"
-                                      :schedules="scheduleList"
+                                      :schedules="TASKS_LIST.map( x => x.additionalInfo.tui_data)"
                                       :view="view"
                                       :taskView="taskView"
                                       :scheduleView="scheduleView"
@@ -296,7 +296,7 @@
                             <b-form-group
                                     label="Asignar vendedr"
                             >
-                                <b-form-select :input="getVendorClients()" v-model="newTaskForm.vendor_id" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
+                                <b-form-select :change="getVendorClients()" v-model="newTaskForm.vendor_id" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Notas"
@@ -309,7 +309,7 @@
                             <b-form-group
                                     label="Cliente"
                             >
-                                <b-form-select  v-model="newTaskForm.client_id"  :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+                                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"  :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Fecha"
@@ -468,8 +468,13 @@ export default {
     };
   },
   mounted() {
+      var root = this;
       this.$store.dispatch('GET_VENDOR_LIST');
       // this.$store.dispatch('GET_CLIENTS_LIST');
+      setTimeout(function (e) {
+          root.refreshScheduleVisibility();
+
+      }, 5000);
       this.$store.dispatch('GET_TASKS_LIST');
     this.setTuiCalendarRef();
     // this.view = this. this.getSelectedMapView();
@@ -506,6 +511,7 @@ export default {
           this.$store.dispatch('POST_TASK', this.newTaskForm)
               .then(result => {
                   console.log(result);
+                  this.$store.dispatch('GET_TASKS_LIST');
               })
       },
 
@@ -567,6 +573,7 @@ export default {
       this.refreshScheduleVisibility();
     },
     refreshScheduleVisibility() {
+          console.log('en render refresh')
       var calendarElements = Array.prototype.slice.call(document.querySelectorAll('#calendarList input'));
 
       this.calendarList.forEach((calendar) => {
@@ -592,6 +599,13 @@ export default {
       // implement your code
       console.log('En el delete');
       console.log('beforeDeleteSchedule', e);
+      const task = this.TASKS_LIST[e.schedule.id];
+      const task_id = task.id.id;
+      this.$store.dispatch('DELETE_TASK', task_id)
+          .then(x => {
+              this.$store.dispatch('GET_TASKS_LIST');
+          })
+
       this.tuiCalendar.invoke('deleteSchedule', e.schedule.id, e.schedule.calendarId);
     },
     onBeforeUpdateSchedule(e) {
@@ -609,14 +623,20 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     onClickDayname(e) {
+        console.log('On click onClickDayname')
+        console.log(e);
       // implement your code
     },
     // eslint-disable-next-line no-unused-vars
     onClickSchedule(e) {
+          console.log('On click onClickSchedule')
+          console.log(e);
       // implement your code
     },
     // eslint-disable-next-line no-unused-vars
     onClickTimezonesCollapseBtn(e) {
+        console.log('On click onClickTimezonesCollapseBtn')
+        console.log(e);
       // implement your code
     },
   },
