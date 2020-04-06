@@ -6,7 +6,7 @@
 
 
             <div class="wrapper">
-                <div class="no-card-shadow container " id="card-drag-area-1" v-dragula="colOne" bag="first-bag">
+                <div class="no-card-shadow container " id="card-drag-area-1" v-dragula bag="first-bag">
                     <div class="task chip-primary mr-1">
                         <div class="task-body">
                             <span class="task-text">Primary chip</span>
@@ -172,7 +172,7 @@
                             <b-card-body >
 
                                 <div class="card-body wrapper" >
-                                    <ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula="colTwo" bag="first-bag">
+                                    <ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula bag="first-bag">
                                         <div class="task chip-primary mr-1">
                                             <div class="task-body">
                                                 <span class="task-text">Primary chip</span>
@@ -224,7 +224,7 @@
                             </b-card-header>
                             <b-card-body>
                                 <div class="card-body wrapper">
-                                    <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula="colThree" bag="first-bag">
+                                    <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula  bag="first-bag">
                                         <div class="task chip-primary mr-1">
                                             <div class="task-body">
                                                 <span class="task-text">Primary chip</span>
@@ -280,13 +280,13 @@
                             <b-form-group
                                 label="Categoria de tarea"
                             >
-                                <b-form-select v-model="newTaskForm.type" :options="taskOptions"/>
+                                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
                             </b-form-group>
 
                             <b-form-group
                                     label="Actividad"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.activity" />
+                                <b-form-input type="text" v-model="newTaskForm.name" />
                             </b-form-group>
                             <b-form-group
                                     label="Ubicación"
@@ -296,7 +296,7 @@
                             <b-form-group
                                     label="Asignar vendedr"
                             >
-                                <b-form-select v-model="newTaskForm.vendor" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+                                <b-form-select :input="getVendorClients()" v-model="newTaskForm.vendor_id" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Notas"
@@ -309,23 +309,32 @@
                             <b-form-group
                                     label="Cliente"
                             >
-                                <b-form-select v-model="newTaskForm.client" :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+                                <b-form-select  v-model="newTaskForm.client_id"  :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Fecha"
                             >
 
-                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.date" class="mb-2"></b-form-datepicker>
+                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date" class="mb-2"></b-form-datepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Hora"
                             >
-                                <vue-timepicker v-model="newTaskForm.startTime"></vue-timepicker>
+                                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Recordatorio"
                             >
-                                <vue-timepicker v-model="newTaskForm.reminder" ></vue-timepicker>
+                                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+
+                            </b-form-group>
+                            <b-form-group
+                                    label="Duracion"
+                            >
+                                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+
+
+                                <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
                             </b-form-group>
                             <b-form-group
@@ -339,7 +348,7 @@
                 <template v-slot:modal-footer="{ ok, cancel, hide }">
                     <b>Custom Footer</b>
                     <!-- Emulate built in modal footer ok and cancel button actions -->
-                    <b-button size="sm" variant="success" @click="ok()">
+                    <b-button size="sm" variant="success" @click="saveTask()">
                         OK
                     </b-button>
                     <b-button size="sm" variant="danger" @click="cancel()">
@@ -426,15 +435,17 @@ export default {
         bounds: null,
       },
       newTaskForm: {
-        type: '',
-        activity: '',
+        category: '',
+        name: '',
         address: '',
-        vendor: '',
+          lat: 0,
+          lng: 0,
+        vendor_id: '',
         notes: '',
-        client: '',
-        date: '',
-        startTime: '',
-        durationTime: '',
+        client_id: '',
+        start_date: '',
+        start_time: '',
+        duration: '',
         reminder: '',
         routine: ''
       },
@@ -458,7 +469,7 @@ export default {
   },
   mounted() {
       this.$store.dispatch('GET_VENDOR_LIST');
-      this.$store.dispatch('GET_CLIENTS_LIST');
+      // this.$store.dispatch('GET_CLIENTS_LIST');
       this.$store.dispatch('GET_TASKS_LIST');
     this.setTuiCalendarRef();
     // this.view = this. this.getSelectedMapView();
@@ -482,9 +493,20 @@ export default {
     });
   },
   methods: {
-      ...mapActions(['GET_VENDOR_LIST', 'GET_CLIENTS_LIST', 'POST_TASK']),
-      postTask() {
-
+      ...mapActions(['GET_VENDOR_LIST', 'GET_CLIENTS_LIST']),
+      getVendorClients() {
+          console.log('IN getVendors clients', this.newTaskForm.client_id);
+          console.log('sss', this.newTaskForm);
+          const vendor_id = this.newTaskForm.vendor_id;
+          const payload = {vendor_id: vendor_id, limit: 10000, textSearch: null};
+        this.$store.dispatch('GET_VENDOR_CLIENTS', payload);
+      },
+      saveTask() {
+          console.log('form', this.newTaskForm);
+          this.$store.dispatch('POST_TASK', this.newTaskForm)
+              .then(result => {
+                  console.log(result);
+              })
       },
 
     // map functions
@@ -602,5 +624,6 @@ export default {
 </script>
 
 <style scoped>
+    @import '~vue2-timepicker/dist/VueTimepicker.css';
 
 </style>
