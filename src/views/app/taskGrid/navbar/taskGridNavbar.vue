@@ -1,12 +1,6 @@
 <template>
 	<div>
 		<b-card>
-			<!--            <div id="header">-->
-			<!--                <div id="pageTitle">-->
-			<!--                    <h3>Clientes</h3>-->
-			<!--                    <br>-->
-			<!--                </div>-->
-			<!--            </div>-->
 			<div id="options_headers" class="d-flex justify-content-between align-items-center">
 				<div
 					class="d-lg-inline-flex d-xl-inline-flex d-md-flex d-sm-flex flex-md-wrap flex-sm-wrap justify-content-lg-around">
@@ -45,7 +39,8 @@
 					<div class="navbar-options-items">
 						<label>
 							<input type="checkbox" v-model="not_contact" class="tui-full-calendar-checkbox-square">
-							<span :style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"/>
+							<span
+								:style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"/>
 							<span class="font-weight-bold">Sin Contactar</span>
 						</label>
 					</div>
@@ -69,10 +64,10 @@ export default {
   data() {
     return {
       group_options: [
-        { value: 'day', text: 'Día' },
-	      { value: 'week', text: 'Semana' },
-	      { value: 'month', text: 'Mes' },
-	      { value: 'custom', text: 'Customizar' }
+        {value: 'day', text: 'Día'},
+        {value: 'week', text: 'Semana'},
+        {value: 'month', text: 'Mes'},
+        {value: 'custom', text: 'Customizar'}
       ]
     };
   },
@@ -84,7 +79,7 @@ export default {
         'toggleActiveClients',
         'toggleInactiveClients',
         'toggleNotContactClients',
-	      'currentGroupByFilter'
+        'currentGroupByFilter'
       ]),
     ...mapGetters(
       ['getFormClientShow',
@@ -92,7 +87,7 @@ export default {
         'getActiveClients',
         'getInactiveClients',
         'getNotContactClients',
-	      'getGroupByFilter'
+        'getGroupByFilter'
       ]),
   },
   computed: {
@@ -128,14 +123,14 @@ export default {
         this.toggleNotContactClients();
       }
     },
-		groupBy: {
-      get(){
+    groupBy: {
+      get() {
         return this.getGroupByFilter();
       },
-			set(value){
+      set(value) {
         this.currentGroupByFilter(value);
-			}
-		}
+      }
+    }
   }
 };
 </script>

@@ -32,10 +32,10 @@ const mutations = {
     state.clients.showFormClient = !state.clients.showFormClient;
   },
   setToNewClientForm: state => {
-    state.clients.isNewClientformClient = true;
+    state.clients.isNewClientFormClient = true;
   },
   unsetNewClientForm: state => {
-    state.clients.isNewClientformClient = false;
+    state.clients.isNewClientFormClient = false;
   },
   setShowFormClientForm: (state, payload) => {
     state.clients.showFormClient = payload;

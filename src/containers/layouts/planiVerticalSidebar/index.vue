@@ -2,14 +2,14 @@
     <div class="app-admin-wrap layout-plani-sidebar-vertical clearfix sidebar-full">
         <planiVerticalSidebar />
         <main>
-            <div class="main-content-wrap mt-0 bg-off-white"
+            <div class="main-content-wrap mt-0 bg-off-white box"
                  :class="{  'vertical-sidebar': getPlaniVerticalSidebar.isVerticalSidebar,
                             compact: getPlaniVerticalSidebar.isVerticalCompact }">
 <!--                <planiVerticalTopbar />-->
                 <transition name="page" mode="out-in">
-                    <router-view />
+                    <router-view class="view-content"/>
                 </transition>
-                <appFooter />
+                <appFooter/>
             </div>
         </main>
     </div>
@@ -36,3 +36,26 @@ export default {
   methods: {}
 };
 </script>
+<style lang="scss">
+	.box {
+		display: flex;
+		flex-flow: column;
+		height: 100%;
+	}
+	.box .row.header {
+		flex: 0 1 auto;
+		/* The above is shorthand for:
+		flex-grow: 0,
+		flex-shrink: 1,
+		flex-basis: auto
+		*/
+	}
+
+	.box .view-content {
+		flex: 1 1 auto;
+	}
+
+	.box .row.footer {
+		flex: 0 1 40px;
+	}
+</style>
