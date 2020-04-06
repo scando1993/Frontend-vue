@@ -18,7 +18,7 @@ export default {
             };
             const response = await axios.get(process.env.VUE_APP_API + '/Task/getAll?limit=1000&textSearch=', config);
             if (!response.data.error) {
-                console.log(response.data.data);
+                console.log('tasks list', response.data.data.data);
                 commit('SET_TASK_LIST', response.data.data.data)
             } else {
                 console.log(response);
@@ -41,6 +41,22 @@ export default {
                         reject(error);
                     })
             })
+        },
+        DELETE_TASK: ({commit}, task_id) => {
+            const config = {
+                headers: {'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'},
+            };
+            console.log('in set vendor')
+            axios
+                .delete(process.env.VUE_APP_API + '/Task/delete?task_id=' + task_id, config)
+                .then(({data, status}) => {
+                    console.log(data, status);
+                    resolve({data, status});
+                })
+                .catch( error => {
+                    reject(error);
+                })
         },
 
     }
