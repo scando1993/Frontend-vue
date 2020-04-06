@@ -14,6 +14,7 @@ import planiVerticalSidebar from './modules/planiVerticalSidebar';
 import calendarNavbar from './modules/calendarNavBar';
 import clientData from './modules/clientData';
 import vendorData from './modules/VendorData';
+import taskData from './modules/taskData';
 
 
 // Load Vuex
@@ -35,6 +36,7 @@ export default new Vuex.Store({
     calendarNavbar,
     taskGridNavbar,
     clientData,
-    vendorData
+    vendorData,
+    taskData
   }
 });
