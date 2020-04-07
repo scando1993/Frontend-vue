@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <team-navbar/>-->
+        <team-navbar v-if="loggedInUser.admin"/>
         <div v-b-modal.m-new-admin id="list_header" class="d-flex justify-content-end btn">
             <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
             </i>
@@ -128,9 +128,10 @@ export default {
     mounted() {
       this.$store.dispatch('GET_TEAM');
     },
-    computed: {
-      ...mapGetters(['TEAM'])
-    },
+	computed:{
+    ...mapGetters(['loggedInUser']),
+    ...mapGetters(['TEAM'])
+	},
   methods: {
       changeToCalendar() {
           this.$router.push('calendar/calendar.dashboard.v1');

@@ -9,9 +9,9 @@
 						text="Día"
 						class="mx-1 mb-sm-1 mb-md-1 w-auto"
 						v-model="groupBy"
-						:options="group_options"
+						:options="loggedInUser.admin ? group_options_admin : group_options_user"
 					/>
-					<button class="planiButton btn mx-1">Ver Equipo</button>
+					<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>
 				</div>
 				<b-form-input
 					id="input-1"
@@ -57,17 +57,22 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'taskGridNavbar',
+  name: 'clientNavbar',
   data() {
     return {
-      group_options: [
-        {value: 'day', text: 'Día'},
-        {value: 'week', text: 'Semana'},
-        {value: 'month', text: 'Mes'},
-        {value: 'custom', text: 'Customizar'}
+      group_options_admin: [
+        { value: 'vendor', text: 'Vendedores' },
+        { value: 'priority', text: 'Prioridad' },
+        { value: 'clients', text: 'Clientes' },
+        { value: 'custom', text: 'Customizar' }
+      ],
+      group_options_user: [
+        { value: 'priority', text: 'Prioridad' },
+        { value: 'clients', text: 'Alfabetico' },
+        { value: 'custom', text: 'Customizar' }
       ]
     };
   },
@@ -125,12 +130,15 @@ export default {
     },
     groupBy: {
       get() {
+        if (this.getGroupByFilter() === '')
+          return this.group_options_admin[0].text;
         return this.getGroupByFilter();
       },
       set(value) {
         this.currentGroupByFilter(value);
       }
-    }
+    },
+    ...mapGetters(['loggedInUser']),
   }
 };
 </script>
@@ -143,6 +151,11 @@ export default {
 
 	.btn-add-plani {
 		color: #00b3ee;
+	}
+
+	.client-navbar-btn-equip {
+		background-color: #00b3ee;
+		color: white;
 	}
 
 	.btn-outline-plani {

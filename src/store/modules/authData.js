@@ -89,6 +89,23 @@ export default {
         });
 
       /*
+      if (data.email === 'test@plani.org'){
+        const newUser = { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2', admin: false };
+        console.log(newUser);
+        localStorage.setItem('userInfo', JSON.stringify(newUser));
+        commit('setUser', { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2' });
+        console.log('user');
+      }else if(data.email === 'admin@plani.org'){
+        const newUser = { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2', admin: true };
+        console.log(newUser);
+        localStorage.setItem('userInfo', JSON.stringify(newUser));
+        commit('setUser', { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2' });
+        console.log('user');
+      }else {
+        localStorage.removeItem('userInfo');
+        commit('setError', { code: 1, message: '' });
+      }
+      *//*
       firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
@@ -134,6 +151,8 @@ export default {
         });
     },
     signOut({ commit }) {
+      // localStorage.removeItem('userInfo');
+      // commit('setLogout');
       firebase
         .auth()
         .signOut()

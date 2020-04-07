@@ -188,7 +188,7 @@
                     </li>
 
                     <!-- Team menu> -->
-                    <li class="Ul_li--hover">
+                    <li v-if="loggedInUser.admin" class="Ul_li--hover">
                         <a class="has-arrow " href="/app/team" :class="{ active: selectedParentMenu ==='team' }">
                             <i class="i-Handshake text-20 mr-2"></i>
                             <span
@@ -208,6 +208,17 @@
                             >Monitoreo</span>
                         </a>
                     </li>
+
+	                <!-- Monitor menu> -->
+	                <li class="Ul_li--hover">
+		                <a class="has-arrow " href="#" @click.prevent="logoutUser">
+			                <i class="i-Power-2 text-20 mr-2"></i>
+			                <span
+				                class="text-15"
+				                :class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
+			                >Sign Out</span>
+		                </a>
+	                </li>
                 </ul>
 
             </div>
@@ -223,7 +234,7 @@ export default {
   components: {
   },
   computed: {
-    ...mapGetters(['getPlaniVerticalCompact', 'getPlaniVerticalSidebar'])
+    ...mapGetters(['getPlaniVerticalCompact', 'getPlaniVerticalSidebar', 'loggedInUser'])
   },
   data() {
     return {
@@ -244,8 +255,15 @@ export default {
       'planiSwitchSidebar',
       'planiSidebarCompact',
       'planiRemoveSidebarCompact',
-      'planiMobileSidebar'
+      'planiMobileSidebar',
+      'signOut'
     ]),
+
+    logoutUser() {
+      this.signOut();
+
+      this.$router.push('/app/sessions/signIn');
+    },
 
     toggleSelectedParentMenu() {
       const currentParentUrl = this.$route.path

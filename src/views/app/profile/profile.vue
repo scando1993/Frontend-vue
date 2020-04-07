@@ -189,6 +189,8 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['loggedInUser']),
+
     getBackgroundImage: function () {
       return require('@/assets/images/photo-wide-5.jpeg');
     },

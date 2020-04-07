@@ -1,63 +1,240 @@
 <template>
 	<div class="box">
-		<task-grid-navbar/>
+<!--		<h3>Clientes</h3>-->
+		<client-navbar/>
+		<breadcumb :page="'Clientes'" :folder="'Main menu'"/>
 		<div id="body" class="view-content">
 			<div class="client-view">
 				<div class="client-content"
-					:class="[ getFormClientShow ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]">
-<!--					<div class="d-flex justify-content-between mr-3">-->
-					<vue-perfect-scrollbar class="scrollable d-flex flex-row flew-wrap justify-content-between mr-3"
-					                       ref="scrollable_content">
-						<div v-if="admin" class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
-<!--							<clients-by-vendor/>-->
-							<template v-for="(vendor, indexVendor) in membersTasks">
-								<div v-bind:key="indexVendor" v-if="indexVendor !== 0"
-								     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;" />
-								<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
-									<h3 class="text-center">{{vendor.memberName}}</h3>
-									<div style="min-width:300px;">
-										<b-row>
-											<b-col md="6" sm="6" xl="6" lg="6" v-for="(task, indextask) in filterSearch(vendor.tasks)" :key="indextask">
-												<div class="card shadow mb-2 mr-0" v-on:click="showFormClientB(indexVendor, indextask)">
-													<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-													<div class="client-card-body">
-														<div class="d-flex flex-row justify-content-between">
-															<div class="mr-auto">
-																<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-																<p>{{clients[task.client_id].name}}</p>
-															</div>
-															<div class="">
-																<button class="client-task-btn-history p-1">Historial</button>
+				     :class="[ getFormClientShow ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]">
+					<div v-if="loggedInUser.admin">
+						<div v-if="getGroupByFilter === 'vendor'">
+							<vue-perfect-scrollbar class="scrollable d-flex flex-row flew-wrap justify-content-between mr-3"
+							                       ref="scrollable_content">
+								<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
+									<template v-for="(vendor, indexVendor) in orderVendors(membersTasks)">
+										<div v-bind:key="indexVendor" v-if="indexVendor !== 0"
+										     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;" />
+										<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
+											<h3 class="text-center">{{vendor.memberName}}</h3>
+											<div style="min-width:300px;">
+												<b-row>
+													<b-col md="6" sm="6" xl="6" lg="6" v-for="(task, indextask) in filterSearch(vendor.tasks)" :key="indextask">
+														<div class="card shadow mb-2 mr-0" v-on:click="showFormClientB(indexVendor, indextask)">
+															<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+															<div class="client-card-body">
+																<div class="d-flex flex-row justify-content-between">
+																	<div class="mr-auto">
+																		<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
+																		<p>{{clients[task.client_id].name}}</p>
+																	</div>
+																	<div class="">
+																		<button class="client-task-btn-history p-1">Historial</button>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-12">
+																		<b>Proxima actividad</b>
+																		<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-12">
+																		<p class="text-wrap">{{task.activity.name}}</p>
+																	</div>
+																</div>
+																<div class="row">
+																	<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
+																</div>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-12">
-																<b>Proxima actividad</b>
-																<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-12">
-																<p class="text-wrap">{{task.activity.name}}</p>
-															</div>
-														</div>
-														<div class="row">
-															<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-														</div>
-													</div>
-												</div>
-											</b-col>
-										</b-row>
-									</div>
+													</b-col>
+												</b-row>
+											</div>
+										</div>
+									</template>
 								</div>
-							</template>
+							</vue-perfect-scrollbar>
 						</div>
-						<div v-else></div>
-					</vue-perfect-scrollbar>
-<!--					</div>-->
+						<div v-else-if="getGroupByFilter === 'priority'">
+							<vue-perfect-scrollbar class="scrollable d-flex flex-row flew-wrap justify-content-between mr-3"
+							                       ref="scrollable_content">
+								<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
+									<template v-for="(vendor, indexVendor) in vendorsByPriority">
+										<div v-bind:key="indexVendor" v-if="indexVendor !== 0"
+										     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;" />
+										<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
+											<h3 class="text-center">{{vendor.memberName}}</h3>
+											<div style="min-width:300px;">
+												<b-row>
+													<b-col md="6" sm="6" xl="6" lg="6" v-for="(task, indextask) in filterSearch(vendor.tasks)" :key="indextask">
+														<div class="card shadow mb-2 mr-0" v-on:click="showFormClientB(indexVendor, indextask)">
+															<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+															<div class="client-card-body">
+																<div class="d-flex flex-row justify-content-between">
+																	<div class="mr-auto">
+																		<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
+																		<p class="client-card-text">{{clients[task.client_id].name}}</p>
+																	</div>
+																	<div class="">
+																		<button class="client-task-btn-history p-1">Historial</button>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-12">
+																		<b clas="client-card-text">Proxima actividad</b>
+																		<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-12">
+																		<p class="text-wrap client-card-text">{{task.activity.name}}</p>
+																	</div>
+																</div>
+																<div class="row">
+																	<p class="mb-0 col-12 text-italic client-card-text">Ultima acción: {{formatDate(task.last_activity)}}</p>
+																</div>
+															</div>
+														</div>
+													</b-col>
+												</b-row>
+											</div>
+										</div>
+									</template>
+								</div>
+							</vue-perfect-scrollbar>
+						</div>
+						<div v-else-if="getGroupByFilter === 'clients'">
+							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
+								<!--							<clients-by-vendor/>-->
+								<template v-for="(task, indexTask) in filterSearch(orderClientsByName(orderClientByVendors(membersTasks)))">
+									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
+										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+										<div class="client-card-body">
+											<div class="d-flex flex-row justify-content-between">
+												<div class="mr-auto">
+													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
+													<p>{{clients[task.client_id].name}}</p>
+												</div>
+												<div class="">
+													<button class="client-task-btn-history p-1">Historial</button>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Vendedor:</b>
+													<p class="text-wrap">{{task.vendor}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Proxima actividad</b>
+													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<p class="text-wrap">{{task.activity.name}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
+											</div>
+										</div>
+									</div>
+								</template>
+							</div>
+						</div>
+						<div v-else>No hay contenido</div>
+					</div>
+					<div v-else>
+						<div v-if="getGroupByFilter === 'priority'">
+							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
+								<!--							<clients-by-vendor/>-->
+								<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(membersTasks))">
+									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
+										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+										<div class="client-card-body">
+											<div class="d-flex flex-row justify-content-between">
+												<div class="mr-auto">
+													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
+													<p>{{clients[task.client_id].name}}</p>
+												</div>
+												<div class="">
+													<button class="client-task-btn-history p-1">Historial</button>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Vendedor:</b>
+													<p class="text-wrap">{{task.vendor}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Proxima actividad</b>
+													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<p class="text-wrap">{{task.activity.name}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
+											</div>
+										</div>
+									</div>
+								</template>
+							</div>
+						</div>
+						<div v-else-if="getGroupByFilter === 'clients'">
+							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
+								<!--							<clients-by-vendor/>-->
+								<template v-for="(task, indexTask) in filterSearch(orderClientByName(membersTasks))">
+									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
+										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+										<div class="client-card-body">
+											<div class="d-flex flex-row justify-content-between">
+												<div class="mr-auto">
+													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
+													<p>{{clients[task.client_id].name}}</p>
+												</div>
+												<div class="">
+													<button class="client-task-btn-history p-1">Historial</button>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Vendedor:</b>
+													<p class="text-wrap">{{task.vendor}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<b>Proxima actividad</b>
+													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<p class="text-wrap">{{task.activity.name}}</p>
+												</div>
+											</div>
+											<div class="row">
+												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
+											</div>
+										</div>
+									</div>
+								</template>
+							</div>
+						</div>
+					</div>
 				</div>
+<!--				<client-form/>-->
 				<div v-if="getFormClientShow" class="ml-2 flex-fill"
-					:class="{ getFormClientShow: 'col-sm-6 col-md-6 col-xl-5 col-lg-5' }">
+					:class="[ getFormClientShow ? 'col-sm-6 col-md-6 col-xl-5 col-lg-5' : '' ]">
 					<div class="card">
 						<div class="card-header" style="background: #00b3ee"></div>
 						<div class="client-modal-header">
@@ -116,12 +293,14 @@
 											label-for="clientVendor"
 											invalid-feedback="clientVendor"
 											label="Asignar vendedor"
+											v-if="loggedInUser.admin"
 										>
 											<b-form-select
 												v-model="vendor_id_selected"
 												:options="VENDOR_TASKS.map( function(element, index) {return {value: element.id.id, text: element.name}})"
 												id="inline-form-custom-select-pref"
 												required
+												v-if="loggedInUser.admin"
 											>
 												<option slot="first" :value="null">Choose...</option>
 												>
@@ -239,103 +418,22 @@
 							</form>
 						</div>
 					</div>
-<!--					<b-card style="min-width: 400px">-->
-<!--						<template v-slot:header class="bg-success">-->
-<!--							<div class="d-flex justify-content-between">-->
-<!--								<button v-on:click="hideForm" class="btn font-weight-bold" style="background: none; color: #00b3ee; font-size: 20px">X-->
-<!--								</button>-->
-<!--								<h3 class="font-weight-bold">{{getFormTitle}}</h3>-->
-<!--								<button v-if="!getFormClientNewClient" class="btn py-0 client-task-btn-history">Ver Historial</button>-->
-<!--								<div v-else></div>-->
-<!--							</div>-->
-<!--						</template>-->
-<!--						<form ref="formNewAdmin" @submit.stop.prevent @submit="addNewCliente" @reset="hideForm">-->
-<!--							<b-row>-->
-<!--								<b-col sm="6" md="6" lg="6" xl="6" class="d-flex flex-column justify-content-between">-->
-<!--									<b-form-group-->
-<!--										label-for="clientName"-->
-<!--										invalid-feedback="llene este campo"-->
-<!--										label="Nombre"-->
-<!--									>-->
-<!--										<b-form-input-->
-<!--											id="clientName"-->
-<!--											placeholder=""-->
-<!--											type="text"-->
-<!--											v-model="formData.name"-->
-<!--											required-->
-<!--										/>-->
-<!--									</b-form-group>-->
-<!--									<b-form-group-->
-<!--										label-for="clientSocial"-->
-<!--										invalid-feedback="Llene este campo"-->
-<!--										label="Razón Social"-->
-<!--									>-->
-<!--										<b-form-input-->
-<!--											id="clientSocial"-->
-<!--											placeholder=""-->
-<!--											type="text"-->
-<!--											v-model="formData.bussinessName"-->
-<!--											required-->
-<!--										/>-->
-<!--									</b-form-group>-->
-<!--									<b-form-group-->
-<!--										label-for="clientUbication"-->
-<!--										invalid-feedback="Llene este campo"-->
-<!--										label="Ubicación"-->
-<!--									>-->
-<!--										<b-form-input-->
-<!--											id="clientUbication"-->
-<!--											placeholder=""-->
-<!--											type="text"-->
-<!--											v-model="formData.address"-->
-<!--											required-->
-<!--										/>-->
-<!--									</b-form-group>-->
-<!--									<b-form-group-->
-<!--										label-for="clientVendor"-->
-<!--										invalid-feedback="clientVendor"-->
-<!--										label="Asignar vendedor"-->
-<!--									>-->
-<!--										<b-form-select-->
-<!--											v-model="vendorSelected"-->
-<!--											:options="vendorSelectList"-->
-<!--											id="inline-form-custom-select-pref"-->
-<!--											required-->
-<!--										>-->
-<!--											<option slot="first" :value="null">Choose...</option>-->
-<!--											>-->
-<!--										</b-form-select>-->
-<!--									</b-form-group>-->
-<!--									<b-form-group-->
-<!--										label-for="clientVendor"-->
-<!--										invalid-feedback="clientVendor"-->
-<!--										label="Notas"-->
-<!--									>-->
-<!--										<b-form-textarea-->
-<!--											v-model="formData.notes"-->
-<!--											placeholder="..."-->
-<!--											rows="3"-->
-<!--											max-rows="6"-->
-<!--										>>-->
-<!--										</b-form-textarea>-->
-<!--									</b-form-group>-->
-
-                </b-card>
-            </div>
-        </div>
-
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-import TaskGridNavbar from './navbar/taskGridNavbar';
-import ClientsByVendor from './ClientsByVendor';
+import ClientNavbar from './navbar/clientNavbar';
+import ClientsByVendor from './clientsByVendor';
 import { mapActions, mapGetters } from 'vuex';
 import { taskGridDummyData, clienteDummyData, vendorDummyData } from './data/taskGridData';
+import ClientForm from './clientForm';
 
 export default {
   name: 'taskGrid',
-  components: { TaskGridNavbar, ClientsByVendor },
+  components: { ClientForm, ClientNavbar, ClientsByVendor },
   data() {
     return {
       admin: true,
@@ -383,7 +481,7 @@ export default {
     console.log(this.getFormClientShow);
   },
   computed: {
-    ...mapGetters(['getFormClientShow', 'getFormClientNewClient', 'getFormTitle', 'VENDOR_TASKS']),
+    ...mapGetters(['getFormClientShow', 'getFormClientNewClient', 'getFormTitle', 'getGroupByFilter', 'loggedInUser', 'VENDOR_TASKS']),
 
     vendorSelectList: function () {
       var options = {};
@@ -391,32 +489,45 @@ export default {
         options[this.vendors[i].id] = this.vendors[i].name;
       }
       return options;
-    }
+    },
+    vendorsByPriority: function() {
+      return this.orderVendorsByPriority(this.membersTasks);
+    },
+
   },
   methods: {
     ...mapActions(['showNewClientForm', 'showClientForm', 'hideClientForm', 'GET_CLIENTS_TASK', 'POST_CLIENT', 'SET_CLIENT_VENDOR']),
     ...mapGetters(['getSearchText',
       'getActiveClients',
       'getInactiveClients',
-      'getNotContactClients']),
+      'getNotContactClients'
+    ]),
 
     filterSearch(list) {
       return list.filter(task => {
         switch (task.activity.state) {
-	        case 'Active': {
-	          if (!this.getActiveClients())
-	            return false;
-	        }break;
-	        case 'Inactive': {
-	          if(!this.getInactiveClients())
-	            return false;
-	        }break;
-	        case 'Without contact':{
-	          if(!this.getNotContactClients())
-	            return false;
-	        }break;
+        case 'Active': {
+          if (!this.getActiveClients())
+            return false;
+        }break;
+        case 'Inactive': {
+          if(!this.getInactiveClients())
+            return false;
+        }break;
+        case 'Without contact':{
+          if(!this.getNotContactClients())
+            return false;
+        }break;
         }
         return this.clients[task.client_id].bussinessName.toLowerCase().match(this.getSearchText().toLowerCase());
+      });
+    },
+
+	  orderVendors(list) {
+      return list.slice().sort(function(a, b) {
+        let textA = a.memberName.toUpperCase();
+        let textB = b.memberName.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       });
     },
     getTaskName(tasks) {
@@ -424,9 +535,7 @@ export default {
       try {
         name = tasks[0].task_info.name;
       }
-      catch (e) {
-
-      }
+      catch (e) {}
       return name;
     },
     getTaskLastStatus(tasks) {
@@ -439,6 +548,61 @@ export default {
       }
       return name;
     },
+
+    orderVendorsByPriority(list) {
+      let _list = list.slice();
+      for(let i = 0; i < _list.length; i++){
+        _list[i].tasks.sort(function (a, b) {
+          return a.last_activity - b.last_activity;
+        });
+      }
+      return _list;
+    },
+
+    orderClientByVendors(list) {
+      let clients = [];
+      for(let i = 0; i < list.length; i++){
+        for(let j = 0; j < list[i].tasks.length; j++){
+          let tmp = list[i].tasks[j];
+          tmp['vendor'] = list[i].memberName;
+          clients.push(tmp);
+        }
+      }
+      return clients;
+    },
+
+    orderClientByPriority(list) {
+      let clients = [];
+      for(let j = 0; j < list[0].tasks.length; j++){
+        let tmp = list[0].tasks[j];
+        clients.push(tmp);
+      }
+      return clients.sort(function(a, b) {
+        return a.last_activity - b.last_activity;
+      });
+    },
+
+    orderClientByName(list) {
+      let clients = [];
+      for(let j = 0; j < list[0].tasks.length; j++){
+        let tmp = list[0].tasks[j];
+        clients.push(tmp);
+      }
+      return clients.sort(function(a, b) {
+        let textA = a.company_name.toUpperCase();
+        let textB = b.company_name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+    },
+
+	  orderClientsByName(list){
+      return list.slice().sort(function(a, b) {
+        let textA = a.company_name.toUpperCase();
+        let textB = b.company_name.toUpperCase();
+        return (textA > textB) ? -1 : (textA < textB) ? 1 : 0;
+      });
+	  },
+
     async addNewCliente() {
       // console.log(this.vendorSelected);
       // this.vendorSelectedInGrid.
@@ -465,6 +629,7 @@ export default {
       //this.addNewTask(this.vendorSelected, clientId);
       this.hideForm();
     },
+
     addNewTask(vendoId, clientId) {
       const newTask = {
         client_id: clientId,
@@ -619,7 +784,8 @@ export default {
 	}
 
 	.client-card-text {
-
+		font-size: 1rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.client-view {
