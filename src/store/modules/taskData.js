@@ -43,20 +43,46 @@ export default {
             })
         },
         DELETE_TASK: ({commit}, task_id) => {
-            const config = {
-                headers: {'x-authorization': 'Bearer ' + localStorage.getItem('token'),
-                    'Content-Type': 'application/json'},
-            };
-            console.log('in set vendor')
-            axios
-                .delete(process.env.VUE_APP_API + '/Task/delete?task_id=' + task_id, config)
-                .then(({data, status}) => {
-                    console.log(data, status);
-                    resolve({data, status});
-                })
-                .catch( error => {
-                    reject(error);
-                })
+            return new Promise((resolve, reject) => {
+                const config = {
+                    headers: {
+                        'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                        'Content-Type': 'application/json'
+                    },
+                };
+                console.log('in set vendor')
+                axios
+                    .delete(process.env.VUE_APP_API + '/Task/delete?task_id=' + task_id, config)
+                    .then(({data, status}) => {
+                        console.log(data, status);
+                        resolve({data, status});
+                    })
+                    .catch(error => {
+                        reject(error);
+                    })
+            })
+        },
+        UPDATE_TASK: ({commit}, payload) => {
+            return new Promise((resolve, reject) => {
+                const config = {
+                    headers: {
+                        'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                        'Content-Type': 'application/json'
+                    },
+                };
+                const {task_id, data} = payload;
+
+                console.log('in set vendor')
+                axios
+                    .put(process.env.VUE_APP_API + '/Task/edit?task_id=' + task_id, data, config)
+                    .then(({data, status}) => {
+                        console.log(data, status);
+                        resolve({data, status});
+                    })
+                    .catch(error => {
+                        reject(error);
+                    })
+            })
         },
 
     }
