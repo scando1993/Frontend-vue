@@ -72,7 +72,7 @@ export default {
                 };
                 const {task_id, data} = payload;
 
-                console.log('in set vendor')
+                console.log('in set vendor');
                 axios
                     .put(process.env.VUE_APP_API + '/Task/edit?task_id=' + task_id, data, config)
                     .then(({data, status}) => {
