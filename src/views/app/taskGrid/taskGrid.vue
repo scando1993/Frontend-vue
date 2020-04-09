@@ -1,6 +1,5 @@
 <template>
 	<div class="box">
-<!--		<h3>Clientes</h3>-->
 		<client-navbar/>
 		<breadcumb :page="'Clientes'" :folder="'Main menu'"/>
 		<div id="body" class="view-content">
@@ -20,34 +19,10 @@
 											<div style="min-width:300px;">
 												<b-row>
 													<b-col md="6" sm="6" xl="6" lg="6" v-for="(task, indextask) in filterSearch(vendor.tasks)" :key="indextask">
-														<div class="card shadow mb-2 mr-0" v-on:click="showFormClientB(indexVendor, indextask)">
-															<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-															<div class="client-card-body">
-																<div class="d-flex flex-row justify-content-between">
-																	<div class="mr-auto">
-																		<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-																		<p>{{clients[task.client_id].name}}</p>
-																	</div>
-																	<div class="">
-																		<button class="client-task-btn-history p-1">Historial</button>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-12">
-																		<b>Proxima actividad</b>
-																		<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-12">
-																		<p class="text-wrap">{{task.activity.name}}</p>
-																	</div>
-																</div>
-																<div class="row">
-																	<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-																</div>
-															</div>
-														</div>
+														<client-card-widget :task_id="indextask"
+														                    :task="task"
+														                    :client="clients[task.client_id]"
+														                    v-on:click="showFormClientB(indexVendor, indextask)"/>
 													</b-col>
 												</b-row>
 											</div>
@@ -68,34 +43,10 @@
 											<div style="min-width:300px;">
 												<b-row>
 													<b-col md="6" sm="6" xl="6" lg="6" v-for="(task, indextask) in filterSearch(vendor.tasks)" :key="indextask">
-														<div class="card shadow mb-2 mr-0" v-on:click="showFormClientB(indexVendor, indextask)">
-															<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-															<div class="client-card-body">
-																<div class="d-flex flex-row justify-content-between">
-																	<div class="mr-auto">
-																		<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-																		<p class="client-card-text">{{clients[task.client_id].name}}</p>
-																	</div>
-																	<div class="">
-																		<button class="client-task-btn-history p-1">Historial</button>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-12">
-																		<b clas="client-card-text">Proxima actividad</b>
-																		<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-12">
-																		<p class="text-wrap client-card-text">{{task.activity.name}}</p>
-																	</div>
-																</div>
-																<div class="row">
-																	<p class="mb-0 col-12 text-italic client-card-text">Ultima acción: {{formatDate(task.last_activity)}}</p>
-																</div>
-															</div>
-														</div>
+														<client-card-widget :task_id="indextask"
+														                    :task="task"
+														                    :client="clients[task.client_id]"
+														                    v-on:click="showFormClientB(indexVendor, indextask)"/>
 													</b-col>
 												</b-row>
 											</div>
@@ -105,43 +56,14 @@
 							</vue-perfect-scrollbar>
 						</div>
 						<div v-else-if="getGroupByFilter === 'clients'">
-							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
+							<div class="d-flex flex-row flex-wrap justify-content-between m-2">
 								<!--							<clients-by-vendor/>-->
 								<template v-for="(task, indexTask) in filterSearch(orderClientsByName(orderClientByVendors(membersTasks)))">
-									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
-										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-										<div class="client-card-body">
-											<div class="d-flex flex-row justify-content-between">
-												<div class="mr-auto">
-													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-													<p>{{clients[task.client_id].name}}</p>
-												</div>
-												<div class="">
-													<button class="client-task-btn-history p-1">Historial</button>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Vendedor:</b>
-													<p class="text-wrap">{{task.vendor}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Proxima actividad</b>
-													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<p class="text-wrap">{{task.activity.name}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-											</div>
-										</div>
-									</div>
+									<client-card-widget :task_id="indexTask"
+									                    :show_vendor="true"
+									                    :task="task"
+									                    :client="clients[task.client_id]"
+									                    v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask"/>
 								</template>
 							</div>
 						</div>
@@ -152,40 +74,10 @@
 							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
 								<!--							<clients-by-vendor/>-->
 								<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(membersTasks))">
-									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
-										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-										<div class="client-card-body">
-											<div class="d-flex flex-row justify-content-between">
-												<div class="mr-auto">
-													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-													<p>{{clients[task.client_id].name}}</p>
-												</div>
-												<div class="">
-													<button class="client-task-btn-history p-1">Historial</button>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Vendedor:</b>
-													<p class="text-wrap">{{task.vendor}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Proxima actividad</b>
-													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<p class="text-wrap">{{task.activity.name}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-											</div>
-										</div>
-									</div>
+									<client-card-widget task_id="indexTask"
+									                    task="task"
+									                    client="clients[task.client_id]"
+									                    v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask"/>
 								</template>
 							</div>
 						</div>
@@ -193,40 +85,10 @@
 							<div class="d-flex flex-row flex-wrap justify-content-between m-3">
 								<!--							<clients-by-vendor/>-->
 								<template v-for="(task, indexTask) in filterSearch(orderClientByName(membersTasks))">
-									<div class="card shadow mb-2 mr-0" v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask">
-										<div class="card-header p-2" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-										<div class="client-card-body">
-											<div class="d-flex flex-row justify-content-between">
-												<div class="mr-auto">
-													<b class="font-weight-bold">{{clients[task.client_id].bussinessName}}</b>
-													<p>{{clients[task.client_id].name}}</p>
-												</div>
-												<div class="">
-													<button class="client-task-btn-history p-1">Historial</button>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Vendedor:</b>
-													<p class="text-wrap">{{task.vendor}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<b>Proxima actividad</b>
-													<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-12">
-													<p class="text-wrap">{{task.activity.name}}</p>
-												</div>
-											</div>
-											<div class="row">
-												<p class="mb-0 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-											</div>
-										</div>
-									</div>
+									<client-card-widget task_id="indexTask"
+									                    task="task"
+									                    client="clients[task.client_id]"
+									                    v-on:click="showFormClientC(task.client_id)" v-bind:key="indexTask"/>
 								</template>
 							</div>
 						</div>
@@ -235,189 +97,190 @@
 <!--				<client-form/>-->
 				<div v-if="getFormClientShow" class="ml-2 flex-fill"
 					:class="[ getFormClientShow ? 'col-sm-6 col-md-6 col-xl-5 col-lg-5' : '' ]">
-					<div class="card">
-						<div class="card-header" style="background: #00b3ee"></div>
-						<div class="client-modal-header">
-							<div class="d-flex justify-content-between align-content-center">
-								<button v-on:click="hideForm" class="btn font-weight-bold" style="background: none; color: #00b3ee; font-size: 20px">X
-								</button>
-								<h3 class="font-weight-bold">{{getFormTitle}}</h3>
-								<button v-if="!getFormClientNewClient" class="btn py-0 client-task-btn-history">Ver Historial</button>
-								<div v-else></div>
-							</div>
-						</div>
-						<div class="card-body">
-							<form ref="formNewAdmin" @submit.stop.prevent @submit="addNewCliente" @reset="hideForm">
-								<b-row>
-									<b-col sm="6" md="6" lg="6" xl="6" class="d-flex flex-column justify-content-between">
-										<b-form-group
-											label-for="clientName"
-											invalid-feedback="llene este campo"
-											label="Nombre"
-										>
-											<b-form-input
-												id="clientName"
-												placeholder=""
-												type="text"
-												v-model="formData.name"
-												required
-											/>
-										</b-form-group>
-										<b-form-group
-											label-for="clientSocial"
-											invalid-feedback="Llene este campo"
-											label="Razón Social"
-										>
-											<b-form-input
-												id="clientSocial"
-												placeholder=""
-												type="text"
-												v-model="formData.bussinessName"
-												required
-											/>
-										</b-form-group>
-										<b-form-group
-											label-for="clientUbication"
-											invalid-feedback="Llene este campo"
-											label="Ubicación"
-										>
-											<b-form-input
-												id="clientUbication"
-												placeholder=""
-												type="text"
-												v-model="formData.address"
-												required
-											/>
-										</b-form-group>
-										<b-form-group
-											label-for="clientVendor"
-											invalid-feedback="clientVendor"
-											label="Asignar vendedor"
-											v-if="loggedInUser.admin"
-										>
-											<b-form-select
-												v-model="vendor_id_selected"
-												:options="VENDOR_TASKS.map( function(element, index) {return {value: element.id.id, text: element.name}})"
-												id="inline-form-custom-select-pref"
-												required
-												v-if="loggedInUser.admin"
-											>
-												<option slot="first" :value="null">Choose...</option>
-												>
-											</b-form-select>
-										</b-form-group>
-										<b-form-group
-											label-for="clientVendor"
-											invalid-feedback="clientVendor"
-											label="Notas"
-										>
-											<b-form-textarea
-												v-model="formData.notes"
-												placeholder="..."
-												rows="3"
-												max-rows="6"
-											>>
-											</b-form-textarea>
-										</b-form-group>
+					<client-form/>
+<!--					<div class="card">-->
+<!--						<div class="card-header p-1" style="background: #00b3ee"></div>-->
+<!--						<div class="client-modal-header">-->
+<!--							<div class="d-flex justify-content-between align-content-center">-->
+<!--								<button v-on:click="hideForm" class="btn font-weight-bold" style="background: none; color: #00b3ee; font-size: 20px">X-->
+<!--								</button>-->
+<!--								<h3 class="font-weight-bold">{{getFormTitle}}</h3>-->
+<!--								<button v-if="!getFormClientNewClient" class="btn py-0 client-task-btn-history">Ver Historial</button>-->
+<!--								<div v-else></div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--						<div class="card-body">-->
+<!--							<form ref="formNewAdmin" @submit.stop.prevent @submit="addNewCliente" @reset="hideForm">-->
+<!--								<b-row>-->
+<!--									<b-col sm="6" md="6" lg="6" xl="6" class="d-flex flex-column justify-content-between">-->
+<!--										<b-form-group-->
+<!--											label-for="clientName"-->
+<!--											invalid-feedback="llene este campo"-->
+<!--											label="Nombre"-->
+<!--										>-->
+<!--											<b-form-input-->
+<!--												id="clientName"-->
+<!--												placeholder=""-->
+<!--												type="text"-->
+<!--												v-model="formData.name"-->
+<!--												required-->
+<!--											/>-->
+<!--										</b-form-group>-->
+<!--										<b-form-group-->
+<!--											label-for="clientSocial"-->
+<!--											invalid-feedback="Llene este campo"-->
+<!--											label="Razón Social"-->
+<!--										>-->
+<!--											<b-form-input-->
+<!--												id="clientSocial"-->
+<!--												placeholder=""-->
+<!--												type="text"-->
+<!--												v-model="formData.bussinessName"-->
+<!--												required-->
+<!--											/>-->
+<!--										</b-form-group>-->
+<!--										<b-form-group-->
+<!--											label-for="clientUbication"-->
+<!--											invalid-feedback="Llene este campo"-->
+<!--											label="Ubicación"-->
+<!--										>-->
+<!--											<b-form-input-->
+<!--												id="clientUbication"-->
+<!--												placeholder=""-->
+<!--												type="text"-->
+<!--												v-model="formData.address"-->
+<!--												required-->
+<!--											/>-->
+<!--										</b-form-group>-->
+<!--										<b-form-group-->
+<!--											label-for="clientVendor"-->
+<!--											invalid-feedback="clientVendor"-->
+<!--											label="Asignar vendedor"-->
+<!--											v-if="loggedInUser.admin"-->
+<!--										>-->
+<!--											<b-form-select-->
+<!--												v-model="vendorSelected"-->
+<!--												:options="vendorSelectList"-->
+<!--												id="inline-form-custom-select-pref"-->
+<!--												required-->
+<!--												v-if="loggedInUser.admin"-->
+<!--											>-->
+<!--												<option slot="first" :value="null">Choose...</option>-->
+<!--												>-->
+<!--											</b-form-select>-->
+<!--										</b-form-group>-->
+<!--										<b-form-group-->
+<!--											label-for="clientVendor"-->
+<!--											invalid-feedback="clientVendor"-->
+<!--											label="Notas"-->
+<!--										>-->
+<!--											<b-form-textarea-->
+<!--												v-model="formData.notes"-->
+<!--												placeholder="..."-->
+<!--												rows="3"-->
+<!--												max-rows="6"-->
+<!--											>>-->
+<!--											</b-form-textarea>-->
+<!--										</b-form-group>-->
 
-									</b-col>
-									<b-col sm="6" md="6" lg="6" xl="6" class="d-flex flex-column justify-content-between">
-										<div class="client-modal-contact">
-											<p class="ml-0">Contacto 1:</p>
-											<b-form-group
-												label-for="contactName1"
-												invalid-feedback="LLene este campo"
-											>
-												<b-form-input
-													id="contactName1"
-													placeholder="Nombre"
-													type="text"
-													v-model="formData.contacts[0].name"
-													required
-												/>
-											</b-form-group>
-											<b-form-group
-												label-for="contactEmail1"
-												invalid-feedback="Email no valido"
-											>
-												<b-form-input
-													id="contactEmail1"
-													placeholder="E-mail"
-													type="email"
-													v-model="formData.contacts[0].email"
-													required
-												/>
-											</b-form-group>
-											<b-form-group
-												label-for="contactNumber1"
-												invalid-feedback="Número inválido"
-											>
-												<b-form-input
-													id="contactNumber1"
-													placeholder="Teléfono"
-													type="number"
-													v-model="formData.contacts[0].phoneNumber"
-													required
-												/>
-											</b-form-group>
-										</div>
-										<div class="client-modal-contact">
-											<p class="ml-0">Contacto 2:</p>
-											<b-form-group
-												label-for="contactName2"
-												invalid-feedback="LLene este campo"
-											>
-												<b-form-input
-													id="contactName2"
-													placeholder="Nombre"
-													type="text"
-													v-model="formData.contacts[1].name"
-													required
-												/>
-											</b-form-group>
-											<b-form-group
-												label-for="contactEmail2"
-												invalid-feedback="Email no valido"
-											>
-												<b-form-input
-													id="contactEmail2"
-													placeholder="E-mail"
-													type="email"
-													v-model="formData.contacts[1].email"
-													required
-												/>
-											</b-form-group>
-											<b-form-group
-												label-for="contactNumber2"
-												invalid-feedback="Número inválido"
-											>
-												<b-form-input
-													id="contactNumber2"
-													placeholder="Teléfono"
-													type="number"
-													v-model="formData.contacts[1].phoneNumber"
-													required
-												/>
-											</b-form-group>
-										</div>
-									</b-col>
-								</b-row>
+<!--									</b-col>-->
+<!--									<b-col sm="6" md="6" lg="6" xl="6" class="d-flex flex-column justify-content-between">-->
+<!--										<div class="client-modal-contact">-->
+<!--											<p class="ml-0">Contacto 1:</p>-->
+<!--											<b-form-group-->
+<!--												label-for="contactName1"-->
+<!--												invalid-feedback="LLene este campo"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactName1"-->
+<!--													placeholder="Nombre"-->
+<!--													type="text"-->
+<!--													v-model="formData.contacts[0].name"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--											<b-form-group-->
+<!--												label-for="contactEmail1"-->
+<!--												invalid-feedback="Email no valido"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactEmail1"-->
+<!--													placeholder="E-mail"-->
+<!--													type="email"-->
+<!--													v-model="formData.contacts[0].email"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--											<b-form-group-->
+<!--												label-for="contactNumber1"-->
+<!--												invalid-feedback="Número inválido"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactNumber1"-->
+<!--													placeholder="Teléfono"-->
+<!--													type="number"-->
+<!--													v-model="formData.contacts[0].phoneNumber"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--										</div>-->
+<!--										<div class="client-modal-contact">-->
+<!--											<p class="ml-0">Contacto 2:</p>-->
+<!--											<b-form-group-->
+<!--												label-for="contactName2"-->
+<!--												invalid-feedback="LLene este campo"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactName2"-->
+<!--													placeholder="Nombre"-->
+<!--													type="text"-->
+<!--													v-model="formData.contacts[1].name"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--											<b-form-group-->
+<!--												label-for="contactEmail2"-->
+<!--												invalid-feedback="Email no valido"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactEmail2"-->
+<!--													placeholder="E-mail"-->
+<!--													type="email"-->
+<!--													v-model="formData.contacts[1].email"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--											<b-form-group-->
+<!--												label-for="contactNumber2"-->
+<!--												invalid-feedback="Número inválido"-->
+<!--											>-->
+<!--												<b-form-input-->
+<!--													id="contactNumber2"-->
+<!--													placeholder="Teléfono"-->
+<!--													type="number"-->
+<!--													v-model="formData.contacts[1].phoneNumber"-->
+<!--													required-->
+<!--												/>-->
+<!--											</b-form-group>-->
+<!--										</div>-->
+<!--									</b-col>-->
+<!--								</b-row>-->
 
-								<div class="mt-5 d-flex justify-content-around">
-									<div v-if="getFormClientNewClient">
-										<button class="btn client-btn" type="reset">Cancelar</button>
-										<button class="btn client-btn" type="submit"> Agregar</button>
-									</div>
-									<div v-else>
-										<button class="btn client-btn" type="button" @click="deleteClient">Eliminar</button>
-										<button class="btn client-btn" type="reset">Cancelar</button>
-										<button class="btn client-btn" type="button" @click="editForm">Editar</button>
-										<button class="btn client-btn" type="button">Crear Tarea</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
+<!--								<div class="mt-5 d-flex justify-content-around">-->
+<!--									<div v-if="getFormClientNewClient">-->
+<!--										<button class="btn client-btn" type="reset">Cancelar</button>-->
+<!--										<button class="btn client-btn" type="submit"> Agregar</button>-->
+<!--									</div>-->
+<!--									<div v-else>-->
+<!--										<button class="btn client-btn" type="button" @click="deleteClient">Eliminar</button>-->
+<!--										<button class="btn client-btn" type="reset">Cancelar</button>-->
+<!--										<button class="btn client-btn" type="button" @click="editForm">Editar</button>-->
+<!--										<button class="btn client-btn" type="button">Crear Tarea</button>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</form>-->
+<!--						</div>-->
+<!--					</div>-->
 				</div>
 			</div>
 		</div>
@@ -427,16 +290,16 @@
 <script>
 import ClientNavbar from './navbar/clientNavbar';
 import ClientsByVendor from './clientsByVendor';
+import ClientCardWidget from './clientCard';
 import { mapActions, mapGetters } from 'vuex';
 import { taskGridDummyData, clienteDummyData, vendorDummyData } from './data/taskGridData';
 import ClientForm from './clientForm';
 
 export default {
   name: 'taskGrid',
-  components: { ClientForm, ClientNavbar, ClientsByVendor },
+  components: { ClientForm, ClientNavbar, ClientsByVendor, ClientCardWidget },
   data() {
     return {
-      admin: true,
       socialState: '',
       nameState: '',
       newClientSocial: '',
@@ -783,10 +646,10 @@ export default {
 		overflow: scroll;
 	}
 
-	.client-card-text {
-		font-size: 1rem;
-		margin-bottom: 0.25rem;
-	}
+	/*.client-card-text {*/
+	/*	font-size: 1rem;*/
+	/*	margin-bottom: 0.25rem;*/
+	/*}*/
 
 	.client-view {
 		display: flex;
@@ -802,7 +665,7 @@ export default {
 	.client-modal {
 		flex-grow: 1;
 	}
-
+/*
 	.client-modal-contact {
 		border-radius: 10px;
 		border: 5px #000000;
@@ -812,13 +675,13 @@ export default {
 		@extend .card-header;
 		padding: 0.15rem 1rem;
 	}
-
-	.client-task-btn-history {
-		background-color: #00b3ee;
-		color: white;
-		border-radius: 5px;
-		font-size: 0.75rem;
-	}
+*/
+	/*.client-task-btn-history {*/
+	/*	background-color: #00b3ee;*/
+	/*	color: white;*/
+	/*	border-radius: 5px;*/
+	/*	font-size: 0.75rem;*/
+	/*}*/
 
 	.client-btn{
 		background-color: #00b3ee;
@@ -826,19 +689,19 @@ export default {
 		border-radius: 12px;
 	}
 
-	.client-dot-activity {
-		border-radius: 50%;
-		width: 1em;
-		height: 1em;
-		margin-left: 0.50rem;
-		display: inline-block;
-	}
-
+	/*.client-dot-activity {*/
+	/*	border-radius: 50%;*/
+	/*	width: 1em;*/
+	/*	height: 1em;*/
+	/*	margin-left: 0.50rem;*/
+	/*	display: inline-block;*/
+	/*}*/
+/*
 	.client-card-body {
 		@extend .card-body !optional;
 		padding: 0.25rem 1.25rem 1.25rem 1.25rem;
 	}
-
+*/
 	@media(min-width: 1200px){
 		.v-xl-divider{
 			margin-left: 1.25rem;
