@@ -10,14 +10,24 @@ export default {
         ? JSON.parse(localStorage.getItem('userInfo'))
         : null,
     loading: false,
-    error: null
+    error: null,
+      loggedUserScope: null,
+      loggedUserEmail: null
   },
   getters: {
+      loggedUserEmail: state => state.loggedUserEmail,
     loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
-    error: state => state.error
+    error: state => state.error,
+      loggedUserScope: state => state.loggedUserScope
   },
   mutations: {
+      setLoggedUserEmail(state, data) {
+          state.loggedUserEmail = data;
+      },
+      setUserScope(state, data) {
+          state.loggedUserScope = data;
+      },
     setUser(state, data) {
       state.loggedInUser = data;
       state.loading = false;
@@ -60,11 +70,18 @@ export default {
           const refreshToken = response.data.refreshToken;
           const tokenDecoded = jwtDecode(token);
           const userId = tokenDecoded['userId'];
-          const newUser = { uid: userId };
-          localStorage.setItem('userInfo', JSON.stringify(newUser));
+          const scope = response.data.scope;
+
+
+            const newUser = { uid: userId, scope: scope };
+
+
+            localStorage.setItem('userInfo', JSON.stringify(newUser));
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
+          commit('setUserScope', scope);
           commit('setUser', newUser);
+          commit('setLoggedUserEmail', data.email);
         })
         .catch(function (error) {
           localStorage.removeItem('userInfo');
