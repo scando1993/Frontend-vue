@@ -38,8 +38,8 @@ export default new Vuex.Store({
     taskGridNavbar,
     clientData,
     vendorData,
-    taskData
-    teamData
+    taskData,
+    teamData,
     profileData
   }
 });
