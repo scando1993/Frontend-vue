@@ -11,7 +11,7 @@
             <div id="basicForm">
                 <b-row>
                     <b-col md="12">
-                        <b-form>
+                        <b-form @submit.prevent>
 
                             <div class="mt-3 mb-30 border-top"></div>
 
@@ -28,7 +28,7 @@
                                             type="text"
                                             required
                                             placeholder="Nombre "
-                                            v-model = "formData.name"
+                                            v-model = "PROFILE.additionalInfo.firstName"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -42,7 +42,7 @@
                                             type="text"
                                             required
                                             placeholder="Apellido"
-                                            v-model = "formData.lastname"
+                                            v-model = "PROFILE.additionalInfo.lastName"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -56,7 +56,7 @@
                                             type="email"
                                             required
                                             placeholder="usuario"
-                                            v-model = "formData.username"
+                                            v-model = "PROFILE.additionalInfo.email"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -68,9 +68,8 @@
                                     <b-form-input
                                             id="input-1"
                                             type="password"
-                                            required
                                             placeholder="Contraseña"
-                                            v-model = "formData.password"
+                                            v-model = "password"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -87,7 +86,7 @@
                                             type="text"
                                             required
                                             placeholder="Nombre Compañia"
-                                            v-model = "formData.company.name"
+                                            v-model = "PROFILE.additionalInfo.company"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -101,7 +100,7 @@
                                             type="text"
                                             required
                                             placeholder="Dirección Compañia"
-                                            v-model = "formData.company.address"
+                                            v-model = "PROFILE.additionalInfo.company_address"
                                     />
                                 </b-form-group>
                             </b-row>
@@ -119,7 +118,7 @@
                                             type="email"
                                             required
                                             placeholder="usuario@mail.com"
-                                            v-model = "formData.email"
+                                            v-model = "PROFILE.additionalInfo.email"
                                     />
                                 </b-form-group>
                                 <b-form-group
@@ -133,12 +132,12 @@
                                             type="number"
                                             required
                                             placeholder="Télefono"
-                                            v-model = "formData.phoneNumber"
+                                            v-model = "PROFILE.additionalInfo.phone"
                                     />
                                 </b-form-group>
                             </b-row>
                             <b-col md="12" class="d-flex justify-content-end ">
-                                <b-button class="mr-2 " type="submit" v-on:click="saveDummyData" variant="primary">Guardar</b-button>
+                                <b-button class="mr-2 " type="submit" v-on:click="save" variant="primary">Guardar</b-button>
                                 <b-button class="" type="cancel" variant="outline-secondary">Cancelar</b-button>
                             </b-col>
                         </b-form>
@@ -174,8 +173,27 @@ export default {
       }
     };
   },
-
+    computed: {
+      ...mapGetters(['PROFILE'])
+    },
+    mounted() {
+      this.$store.dispatch('GET_PROFILE');
+    },
   methods: {
+      save() {
+          const form = {
+              "email": this.PROFILE.additionalInfo.email,
+              "firstName": this.PROFILE.additionalInfo.firstName,
+              "lastName": this.PROFILE.additionalInfo.lastName,
+              "name": this.PROFILE.additionalInfo.name,
+              "role": this.PROFILE.additionalInfo.role,
+              "phone": this.PROFILE.additionalInfo.phone,
+              "company": this.PROFILE.additionalInfo.company,
+              "company_address": this.PROFILE.additionalInfo.company_address
+          };
+          console.log('in save', form);
+          this.$store.dispatch('UPDATE_PROFILE', form);
+      },
     initForm() {
       this.setDummyData();
     },
