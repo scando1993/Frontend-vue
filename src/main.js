@@ -18,6 +18,8 @@ import VModal from 'vue-js-modal';
 import FunctionalCalendar from 'vue-functional-calendar';
 import { Icon }  from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import VueTimepicker from 'vue2-timepicker'
+
 
 Vue.use(FunctionalCalendar, {
   dayNames: ['L', 'M', 'Mi', 'J', 'V', 'S', 'D']

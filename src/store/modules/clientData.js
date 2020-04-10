@@ -28,7 +28,7 @@ export default {
             };
             const response = await axios.get(process.env.VUE_APP_API + '/Client/getAll', headers);
             if (!response.data.error) {
-                console.log(response.data.data);
+                console.log('clients!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.data.data.data);
                 commit('SET_CLIENTS', response.data.data.data)
             } else {
                 console.log(response);

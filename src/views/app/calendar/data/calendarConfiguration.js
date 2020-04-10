@@ -32,23 +32,26 @@ export var calendarList = [
 ];
 export var scheduleList = [
   {
-    id: '1',
+    id: '0',
     calendarId: '1',
-    title: 'my schedule',
+    title: 'Some',
     category: 'time',
+    location:"ss",
     dueDateClass: '',
-    start: '2018-10-18T22:30:00+09:00',
-    end: '2018-10-19T02:30:00+09:00'
+    start: new Date(),
+    end: 'Sat Apr 8 2020 12:12:00 GMT-0500'
   },
   {
     id: '2',
-    calendarId: '1',
-    title: 'second schedule',
-    category: 'time',
-    dueDateClass: '',
-    start: '2018-10-18T17:30:00+09:00',
-    end: '2018-10-19T17:31:00+09:00'
+    calendarId: "2",
+    title: "ssss2",
+    category: "time",
+    location: "0,0",
+    dueDateClass: "",
+    start: "2020-04-14T05:00:00.000Z",
+    end: "2020-04-14T05:59:00.000Z"
   }
+
 ];
 export var view = 'month';
 export var taskView = false;
