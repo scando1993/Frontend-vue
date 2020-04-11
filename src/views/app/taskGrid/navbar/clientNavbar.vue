@@ -87,7 +87,7 @@ export default {
         'currentGroupByFilter'
       ]),
     ...mapGetters(
-      ['getFormClientShow',
+      ['getShowClientForm',
         'getSearchText',
         'getActiveClients',
         'getInactiveClients',
@@ -144,11 +144,6 @@ export default {
 </script>
 
 <style scoped>
-	.planiButton {
-		background-color: #00b3ee;
-		color: white;
-	}
-
 	.btn-add-plani {
 		color: #00b3ee;
 	}

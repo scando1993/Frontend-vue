@@ -1,8 +1,9 @@
 const state = {
   clients: {
-    showFormClient: false,
-    isNewClientFormClient: false,
+    showClientForm: false,
+    isNewClientForm: false,
     formTitle: '',
+    client_id: '',
     searchFilter: '',
     groupBy: '',
     clients_filters: {
@@ -14,9 +15,10 @@ const state = {
 };
 
 const getters = {
-  getFormClientShow: state => state.clients.showFormClient,
-  getFormClientNewClient: state => state.clients.isNewClientFormClient,
+  getShowClientForm: state => state.clients.showClientForm,
+  getNewClientForm: state => state.clients.isNewClientForm,
   getFormTitle: state => state.clients.formTitle,
+  getFormClientId: state => state.clients.client_id,
   getSearchText: state => state.clients.searchFilter,
   getActiveClients: state => state.clients.clients_filters.active,
   getInactiveClients: state => state.clients.clients_filters.inactive,
@@ -28,17 +30,20 @@ const mutations = {
   setFormTitle: (state, payload) => {
     state.clients.formTitle = payload;
   },
-  toggleFormClientShow: state => {
-    state.clients.showFormClient = !state.clients.showFormClient;
+  setFormClientId: (state, payload) => {
+    state.clients.client_id = payload;
   },
-  setToNewClientForm: state => {
-    state.clients.isNewClientFormClient = true;
+  setShowClientForm: state => {
+    state.clients.showClientForm = true;
+  },
+  setNewClientForm: state => {
+    state.clients.isNewClientForm = true;
+  },
+  unsetShowClientForm: state => {
+    state.clients.showClientForm = false;
   },
   unsetNewClientForm: state => {
-    state.clients.isNewClientFormClient = false;
-  },
-  setShowFormClientForm: (state, payload) => {
-    state.clients.showFormClient = payload;
+    state.clients.isNewClientForm = false;
   },
   setSearchText: (state, payload) => {
     state.clients.searchFilter = payload;
@@ -61,18 +66,24 @@ const actions = {
     commit('toggleFormClientShow');
   },
   showNewClientForm({ commit }) {
-    commit('setToNewClientForm');
+    commit('setNewClientForm');
     commit('setFormTitle', 'Agregar Cliente');
-    commit('setShowFormClientForm', true);
+    commit('setFormClientId', '');
+    commit('setShowClientForm');
   },
-  showClientForm({ commit }) {
+  showClientForm({ commit }, data ) {
     commit('unsetNewClientForm');
+    commit('unsetShowClientForm');
     commit('setFormTitle', 'Cliente');
-    commit('setShowFormClientForm', true);
+    commit('setFormClientId', data);
+    commit('setShowClientForm');
   },
   hideClientForm({ commit }) {
-    console.log('en hide');
-    commit('setShowFormClientForm', false);
+    commit('unsetShowClientForm');
+    commit('unsetNewClientForm');
+  },
+  setFormClientId( { commit }, data ){
+    commit('setFormClientId', data);
   },
   setSearchText( { commit }, data ){
     console.log(data);

@@ -1,10 +1,10 @@
 <template>
-	<div class="client-card shadow mb-2 mr-0">
+	<div class="client-card shadow mb-2 mr-0" v-on:click="showClientInfo(task.client_id)">
 		<div class="card-header p-1" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
 		<div class="client-card-body">
 			<div class="d-flex flex-row justify-content-between mb-2">
 				<div class="mr-auto">
-					<b>{{client.bussinessName}}</b>
+					<b>{{client.businessName}}</b>
 					<p>{{client.name}}</p>
 				</div>
 				<div class="">
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'clientCardWidget',
   props: {
@@ -59,7 +61,9 @@ export default {
 	},
 	computed:{},
 	methods:{
-    getHeaderNgVariant(state) {
+    ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm']),
+
+    getHeaderNgVariant: function (state) {
       switch (state) {
       case 'Active':
         return '#00b3ee';
@@ -69,9 +73,14 @@ export default {
         return 'gainsboro';
       }
     },
+
     formatDate: function (dateToFormat) {
       return dateToFormat.toString().split(' ', 4).join(' ');
     },
+
+    showClientInfo: function (client_id){
+      this.showClientForm(client_id);
+    }
 	}
 };
 </script>
