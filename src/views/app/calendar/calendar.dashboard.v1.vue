@@ -7,43 +7,19 @@
 
             <div class="wrapper">
                 <div class="no-card-shadow container " id="card-drag-area-1" v-dragula bag="first-bag">
-                    <div class="task chip-primary mr-1">
+                    <div class="task chip mr-1"
+                         v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
+                         v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now')"
+                    >
                         <div class="task-body">
-                            <span class="task-text">Primary chip</span>
-                            <div class="avatar ml-auto">
+                            <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+                            <!--<div class="avatar ml-auto">
                                 <div class="avatar-content">
                                     LD
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
-                    <div class="task chip-success mr-1">
-                        <div class="task-body">
-                            <span class="task-text">Avatar Text</span>
-                            <div class="avatar ml-auto">
-                                <div class="avatar-content">
-                                    LD
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task chip-info mr-1">
-                        <div class="task-body">
-                            <span class="task-text">Avatar Icon</span>
-                            <div class="avatar ml-auto">
-                                <span><i class="bx bx-user"/></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task chip-warning mr-1">
-                        <div class="task-body">
-                            <span class="task-text">Avatar Image</span>
-                            <div class="avatar ml-auto">
-                                LI
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
@@ -173,40 +149,16 @@
 
                                 <div class="card-body wrapper" >
                                     <ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula bag="first-bag">
-                                        <div class="task chip-primary mr-1">
+
+
+                                        <div class="task chip mr-1 expiredChip" v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
                                             <div class="task-body">
-                                                <span class="task-text">Primary chip</span>
-                                                <div class="avatar ml-auto">
+                                                <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+                                                <!--<div class="avatar ml-auto">
                                                     <div class="avatar-content">
                                                         LD
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-success mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Text</span>
-                                                <div class="avatar ml-auto">
-                                                    <div class="avatar-content">
-                                                        LD
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-info mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Icon</span>
-                                                <div class="avatar ml-auto">
-                                                    <span><i class="bx bx-user"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-warning mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Image</span>
-                                                <div class="avatar ml-auto">
-                                                    LI
-                                                </div>
+                                                </div>-->
                                             </div>
                                         </div>
                                     </ul>
@@ -225,40 +177,14 @@
                             <b-card-body>
                                 <div class="card-body wrapper">
                                     <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula  bag="first-bag">
-                                        <div class="task chip-primary mr-1">
+                                        <div class="task chip mr-1 pendingChip"  v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
                                             <div class="task-body">
-                                                <span class="task-text">Primary chip</span>
-                                                <div class="avatar ml-auto">
+                                                <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+                                                <!--<div class="avatar ml-auto">
                                                     <div class="avatar-content">
                                                         LD
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-success mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Text</span>
-                                                <div class="avatar ml-auto">
-                                                    <div class="avatar-content">
-                                                        LD
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-info mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Icon</span>
-                                                <div class="avatar ml-auto">
-                                                    <span><i class="bx bx-user"/></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="task chip-warning mr-1">
-                                            <div class="task-body">
-                                                <span class="task-text">Avatar Image</span>
-                                                <div class="avatar ml-auto">
-                                                    LI
-                                                </div>
+                                                </div>-->
                                             </div>
                                         </div>
                                     </ul>
@@ -732,5 +658,79 @@
 
 <style scoped>
     @import '~vue2-timepicker/dist/VueTimepicker.css';
+    .expiredChip {
+        position:relative;
+    }
+    .expiredChip:after {
+        content:'\A';
+        position:absolute;
+        background:black;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .pendingChip {
+        position:relative;
+    }
+    .pendingChip:after {
+        content:'\A';
+        position:absolute;
+        background:grey;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .soonChip {
+        position:relative;
+    }
+    .soonChip:after {
+        content:'\A';
+        position:absolute;
+        background:yellow;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .earlyChip {
+        position:relative;
+    }
+    .earlyChip:after {
+        content:'\A';
+        position:absolute;
+        background: greenyellow;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .nowChip {
+        position:relative;
+    }
+    .nowChip:after {
+        content:'\A';
+        position:absolute;
+        background: darkred;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
 
 </style>

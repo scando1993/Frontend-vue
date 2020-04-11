@@ -3,9 +3,9 @@
         <b-row>
             <b-col md="4">
                 <b-card title="Expiradas">
-                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
-                        <div class="task-body">
-                            <span class="task-text">Primary chip</span>
+                    <div class="task chip mr-1 expiredChip" v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'expired')" :key="item">
+                        <div class="task-body ml-4">
+                            <span class="task-text">{{task.additionalInfo.name}}</span>
                             <div class="avatar ml-auto">
                                 <div class="avatar-content">
                                     LD
@@ -17,9 +17,12 @@
             </b-col>
             <b-col md="4">
                 <b-card title="Agendadas">
-                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
-                        <div class="task-body">
-                            <span class="task-text">Primary chip</span>
+                    <div class="task chip mr-1 expiredChip"
+                         v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
+                         v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now')"
+                         :key="item">
+                        <div class="task-body ml-4">
+                            <span class="task-text">{{task.additionalInfo.name}}</span>
                             <div class="avatar ml-auto">
                                 <div class="avatar-content">
                                     LD
@@ -31,9 +34,9 @@
             </b-col>
             <b-col md="4">
                 <b-card title="Pendientes">
-                    <div class="task chip-primary mr-1" v-for="item in [1,2,3,4,5]" :key="item">
-                        <div class="task-body">
-                            <span class="task-text">Primary chip</span>
+                    <div class="task chip mr-1 pendingChip" v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'pending')" :key="item">
+                        <div class="task-body ml-4">
+                            <span class="task-text">{{task.additionalInfo.name}}</span>
                             <div class="avatar ml-auto">
                                 <div class="avatar-content">
                                     LD
@@ -48,11 +51,91 @@
 </template>
 
 <script>
-export default {
-  name: 'calendar_task_view'
+    import { mapGetters, mapActions } from 'vuex';
+
+    export default {
+  name: 'calendar_task_view',
+        computed: {
+      ...mapGetters(['TASKS_LIST'])
+        },
+
 };
 </script>
 
 <style scoped>
+    .expiredChip {
+        position:relative;
+    }
+    .expiredChip:after {
+        content:'\A';
+        position:absolute;
+        background:black;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .pendingChip {
+        position:relative;
+    }
+    .pendingChip:after {
+        content:'\A';
+        position:absolute;
+        background:grey;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .soonChip {
+        position:relative;
+    }
+    .soonChip:after {
+        content:'\A';
+        position:absolute;
+        background:yellow;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .earlyChip {
+        position:relative;
+    }
+    .earlyChip:after {
+        content:'\A';
+        position:absolute;
+        background: greenyellow;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
+
+    .nowChip {
+        position:relative;
+    }
+    .nowChip:after {
+        content:'\A';
+        position:absolute;
+        background: darkred;
+        border-radius: 0.8rem;
+        border-bottom-right-radius: 0rem;
+        border-top-right-radius: 0rem;
+        top:0; bottom:0;
+        left:0;
+        width:10%;
+    }
 
 </style>
