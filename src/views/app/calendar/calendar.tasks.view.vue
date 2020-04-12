@@ -1,16 +1,22 @@
 <template>
     <div>
         <b-row>
-            <b-col md="4">
+            <b-col md="4" class="mx-auto">
                 <b-card title="Expiradas">
                     <div class="task chip mr-1 expiredChip" v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'expired')" :key="item">
-                        <div class="task-body ml-4">
-                            <span class="task-text">{{task.additionalInfo.name}}</span>
-                            <div class="avatar ml-auto">
+                        <div class="task-body ml-5">
+
+                            <span class="task-text">
+                                {{task.additionalInfo.client_data.additionalInfo.social_reason}}
+                                <br>
+                                {{task.additionalInfo.name}}
+                            </span>
+                            <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    LD
+                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
+                            <span class="task-text ml-4">Expiró: {{task.additionalInfo.start_date}}</span>
                         </div>
                     </div>
                 </b-card>
@@ -21,13 +27,18 @@
                          v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
                          v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now')"
                          :key="item">
-                        <div class="task-body ml-4">
-                            <span class="task-text">{{task.additionalInfo.name}}</span>
-                            <div class="avatar ml-auto">
+                        <div class="task-body ml-5">
+                            <span class="task-text">
+                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <br>
+                                {{task.additionalInfo.name}}
+                            </span>
+                            <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    LD
+                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
+                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date}}</span>
                         </div>
                     </div>
                 </b-card>
@@ -35,13 +46,20 @@
             <b-col md="4">
                 <b-card title="Pendientes">
                     <div class="task chip mr-1 pendingChip" v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'pending')" :key="item">
-                        <div class="task-body ml-4">
-                            <span class="task-text">{{task.additionalInfo.name}}</span>
-                            <div class="avatar ml-auto">
+                        <div class="task-body ml-5">
+                            <span class="task-text">
+                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <br>
+                                {{task.additionalInfo.name}}
+                                <br>
+                            </span>
+                            <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    LD
+                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
+                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date}}</span>
+
                         </div>
                     </div>
                 </b-card>

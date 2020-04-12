@@ -12,7 +12,14 @@
                          v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now')"
                     >
                         <div class="task-body">
-                            <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+
+                            <span class="task-text ml-4">
+                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <br>
+                                {{task.additionalInfo.name}}
+                                <br>
+                                Último contacto: {{task.additionalInfo.start_date}}
+                            </span>
                             <!--<div class="avatar ml-auto">
                                 <div class="avatar-content">
                                     LD
@@ -153,7 +160,13 @@
 
                                         <div class="task chip mr-1 expiredChip" v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
                                             <div class="task-body">
-                                                <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+                                                <span class="task-text ml-4">
+                                                    <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                                    <br>
+                                                    {{task.additionalInfo.name}}
+                                                    <br>
+                                                    Último contacto: {{task.additionalInfo.start_date}}
+                                                </span>
                                                 <!--<div class="avatar ml-auto">
                                                     <div class="avatar-content">
                                                         LD
@@ -179,7 +192,14 @@
                                     <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula  bag="first-bag">
                                         <div class="task chip mr-1 pendingChip"  v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
                                             <div class="task-body">
-                                                <span class="task-text ml-4">{{task.additionalInfo.name}}</span>
+                                                <span class="task-text ml-4">
+                                                    <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                                    <br>
+                                                    {{task.additionalInfo.name}}
+                                                    <br>
+                                                    Último contacto: {{task.additionalInfo.start_date}}
+                                                </span>
+
                                                 <!--<div class="avatar ml-auto">
                                                     <div class="avatar-content">
                                                         LD
