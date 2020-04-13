@@ -11,23 +11,23 @@ export default {
         : null,
     loading: false,
     error: null,
-      loggedUserScope: null,
-      loggedUserEmail: null
+    loggedUserScope: null,
+    loggedUserEmail: null
   },
   getters: {
-      loggedUserEmail: state => state.loggedUserEmail,
+    loggedUserEmail: state => state.loggedUserEmail,
     loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
     error: state => state.error,
-      loggedUserScope: state => state.loggedUserScope
+    loggedUserScope: state => state.loggedUserScope
   },
   mutations: {
-      setLoggedUserEmail(state, data) {
-          state.loggedUserEmail = data;
-      },
-      setUserScope(state, data) {
-          state.loggedUserScope = data;
-      },
+    setLoggedUserEmail(state, data) {
+      state.loggedUserEmail = data;
+    },
+    setUserScope(state, data) {
+      state.loggedUserScope = data;
+    },
     setUser(state, data) {
       state.loggedInUser = data;
       state.loading = false;
@@ -73,10 +73,10 @@ export default {
           const scope = response.data.scope;
 
 
-            const newUser = { uid: userId, scope: scope };
+          const newUser = { uid: userId, scope: scope };
 
 
-            localStorage.setItem('userInfo', JSON.stringify(newUser));
+          localStorage.setItem('userInfo', JSON.stringify(newUser));
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
           commit('setUserScope', scope);

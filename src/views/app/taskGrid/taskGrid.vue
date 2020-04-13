@@ -57,20 +57,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import 'src/assets/styles/vendor/bootstrap/bootstrap';
-
-	/*.scrollable {*/
-	/*	width: 100%;*/
-	/*	!*height: 500px;*!*/
-	/*	position: relative;*/
-	/*	overflow: scroll;*/
-	/*}*/
-
-	/*.client-card-text {*/
-	/*	font-size: 1rem;*/
-	/*	margin-bottom: 0.25rem;*/
-	/*}*/
-
 	.client-view {
 		display: flex;
 		flex-flow: row;
@@ -85,84 +71,4 @@ export default {
 	.client-modal {
 		flex-grow: 1;
 	}
-/*
-	.client-modal-contact {
-		border-radius: 10px;
-		border: 5px #000000;
-	}
-
-	.client-modal-header {
-		@extend .card-header;
-		padding: 0.15rem 1rem;
-	}
-*/
-	/*.client-task-btn-history {*/
-	/*	background-color: #00b3ee;*/
-	/*	color: white;*/
-	/*	border-radius: 5px;*/
-	/*	font-size: 0.75rem;*/
-	/*}*/
-
-	/*.client-btn{*/
-	/*	background-color: #00b3ee;*/
-	/*	color: white;*/
-	/*	border-radius: 12px;*/
-	/*}*/
-
-	/*.client-dot-activity {*/
-	/*	border-radius: 50%;*/
-	/*	width: 1em;*/
-	/*	height: 1em;*/
-	/*	margin-left: 0.50rem;*/
-	/*	display: inline-block;*/
-	/*}*/
-/*
-	.client-card-body {
-		@extend .card-body !optional;
-		padding: 0.25rem 1.25rem 1.25rem 1.25rem;
-	}
-*/
-	/*@media(min-width: 1200px){*/
-	/*	.v-xl-divider{*/
-	/*		margin-left: 1.25rem;*/
-	/*		margin-right: 1.25rem;*/
-	/*		width: 0;*/
-	/*		border: 1px solid gray;*/
-	/*		flex-basis: 100%;*/
-	/*	}*/
-	/*}*/
-
-	/*@media(min-width: 992px){*/
-	/*	.v-lg-divider{*/
-	/*		margin-left: 1.25rem;*/
-	/*		margin-right: 1.25rem;*/
-	/*		width: 0;*/
-	/*		border: 1px solid gray;*/
-	/*		flex-basis: 100%;*/
-	/*	}*/
-	/*}*/
-
-	/*@media(min-width: 768px){*/
-	/*	.h-md-divider{*/
-	/*		margin-top: 1.25rem;*/
-	/*		margin-bottom: 1.25rem;*/
-	/*		height: 0;*/
-	/*		border: 1px solid gray;*/
-	/*		flex-basis: 100%;*/
-	/*	}*/
-	/*}*/
-
-	/*@media(min-width: 576px){*/
-	/*	.h-sm-column{*/
-	/*		margin-top: 1.25rem;*/
-	/*		margin-bottom: 1.25rem;*/
-	/*		height: 0;*/
-	/*		border: 1px solid gray;*/
-	/*		flex-basis: 100%;*/
-	/*	}*/
-	/*}*/
-
-	/*.vendor-list {*/
-
-	/*}*/
 </style>

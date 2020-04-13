@@ -61,8 +61,25 @@ export default {
 	},
 	computed:{},
 	methods:{
-    ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm']),
-
+    ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK']),
+    getTaskName(tasks) {
+      let name = 'N/A';
+      try {
+        name = tasks[0].task_info.name;
+      }
+      catch (e) {
+      }
+      return name;
+    },
+    getTaskLastStatus(tasks) {
+      let name = 'N/A';
+      try {
+        name = tasks[0].task_info.start_date;
+      }
+      catch (e) {
+      }
+      return name;
+    },
     getHeaderNgVariant: function (state) {
       switch (state) {
       case 'Active':
