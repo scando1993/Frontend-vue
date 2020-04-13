@@ -5,7 +5,7 @@
             <div class="main-content-wrap mt-0 bg-off-white box"
                  :class="{  'vertical-sidebar': getPlaniVerticalSidebar.isVerticalSidebar,
                             compact: getPlaniVerticalSidebar.isVerticalCompact }">
-<!--                <planiVerticalTopbar />-->
+                <planiVerticalTopbar />
                 <transition name="page" mode="out-in">
                     <router-view class="view-content"/>
                 </transition>
