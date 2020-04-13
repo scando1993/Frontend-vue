@@ -10,7 +10,7 @@ export const taskGridDummyData = [
           name: 'Llamar a gerencia',
           state: 'Active'
         },
-        last_activity: new Date('11/12/2019')
+        last_activity: new Date('10/12/2019')
       },
       {
         client_id: 1,
@@ -20,7 +20,7 @@ export const taskGridDummyData = [
           name: 'Reservar cita',
           state: 'Inactive'
         },
-        last_activity: new Date('11/12/2019')
+        last_activity: new Date('09/10/2019')
       },
       {
         client_id: 2,
@@ -30,7 +30,7 @@ export const taskGridDummyData = [
           name: 'N/A',
           state: 'Without contact'
         },
-        last_activity: new Date('11/12/2019')
+        last_activity: new Date('08/23/2019')
       },
       {
         client_id: 3,
@@ -184,7 +184,7 @@ export const taskGridDummyData = [
 export const clienteDummyData =  [
   {
     name: 'Carlos Santana',
-    bussinessName: 'La Favorita',
+    businessName: 'La Favorita',
     address: 'Quito av. Jose',
     vendor: {
       id: '1',
@@ -206,7 +206,7 @@ export const clienteDummyData =  [
   },
   {
     name: 'Andrea Santilla',
-    bussinessName: 'Uber',
+    businessName: 'Uber',
     address: 'Quito av. Jose',
     vendor: {
       id: '1',
@@ -228,7 +228,7 @@ export const clienteDummyData =  [
   },
   {
     name: 'Micaela Bravo',
-    bussinessName: 'Nexxt',
+    businessName: 'Nexxt',
     address: 'Quito av. Jose',
     vendor: {
       id: '1',
@@ -250,7 +250,7 @@ export const clienteDummyData =  [
   },
   {
     name: 'Jose Bolivar',
-    bussinessName: 'Huawei',
+    businessName: 'Huawei',
     address: 'Quito av. Jose',
     vendor: {
       id: '1',

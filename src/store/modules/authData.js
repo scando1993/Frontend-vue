@@ -10,14 +10,24 @@ export default {
         ? JSON.parse(localStorage.getItem('userInfo'))
         : null,
     loading: false,
-    error: null
+    error: null,
+    loggedUserScope: null,
+    loggedUserEmail: null
   },
   getters: {
+    loggedUserEmail: state => state.loggedUserEmail,
     loggedInUser: state => state.loggedInUser,
     loading: state => state.loading,
-    error: state => state.error
+    error: state => state.error,
+    loggedUserScope: state => state.loggedUserScope
   },
   mutations: {
+    setLoggedUserEmail(state, data) {
+      state.loggedUserEmail = data;
+    },
+    setUserScope(state, data) {
+      state.loggedUserScope = data;
+    },
     setUser(state, data) {
       state.loggedInUser = data;
       state.loading = false;
@@ -60,11 +70,18 @@ export default {
           const refreshToken = response.data.refreshToken;
           const tokenDecoded = jwtDecode(token);
           const userId = tokenDecoded['userId'];
-          const newUser = { uid: userId };
+          const scope = response.data.scope;
+
+
+          const newUser = { uid: userId, scope: scope };
+
+
           localStorage.setItem('userInfo', JSON.stringify(newUser));
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
+          commit('setUserScope', scope);
           commit('setUser', newUser);
+          commit('setLoggedUserEmail', data.email);
         })
         .catch(function (error) {
           localStorage.removeItem('userInfo');
@@ -72,6 +89,23 @@ export default {
         });
 
       /*
+      if (data.email === 'test@plani.org'){
+        const newUser = { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2', admin: false };
+        console.log(newUser);
+        localStorage.setItem('userInfo', JSON.stringify(newUser));
+        commit('setUser', { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2' });
+        console.log('user');
+      }else if(data.email === 'admin@plani.org'){
+        const newUser = { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2', admin: true };
+        console.log(newUser);
+        localStorage.setItem('userInfo', JSON.stringify(newUser));
+        commit('setUser', { uid: 'bUEBs7FOK1bAr6bSVsKdfKiBg2c2' });
+        console.log('user');
+      }else {
+        localStorage.removeItem('userInfo');
+        commit('setError', { code: 1, message: '' });
+      }
+      *//*
       firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
@@ -117,6 +151,8 @@ export default {
         });
     },
     signOut({ commit }) {
+      // localStorage.removeItem('userInfo');
+      // commit('setLogout');
       firebase
         .auth()
         .signOut()

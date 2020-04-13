@@ -1,30 +1,31 @@
 const axios = require('axios');
+
 export default {
   state: {
-    team_list: []
+    profile: {}
   },
   getters: {
-    TEAM: state => state.team_list
+    PROFILE: state => state.profile
   },
   mutations: {
-    SET_TEAM(state, payload) {
-      state.team_list = payload;
+    SET_PROFILE(state, data) {
+      state.profile = data;
     }
   },
   actions: {
-    GET_TEAM: async ({ commit }) => {
-      const headers = {
+    GET_PROFILE: async ({ commit }) => {
+      const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Vendor/getAll', headers);
+      const response = await axios.get(process.env.VUE_APP_API + '/Profile/get', config);
       if (!response.data.error) {
         console.log(response.data.data);
-        commit('SET_TEAM', response.data.data.data);
+        commit('SET_PROFILE', response.data.data);
       } else {
         console.log(response);
       }
     },
-    DELETE_MEMBER: async ({ commit }, vendor_id) => {
+    UPDATE_PROFILE: ({ commit }, data) => {
       return new Promise((resolve, reject) => {
         const config = {
           headers: {
@@ -33,10 +34,11 @@ export default {
           },
         };
         axios
-          .post(process.env.VUE_APP_API + '/Vendor/delete?vendorID=' + vendor_id, data, config)
+          .put(process.env.VUE_APP_API + '/Profile/edit', data, config)
           .then(({ data, status }) => {
             console.log(data, status);
             // commit('ADD_CLIENT', data);
+            commit('SET_PROFILE', data.data.data);
             resolve({ data, status });
           })
           .catch(error => {
@@ -44,6 +46,5 @@ export default {
           });
       });
     }
-  },
-
+  }
 };

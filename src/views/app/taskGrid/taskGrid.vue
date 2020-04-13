@@ -1,506 +1,74 @@
 <template>
-    <div>
-        <task-grid-navbar/>
-        <br>
-        <br>
-        <div id="body" class="d-flex">
-            <vue-perfect-scrollbar class="scrollable d-flex justify-content-betweend-flex justify-content-between mr-3" ref="scrollable_content">
-                <div v-for="(vendor, indexVendor) in VENDOR_TASKS" class="mr-4" style="min-width: 550px" v-bind:key="indexVendor">
-                    <h3 class="text-center">{{vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName}}</h3>
-                    <div style="max-width: 1000px" class="text-13">
-                        <b-row>
-                            <b-col md="6" v-for="(client, indexcClient) in vendor.Clients" :key="indexcClient">
-
-
-                                <b-card
-                                        header=" " Contac
-                                        header-text-variant="white"
-                                        header-tag="card_header"
-                                        v-on:click="showFormClientB(indexVendor, indexcClient)"
-                                        class="mb-2 mr-0"
-
-                                >
-                                    <div slot="header"
-                                         :style="{'background-color': getHeaderNgVariant('Active')}"
-                                         class="p-2">
-                                    </div>
-                                    <b-row>
-                                        <b-col md="8">
-                                            <p>
-                                                <b class="font-weight-bold">{{client.client_info.client_info.social_reason}}</b>
-                                                <br>{{client.client_info.client_info.name}}
-                                            </p>
-                                        </b-col>
-                                        <b-col md="4">
-                                            <button  class="btn planiButton p-1">Historial</button>
-                                        </b-col>
-                                    </b-row>
-                                    <p class="mt-0">
-                                        <b>Proxima actividdad</b>
-                                        <i class="i-Circular-Point"
-                                           :style="{'background-color': getHeaderNgVariant('Active')}"
-                                        />
-                                        <br>{{getTaskName(client.tasks)}}
-                                    </p>
-                                    <p class="mb-0">Ultima acción: {{getTaskLastStatus(client.tasks)}}</p>
-                                </b-card>
-
-                            </b-col>
-                        </b-row>
-                    </div>
-                </div>
-            </vue-perfect-scrollbar>
-
-            <div v-show="getFormClientShow" class=" w-100">
-                <b-card style="min-width: 300px">
-                    <template v-slot:header class="bg-success">
-                        <div class="d-flex justify-content-between">
-                            <button v-on:click="hideForm" class="btn font-weight-bold" style="background: none; color: #00b3ee; font-size: 20px">X</button>
-                            <h3 class="font-weight-bold">{{getFormTitle}}</h3>
-                            <button v-if="!getFormClientNewClient" class="btn py-0 planiButton">Ver Historial</button>
-                            <div v-else></div>
-                        </div>
-                    </template>
-                    <form ref="formNewAdmin" @submit.stop.prevent @submit="addNewCliente" @reset="hideForm">
-                        <b-row>
-                            <b-col md="7">
-                                <b-form-group
-                                        label-for="clientName"
-                                        invalid-feedback="llene este campo"
-                                        label= "Nombre"
-                                >
-                                    <b-form-input
-                                            id="clientName"
-                                            placeholder=""
-                                            type="text"
-                                            v-model="formData.name"
-                                            required
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        label-for="clientSocial"
-                                        invalid-feedback="Llene este campo"
-                                        label = "Razón Social"
-                                >
-                                    <b-form-input
-                                            id="clientSocial"
-                                            placeholder=""
-                                            type="text"
-                                            v-model="formData.social_reason"
-                                            required
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        label-for="clientUbication"
-                                        invalid-feedback="Llene este campo"
-                                        label = "Ubicación"
-                                >
-                                    <b-form-input
-                                            id="clientUbication"
-                                            placeholder=""
-                                            type="text"
-                                            v-model="formData.address"
-                                            required
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        label-for="clientVendor"
-                                        invalid-feedback="clientVendor"
-                                        label = "Asignar vendedor"
-                                >
-                                    <b-form-select
-                                            v-model="vendor_id_selected"
-                                            :options="VENDOR_TASKS.map( function(element, index) {return {value: element.id.id, text: element.name}})"
-                                            id="inline-form-custom-select-pref"
-                                            required
-                                    >
-                                        <option slot="first" :value="null">Choose...</option>
-                                        ></b-form-select>
-                                </b-form-group>
-                                <b-form-group
-                                        label-for="clientVendor"
-                                        invalid-feedback="clientVendor"
-                                        label = "Notas"
-                                >
-                                    <b-form-textarea
-                                            v-model="formData.notes"
-                                            placeholder="..."
-                                            rows="3"
-                                            max-rows="6"
-                                    >></b-form-textarea>
-                                </b-form-group>
-
-                            </b-col>
-                            <b-col md="4">
-                                <b-card style="border: #0a0a0a" class="mb-2">
-                                    <p class="ml-0">Contacto 1:</p>
-                                    <b-form-group
-                                            label-for="contactName1"
-                                            invalid-feedback="LLene este campo"
-                                    >
-                                        <b-form-input
-                                                id="contactName1"
-                                                placeholder="Nombre"
-                                                type="text"
-                                                v-model="formData.contacts[0].name"
-                                                required
-                                        />
-                                    </b-form-group>
-                                    <b-form-group
-                                            label-for="contactEmail1"
-                                            invalid-feedback="Email no valido"
-                                    >
-                                        <b-form-input
-                                                id="contactEmail1"
-                                                placeholder="E-mail"
-                                                type="email"
-                                                v-model="formData.contacts[0].email"
-                                                required
-                                        />
-                                    </b-form-group>
-                                    <b-form-group
-                                            label-for="contactNumber1"
-                                            invalid-feedback="Número inválido"
-                                    >
-                                        <b-form-input
-                                                id="contactNumber1"
-                                                placeholder="Teléfono"
-                                                type="number"
-                                                v-model="formData.contacts[0].phoneNumber"
-                                                required
-                                        />
-                                    </b-form-group>
-                                </b-card>
-                                <b-card style="border: #0a0a0a">
-                                    <p class="ml-0">Contacto:</p>
-                                    <b-form-group
-                                            label-for="contactName2"
-                                            invalid-feedback="LLene este campo"
-                                    >
-                                        <b-form-input
-                                                id="contactName2"
-                                                placeholder="Nombre"
-                                                type="text"
-                                                v-model="formData.contacts[1].name"
-                                                required
-                                        />
-                                    </b-form-group>
-                                    <b-form-group
-                                            label-for="contactEmail2"
-                                            invalid-feedback="Email no valido"
-                                    >
-                                        <b-form-input
-                                                id="contactEmail2"
-                                                placeholder="E-mail"
-                                                type="email"
-                                                v-model="formData.contacts[1].email"
-                                                required
-                                        />
-                                    </b-form-group>
-                                    <b-form-group
-                                            label-for="contactNumber2"
-                                            invalid-feedback="Número inválido"
-                                    >
-                                        <b-form-input
-                                                id="contactNumber2"
-                                                placeholder="Teléfono"
-                                                type="number"
-                                                v-model="formData.contacts[1].phoneNumber"
-                                                required
-                                        />
-                                    </b-form-group>
-                                </b-card>
-                            </b-col>
-                        </b-row>
-
-                        <div md="12" class="mt-5 d-flex justify-content-around">
-                            <div v-if="getFormClientNewClient" >
-                                <button class="btn planiButton" type="reset">Cancelar</button>
-                                <button class="btn planiButton" type="submit"> Agregar</button>
-                            </div>
-                            <div v-else >
-                                <button class="btn planiButton" type="button" @click="deleteClient">Eliminar</button>
-                                <button class="btn planiButton" type="reset">Cancelar</button>
-                                <button class="btn planiButton" type="button" @click="editForm">Editar</button>
-                                <button class="btn planiButton" type="button">Crear Tarea</button>
-                            </div>
-                        </div>
-                    </form>
-
-                </b-card>
-            </div>
-        </div>
-
-    </div>
+	<div class="box">
+		<client-navbar/>
+		<breadcumb :page="'Clientes'" :folder="'Main menu'"/>
+		<div id="body" class="view-content">
+			<div class="client-view">
+				<div class="client-content"
+				     :class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]">
+					<div v-if="getGroupByFilter === 'vendor'">
+						<clients-by-vendor/>
+					</div>
+					<div v-else-if="getGroupByFilter === 'priority'">
+						<clients-by-task/>
+					</div>
+					<div v-else-if="getGroupByFilter === 'clients'">
+						<clients-by-order/>
+					</div>
+					<div v-else>No hay contenido</div>
+				</div>
+				<div v-if="getShowClientForm" class="ml-2 flex-fill"
+					:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-5 col-lg-5' : '' ]">
+					<client-form/>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-    import TaskGridNavbar from './navbar/taskGridNavbar';
-    import { mapActions, mapGetters } from 'vuex';
-    import { taskGridDummyData, clienteDummyData, vendorDummyData } from './data/taskGridData';
-    export default {
-        name: 'taskGrid',
-        components: { TaskGridNavbar },
-        data() {
-            return {
-                socialState: '',
-                nameState: '',
-                newClientSocial: '',
-                newClientName: '',
-                clientFormTitle: 'Cliente',
-                newClientForm: false,
-                client_id_selected: '',
-                vendor_id_selected: '',
-                formTitle: '',
-                vendorSelected: '',
-                clientSelecteIndex: '',
-                vendorSelectedInGrid: '',
-                //task Data
-                membersTasks: taskGridDummyData,
-                clients: clienteDummyData,
-                vendors: vendorDummyData,
-                formData: {
-                    name: '',
-                    social_reason: '',
-                    address: '',
-                    vendor: {
-                        id: '1',
-                        name: 'Jose Jose'
-                    },
-                    notes: '',
-                    lat: '',
-                    lng: '',
-                    contacts: [
-                        {
-                            name: '',
-                            email: '',
-                            phoneNumber: null
-                        },
-                        {
-                            name: '',
-                            email: '',
-                            phoneNumber: null
-                        },
-                    ]
-                }
-            };
-        },
-        created() {
-            console.log(this.getFormClientShow);
-        },
-        computed: {
-            ...mapGetters(['getFormClientShow', 'getFormClientNewClient','getFormTitle', 'VENDOR_TASKS']),
-            vendorSelectList: function () {
-                var options = {};
-                for (const i in this.vendors){
-                    options[this.vendors[i].id] = this.vendors[i].name;
-                }
-                return options;
-            }
-        },
-        methods: {
-            ...mapActions(['showNewClientForm','showClientForm', 'hideClientForm', 'GET_CLIENTS_TASK', 'POST_CLIENT', 'SET_CLIENT_VENDOR']),
+import ClientNavbar from './navbar/clientNavbar';
+import ClientsByOrder from './clientsByOrder';
+import ClientsByTask from './clientsByTask';
+import ClientsByVendor from './clientsByVendor';
+import { mapGetters } from 'vuex';
+import ClientForm from './clientForm';
 
-            getTaskName(tasks) {
-                var name = 'N/A';
-                try {
-                    name = tasks[0].task_info.name;
-                }
-                catch (e) {
-
-                }
-                return name;
-            },
-            getTaskLastStatus(tasks) {
-                var name = 'N/A';
-                try {
-                    name = tasks[0].task_info.start_date;
-                }
-                catch (e) {
-
-                }
-                return name;
-            },
-            async addNewCliente() {
-                // console.log(this.vendorSelected);
-                // this.vendorSelectedInGrid.
-                //this.clients.push(this.formData);
-                console.log(this.formData);
-                console.log('asas', this.vendor_id_selected);
-                const response = await this.$store.dispatch('POST_CLIENT', this.formData)
-                    .then(response => {
-                        return response;
-                    });
-                console.log('response, post', response);
-                const toSent = {
-                    client_id: response.data.data.id.id,
-                    vendor_id: this.vendor_id_selected
-                };
-                this.$store.dispatch('SET_CLIENT_VENDOR', toSent)
-                    .then(response2 => {
-                        this.$store.dispatch('GET_CLIENTS_TASK');
-                    })
-                    .catch(e2 => {
-                        console.log(e2);
-                    })
-                // const clientId = this.clients.length - 1;
-                //this.addNewTask(this.vendorSelected, clientId);
-                this.hideForm();
-            },
-            addNewTask(vendoId, clientId) {
-                const newTask =  {
-                    client_id: clientId,
-                    company_name: this.formData.bussinessName,
-                    client_name: this.formData.name,
-                    activity: {
-                        name: 'N/A',
-                        state: 'Without contact'
-                    },
-                    last_activity: new Date()
-                };
-                this.membersTasks[vendoId].tasks.push(newTask);
-            },
-            formatDate: function (dateToFormat) {
-                return dateToFormat.toString().split(' ', 4).join(' ');
-            },
-            getHeaderNgVariant(state) {
-                switch (state) {
-                    case 'Active':
-                        return '#00b3ee';
-                    case 'Inactive':
-                        return 'gray';
-                    case 'Without contact':
-                        return 'gainsboro';
-                }
-            },
-            setFormClientData(data) {
-                this.formData = data;
-            },
-            async showFormClientB(vendorIndex, indexcClient) {
-                console.log('index', vendorIndex, indexcClient)
-                this.vendorSelectedInGrid = vendorIndex;
-                const selectedVendor = this.VENDOR_TASKS[vendorIndex];
-                const selectedClient = await selectedVendor.Clients[indexcClient];
-                this.client_id_selected = selectedClient.client_info.id;
-                const clientInfo = selectedClient.client_info.client_info;
-                console.log(clientInfo.name);
-
-                this.formData['name'] = clientInfo.name;
-                this.formData['social_reason'] = clientInfo.social_reason;
-                this.formData['address'] = clientInfo.lat.toString() + " " + clientInfo.lng.toString();
-                this.formData['notes'] = clientInfo.notes;
-                this.formData['contacts'] = clientInfo.contacts || this.formData['contacts'];
-                this.formData['lat'] = clientInfo.lat;
-                this.formData['lng'] = clientInfo.lng;
-                this.vendor_id_selected = selectedVendor.id.id;
-
-
-
-                /*
-                this.clientSelecteIndex = taskIndex;
-                this.vendorSelected = vendorIndex;
-                const clientId = this.membersTasks[vendorIndex].tasks[taskIndex].client_id;
-                const clientData = this.clients[clientId];
-                this.setFormClientData(clientData);
-                */
-                this.showClientForm();
-            },
-            deleteClient() {
-                this.$store.dispatch('DELETE_CLIENT', this.client_id_selected)
-                    .then(response => {
-                        this.$store.dispatch('GET_CLIENTS_TASK');
-                    })
-                //this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-                this.hideForm();
-            },
-            hideForm() {
-                this.resetModal();
-                this.hideClientForm();
-            },
-            async editForm() {
-                this.formData['client_id'] = this.client_id_selected;
-                const result = await this.$store.dispatch('UPDATE_CLIENT', this.formData)
-                    .then(result => {
-                        return result;
-                    });
-                const toSent = {
-                    client_id: this.client_id_selected,
-                    vendor_id: this.vendor_id_selected
-                };
-                this.$store.dispatch('SET_CLIENT_VENDOR', toSent)
-                    .then(response2 => {
-                        this.$store.dispatch('GET_CLIENTS_TASK');
-                    })
-                    .catch(e2 => {
-                        console.log(e2);
-                    })
-
-                /*var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
-                this.updateTask(task);
-                console.log(this.vendorSelectedInGrid);
-                console.log(this.vendorSelected);
-                console.log(this.clientSelecteIndex);
-                if (this.vendorSelectedInGrid !== this.vendorSelected) {
-                    task = this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1)[0];
-                    console.log(task);
-                    this.membersTasks[this.vendorSelected].tasks.push(task);
-                }
-                console.log(task);
-                console.log(this.clients);
-                */
-                this.hideForm();
-            },
-            updateTask(task) {
-                const clientId = task.client_id;
-                var clientData = this.clients[clientId];
-                clientData = this.formData;
-                console.log(clientData);
-                task.company_name = this.formData.bussinessName;
-                task.client_name = this.formData.name;
-            },
-            resetModal() {
-                this.vendor_id_selected = '';
-                this.formData = {
-                    name: '',
-                    social_reason: '',
-                    address: '',
-                    vendor: {
-                        id: '1',
-                        name: 'Jose Jose'
-                    },
-                    notes: '',
-                    lat: '',
-                    lng: '',
-                    contacts: [
-                        {
-                            name: '',
-                            email: '',
-                            phoneNumber: null
-                        },
-                        {
-                            name: '',
-                            email: '',
-                            phoneNumber: null
-                        },
-                    ]
-                }
-            }
-        },
-        mounted() {
-            this.$store.dispatch('GET_CLIENTS_TASK');
-        }
-    };
+export default {
+  name: 'taskGrid',
+  components: {
+    ClientForm,
+	  ClientNavbar,
+	  ClientsByVendor,
+	  ClientsByOrder,
+	  ClientsByTask
+  },
+  data() {
+    return {};
+  },
+  created() {
+    console.log(this.getShowClientForm);
+  },
+  computed: {
+    ...mapGetters(['getShowClientForm', 'getGroupByFilter']),
+  },
+  methods: {}
+};
 </script>
 
-<style scoped>
-    .scrollable{
-        width: 100%;
-        height: 500px;
-        position: relative;
-        overflow: scroll;
-    }
-    .planiButton {
-        background-color: #00b3ee;
-        color: white;
-    }
+<style scoped lang="scss">
+	.client-view {
+		display: flex;
+		flex-flow: row;
+		height: 100%;
+		width: 100%;
+	}
+
+	.client-content{
+		flex: 1 1 auto;
+	}
+
+	.client-modal {
+		flex-grow: 1;
+	}
 </style>

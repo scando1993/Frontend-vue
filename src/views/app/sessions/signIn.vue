@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      email: 'test@plani.org',
+      email: 'ui-lib@gmail.com',
       password: '123456',
       // // password: "vue006",
       userId: '',
