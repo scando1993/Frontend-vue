@@ -16,7 +16,7 @@ export default {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Vendor/getAll', headers);
+      const response = await axios.get(process.env.VUE_APP_API + '/Vendor/getAll?limit=1000', headers);
       if (!response.data.error) {
         console.log(response.data.data);
         commit('SET_TEAM', response.data.data.data);
