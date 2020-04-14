@@ -238,7 +238,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser']),
+    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST']),
 	  formData: {
       get() {
         if (this.getFormClientId() === ''){
@@ -268,7 +268,22 @@ export default {
           };
         }
         else {
-          return this.clients[this.getFormClientId()];
+        	console.log("id client", this.getFormClientId());
+          const client = this.CLIENTS_LIST.find(x => x.id.id === this.getFormClientId());
+          console.log('client_selected', client);
+          return {
+			  name: client.additionalInfo.name,
+			  lat: "0",
+			  lng: "0",
+			  social_reason: client.additionalInfo.social_reason,
+			  address: client.additionalInfo.address,
+			  vendor: {
+				  id: '',
+				  name: ''
+			  },
+			  notes: client.additionalInfo.notes,
+			  contacts: client.additionalInfo.contacts
+		  }
         }
       },
 		  set(value){
@@ -301,7 +316,7 @@ export default {
 						limit: 1000,
 						addTasks: true
 					};
-					this.$store.dispatch('GET_VENDOR_LIST', payload);
+					this.$store.dispatch('GET_CLIENTS_LIST', payload);
 				});
       /*console.log(this.formData.vendor);
       this.formData.vendor = this.vendors[this.vendorSelected];
@@ -335,8 +350,17 @@ export default {
       return dateToFormat.toString().split(' ', 4).join(' ');
     },
     deleteClient: function () {
-      this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-      this.hideForm();
+      // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
+      this.$store.dispatch('DELETE_CLIENT', this.getFormClientId())
+			  .then(response => {
+			  	const payload = {
+			  		limit: 1000,
+					addTasks: true,
+					addVendor: true
+				};
+			  	this.$store.dispatch('GET_CLIENTS_LIST', payload)
+			  });
+		this.hideForm();
     },
     hideForm: function () {
       this.resetModal();

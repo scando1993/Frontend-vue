@@ -92,7 +92,13 @@ export default {
     },
 
     formatDate: function (dateToFormat) {
-      return dateToFormat.toString().split(' ', 4).join(' ');
+    	try {
+			return dateToFormat.toString().split(' ', 4).join(' ');
+
+		}
+		catch (e) {
+			return 'N/A'
+		}
     },
 
     showClientInfo: function (client_id){

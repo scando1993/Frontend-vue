@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-row flex-wrap justify-content-between m-3">
 		<!--							<clients-by-vendor/>-->
-		<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(orderClientByVendors(VENDOR_LIST)))">
+		<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(orderClientByVendors(CLIENTS_LIST)))">
 			<client-card-widget :task_id="indexTask"
 			                    :show_vendor="true"
 			                    :task="task"
@@ -32,8 +32,13 @@ export default {
   		limit: 1000,
 		addTasks: true
 	};
-		this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
-		this.$store.dispatch('GET_CLIENTS_LIST')
+  	const clientPayload = {
+  		limit: 1000,
+		addTasks: true,
+		addVendor: true
+	};
+		// this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
+		this.$store.dispatch('GET_CLIENTS_LIST', clientPayload)
 	},
   computed: {
   	...mapGetters(['VENDOR_LIST', "CLIENTS_LIST"])
@@ -94,14 +99,27 @@ export default {
     	console.log('aca en order' , list);
       let clients = [];
       for(let i = 0; i < list.length; i++){
+      	if(list[i].tasks.length === 0) {
+      		let tmp = {
+      			activity: {
+					state: 'Without contact',
+					name: 'N/A'
+				},
+				last_activity: 'N/A',
+				vendor: 'N/A',
+				client: list[i]
+			};
+			clients.push(tmp);
+		}
         for(let j = 0; j < list[i].tasks.length; j++){
           let tmp = list[i].tasks[j];
-          tmp['vendor'] = list[i].name;
+          tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
           tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
           tmp.activity = {
 			  state: this.parseStatus(tmp.additionalInfo.status),
 			  name: tmp.additionalInfo.name
 		  };
+          tmp.client = list[i];
           console.log("tem2", tmp);
           clients.push(tmp);
         }
