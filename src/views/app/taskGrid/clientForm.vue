@@ -37,7 +37,7 @@
 								id="clientSocial"
 								placeholder=""
 								type="text"
-								v-model="formData.businessName"
+								v-model="formData.social_reason"
 								required
 								:readonly="editForm"
 							/>
@@ -244,7 +244,9 @@ export default {
         if (this.getFormClientId() === ''){
           return {
             name: '',
-            businessName: '',
+			  lat: "0",
+			  lng: "0",
+            social_reason: '',
             address: '',
             vendor: {
               id: '',
@@ -293,11 +295,19 @@ export default {
     ...mapActions(['showNewClientForm', 'showClientForm', 'hideClientForm', 'setFormClientId']),
 
     addNewClient: function () {
-      console.log(this.formData.vendor);
+    	this.$store.dispatch('POST_CLIENT', this.formData)
+				.then(response => {
+					const payload = {
+						limit: 1000,
+						addTasks: true
+					};
+					this.$store.dispatch('GET_VENDOR_LIST', payload);
+				});
+      /*console.log(this.formData.vendor);
       this.formData.vendor = this.vendors[this.vendorSelected];
       this.clients.push(this.formData);
       const clientId = this.clients.length - 1;
-      this.addNewTask(this.vendorSelected, clientId);
+      this.addNewTask(this.vendorSelected, clientId);*/
       this.hideForm();
     },
     addNewTask: function (vendorId, clientId) {
