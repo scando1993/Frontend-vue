@@ -125,27 +125,27 @@ export default {
       indexMember: 0
     };
   },
-    mounted() {
-      this.$store.dispatch('GET_TEAM');
-    },
-	computed:{
+  mounted() {
+    this.$store.dispatch('GET_TEAM');
+  },
+  computed:{
     ...mapGetters(['loggedInUser']),
     ...mapGetters(['TEAM'])
-	},
+  },
   methods: {
-      changeToCalendar() {
-          this.$router.push('calendar/calendar.dashboard.v1');
+    changeToCalendar() {
+      this.$router.push('calendar/calendar.dashboard.v1');
 
-      },
-      changeToClients() {
-          this.$router.push('taskGrid');
+    },
+    changeToClients() {
+      this.$router.push('taskGrid');
 
 
-      },
-      changeToReports() {
-          this.$router.push('reports');
+    },
+    changeToReports() {
+      this.$router.push('reports');
 
-      },
+    },
     leaveTeam() {
       this.$bvModal.hide('m-confirm-leave');
     },
@@ -159,7 +159,7 @@ export default {
       this.indexMember = index;
     },
     deleteMember(){
-        console.log('deleting', this.indexMember);
+      console.log('deleting', this.indexMember);
       this.TEAM.splice(this.indexMember, 1);
       const selectedMember_id = this.TEAM[this.indexMember].id.id;
       this.$store.dispatch('DELETE_MEMBER',selectedMember_id );

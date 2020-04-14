@@ -1,11 +1,11 @@
 <template>
 	<div class="d-flex flex-row flex-wrap justify-content-between m-3">
 		<!--							<clients-by-vendor/>-->
-		<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(orderClientByVendors(membersTasks)))">
+		<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(orderClientByVendors(VENDOR_LIST)))">
 			<client-card-widget :task_id="indexTask"
 			                    :show_vendor="true"
 			                    :task="task"
-			                    :client="clients[task.client_id]"
+			                    :client="task.client"
 			                    v-bind:key="indexTask"/>
 		</template>
 	</div>
@@ -27,7 +27,16 @@ export default {
   },
   created() {
   },
+	mounted() {
+  	const vendorPayload = {
+  		limit: 1000,
+		addTasks: true
+	};
+		this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
+		this.$store.dispatch('GET_CLIENTS_LIST')
+	},
   computed: {
+  	...mapGetters(['VENDOR_LIST', "CLIENTS_LIST"])
   },
   methods: {
     ...mapGetters(['getSearchText',
@@ -40,7 +49,7 @@ export default {
       //   let active = this.getActiveClients();
       //   let inactive = this.getInactiveClients();
       //   let not_contact = this.getNotContactClients();
-			//
+      //
       //   let status = '';
       //   if (active) {
       //     status = 'Active';
@@ -61,17 +70,17 @@ export default {
         switch (task.activity.state) {
         case 'Active':{
           if (active) {
-            return this.clients[task.client_id].businessName.toLowerCase().match(this.getSearchText().toLowerCase());
+            return this.CLIENTS_LIST.find(x => x.id.id === task.client.id.id).additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
           }
         }break;
         case 'Inactive': {
           if (inactive){
-            return this.clients[task.client_id].businessName.toLowerCase().match(this.getSearchText().toLowerCase());
+            return this.CLIENTS_LIST.find(x => x.id.id === task.client.id.id).additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
           }
         }break;
         case 'Without contact': {
           if (not_contact){
-            return this.clients[task.client_id].businessName.toLowerCase().match(this.getSearchText().toLowerCase());
+            return this.CLIENTS_LIST.find(x => x.id.id === task.client.id.id).additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
           }
         }break;
         }
@@ -82,16 +91,46 @@ export default {
     },
 
     orderClientByVendors(list) {
+    	console.log('aca en order' , list);
       let clients = [];
       for(let i = 0; i < list.length; i++){
         for(let j = 0; j < list[i].tasks.length; j++){
           let tmp = list[i].tasks[j];
-          tmp['vendor'] = list[i].memberName;
+          tmp['vendor'] = list[i].name;
+          tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
+          tmp.activity = {
+			  state: this.parseStatus(tmp.additionalInfo.status),
+			  name: tmp.additionalInfo.name
+		  };
+          console.log("tem2", tmp);
           clients.push(tmp);
         }
       }
+      console.log('cleints list', clients);
       return clients;
     },
+	  parseStatus(status) {
+    	var newStatus = '';
+    	switch (status) {
+			case 'expired':
+				newStatus = "Inactive";
+				break;
+			case 'now':
+				newStatus = "Active";
+				break;
+			case 'pending':
+				newStatus = "Without contact";
+				break;
+			case 'soon':
+				newStatus = "Without contact";
+				break;
+			case 'early':
+				newStatus = 'Without contact';
+				break;
+		}
+		console.log("state", newStatus);
+		return newStatus;
+	  },
 
     orderClientByPriority(list) {
       return list.slice().sort(function(a, b) {

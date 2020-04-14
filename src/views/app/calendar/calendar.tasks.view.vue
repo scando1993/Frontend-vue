@@ -69,13 +69,13 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
-    export default {
+export default {
   name: 'calendar_task_view',
-        computed: {
-      ...mapGetters(['TASKS_LIST'])
-        },
+  computed: {
+    ...mapGetters(['TASKS_LIST'])
+  },
 
 };
 </script>

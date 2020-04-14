@@ -49,6 +49,9 @@ export default {
       return options;
     }
   },
+	mounted() {
+  	console.log('mounted in client by vendor');
+	},
   methods: {
     ...mapGetters(['getSearchText',
       'getActiveClients',

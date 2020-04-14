@@ -40,7 +40,7 @@ export default {
       //   let active = this.getActiveClients();
       //   let inactive = this.getInactiveClients();
       //   let not_contact = this.getNotContactClients();
-			//
+      //
       //   let status = '';
       //   if (active) {
       //     status = 'Active';
