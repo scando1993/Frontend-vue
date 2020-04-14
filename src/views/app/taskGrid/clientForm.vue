@@ -368,7 +368,19 @@ export default {
     },
     editClient: function () {
       if (this.editButton) {
-        this.clients[this.getFormClientId()] = this.formData;
+      	// seccond edit
+		  this.formData.client_id = this.getFormClientId();
+		this.$store.dispatch('UPDATE_CLIENT', this.formData)
+				.then(response => {
+					const payload = {
+						limit: 1000,
+						addTasks: true,
+						addVendor: true
+					};
+					this.$store.dispatch('GET_CLIENTS_LIST', payload)
+				})
+		  this.hideForm();
+        //this.clients[this.getFormClientId()] = this.formData;
       }
       this.editButton = !this.editButton;
       var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
