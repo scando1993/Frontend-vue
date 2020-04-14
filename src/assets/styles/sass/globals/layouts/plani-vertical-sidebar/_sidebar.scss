@@ -31,7 +31,7 @@
     overflow-x: hidden;
     padding-top: 20px;
     transition: width 0.3s ease-in;
-    background: #fff;
+    background: #4399B6;
   }
   .gull-brand-logo {
     width: 60px;
@@ -60,7 +60,7 @@
   }
   .Ul_li--hover > div > a::before {
     content: "";
-    background-color: $purple;
+    background-color: $white;
     position: absolute;
     height: 35px;
     width: 225px;
@@ -74,7 +74,7 @@
   }
 
   .ul-vertical-sidebar a.has-arrow {
-    color: $gray-800;
+    color: $white;
     margin-bottom: 15px;
     height: 35px;
     // padding: 0 15px;
@@ -85,7 +85,7 @@
     color: $primary;
   }
   .Ul_li--hover div .Ul_collapse li a {
-    color: $gray-800;
+    color: $yellow;
     margin-bottom: 10px !important;
     display: block;
     font-size: 15px;
@@ -192,10 +192,10 @@
     display: none;
   }
 
-  // parent hover color
-  :not(.collapsed) > .router-link-exact-active.open {
-    color: $primary;
-  }
+  //// parent hover color
+  //:not(.collapsed) > .router-link-exact-active.open {
+  //  color: $primary;
+  //}
 }
 
 [dir="rtl"] {
