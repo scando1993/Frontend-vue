@@ -6,9 +6,6 @@
 			<div class="client-view">
 				<div class="client-content"
 				     :class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]">
-					<div v-if="getGroupByFilter === ''">
-						<clients-by-task/>
-					</div>
 					<div v-if="getGroupByFilter === 'vendor'">
 						<clients-by-vendor/>
 					</div>
