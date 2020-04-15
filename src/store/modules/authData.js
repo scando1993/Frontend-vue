@@ -71,9 +71,10 @@ export default {
           const tokenDecoded = jwtDecode(token);
           const userId = tokenDecoded['userId'];
           const scope = response.data.scope;
+          const admin = scope === "TEAM_ADMIN";
 
 
-          const newUser = { uid: userId, scope: scope };
+          const newUser = { uid: userId, scope: scope, admin: admin };
 
 
           localStorage.setItem('userInfo', JSON.stringify(newUser));

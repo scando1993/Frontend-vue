@@ -36,20 +36,20 @@ export var scheduleList = [
     calendarId: '1',
     title: 'Some',
     category: 'time',
-    location:"ss",
+    location:'ss',
     dueDateClass: '',
     start: new Date(),
     end: 'Sat Apr 8 2020 12:12:00 GMT-0500'
   },
   {
     id: '2',
-    calendarId: "2",
-    title: "ssss2",
-    category: "time",
-    location: "0,0",
-    dueDateClass: "",
-    start: "2020-04-14T05:00:00.000Z",
-    end: "2020-04-14T05:59:00.000Z"
+    calendarId: '2',
+    title: 'ssss2',
+    category: 'time',
+    location: '0,0',
+    dueDateClass: '',
+    start: '2020-04-14T05:00:00.000Z',
+    end: '2020-04-14T05:59:00.000Z'
   }
 
 ];

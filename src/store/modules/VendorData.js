@@ -12,11 +12,22 @@ export default {
     }
   },
   actions: {
-    GET_VENDOR_LIST: async ({ commit }) => {
+    GET_VENDOR_LIST: async ({ commit }, params) => {
       const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Vendor/getAll', config);
+      console.log("vendorParams", params);
+      const { limit, textSearch, addTasks, addClients } = params;
+      var endPoint = '/Vendor/getAll?limit=' + limit;
+
+      if(addTasks)
+        endPoint += '&addTasks=' + addTasks;
+      if (addClients)
+        endPoint += '&addClients=' +  addClients;
+      if (textSearch)
+        endPoint += '&textSearch='  + textSearch;
+
+      const response = await axios.get(process.env.VUE_APP_API + endPoint, config);
       if (!response.data.error) {
         console.log('vendors', response.data.data.data);
         commit('SET_VENDOR_LIST', response.data.data.data);
@@ -28,6 +39,7 @@ export default {
       const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
+      console.log("in get vendor's tasks");
       var endponit = `/Vendor/getTasks?vendorID=${vendor_id}?limit=${limit}`;
       if (textSearch) {
         endponit += '?textSearch=' + textSearch;

@@ -1,11 +1,11 @@
 <template>
-	<div class="client-card shadow mb-2 mr-0" v-on:click="showClientInfo(task.client_id)">
+	<div class="client-card shadow mb-2 mr-0" v-on:click="showClientInfo(task.client.id.id)">
 		<div class="card-header p-1" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
 		<div class="client-card-body">
 			<div class="d-flex flex-row justify-content-between mb-2">
 				<div class="mr-auto">
-					<b>{{client.businessName}}</b>
-					<p>{{client.name}}</p>
+					<b>{{client.additionalInfo.social_reason}}</b>
+					<p>{{client.additionalInfo.name}}</p>
 				</div>
 				<div class="">
 					<button class="client-task-btn-history">Historial</button>
@@ -44,23 +44,23 @@ export default {
       type: Number,
 	    required: true
     },
-		show_vendor: {
+    show_vendor: {
       type: Boolean,
-			required: false,
-			default: false
-		},
-		task: {
+      required: false,
+      default: false
+    },
+    task: {
       type: Object
-		},
-		client: {
+    },
+    client: {
       type: Object
-		}
-	},
-	data: function (){
+    }
+  },
+  data: function (){
     return {};
-	},
-	computed:{},
-	methods:{
+  },
+  computed:{},
+  methods:{
     ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK']),
     getTaskName(tasks) {
       let name = 'N/A';
@@ -92,13 +92,19 @@ export default {
     },
 
     formatDate: function (dateToFormat) {
-      return dateToFormat.toString().split(' ', 4).join(' ');
+    	try {
+			return dateToFormat.toString().split(' ', 4).join(' ');
+
+		}
+		catch (e) {
+			return 'N/A'
+		}
     },
 
     showClientInfo: function (client_id){
       this.showClientForm(client_id);
     }
-	}
+  }
 };
 </script>
 

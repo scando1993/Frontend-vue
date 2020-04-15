@@ -37,7 +37,7 @@
 								id="clientSocial"
 								placeholder=""
 								type="text"
-								v-model="formData.businessName"
+								v-model="formData.social_reason"
 								required
 								:readonly="editForm"
 							/>
@@ -83,7 +83,9 @@
 								>
 									<b-form-select
 										v-model="vendorSelected"
-										:options="vendorSelectList"
+										:options="VENDOR_LIST.map(function(x) {
+										  return {value: x.id.id, text: x.additionalInfo.firstName}
+										} )"
 										id="clientVendor"
 										required
 									>
@@ -238,13 +240,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser']),
+    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST']),
 	  formData: {
       get() {
         if (this.getFormClientId() === ''){
           return {
             name: '',
-            businessName: '',
+			  lat: "0",
+			  lng: "0",
+            social_reason: '',
             address: '',
             vendor: {
               id: '',
@@ -266,7 +270,22 @@ export default {
           };
         }
         else {
-          return this.clients[this.getFormClientId()];
+        	console.log("id client", this.getFormClientId());
+          const client = this.CLIENTS_LIST.find(x => x.id.id === this.getFormClientId());
+          console.log('client_selected', client);
+          return {
+			  name: client.additionalInfo.name,
+			  lat: "0",
+			  lng: "0",
+			  social_reason: client.additionalInfo.social_reason,
+			  address: client.additionalInfo.address,
+			  vendor: {
+				  id: '',
+				  name: ''
+			  },
+			  notes: client.additionalInfo.notes,
+			  contacts: client.additionalInfo.contacts
+		  }
         }
       },
 		  set(value){
@@ -293,11 +312,19 @@ export default {
     ...mapActions(['showNewClientForm', 'showClientForm', 'hideClientForm', 'setFormClientId']),
 
     addNewClient: function () {
-      console.log(this.formData.vendor);
+    	this.$store.dispatch('POST_CLIENT', this.formData)
+				.then(response => {
+					const payload = {
+						limit: 1000,
+						addTasks: true
+					};
+					this.$store.dispatch('GET_CLIENTS_LIST', payload);
+				});
+      /*console.log(this.formData.vendor);
       this.formData.vendor = this.vendors[this.vendorSelected];
       this.clients.push(this.formData);
       const clientId = this.clients.length - 1;
-      this.addNewTask(this.vendorSelected, clientId);
+      this.addNewTask(this.vendorSelected, clientId);*/
       this.hideForm();
     },
     addNewTask: function (vendorId, clientId) {
@@ -325,8 +352,17 @@ export default {
       return dateToFormat.toString().split(' ', 4).join(' ');
     },
     deleteClient: function () {
-      this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-      this.hideForm();
+      // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
+      this.$store.dispatch('DELETE_CLIENT', this.getFormClientId())
+			  .then(response => {
+			  	const payload = {
+			  		limit: 1000,
+					addTasks: true,
+					addVendor: true
+				};
+			  	this.$store.dispatch('GET_CLIENTS_LIST', payload)
+			  });
+		this.hideForm();
     },
     hideForm: function () {
       this.resetModal();
@@ -334,7 +370,26 @@ export default {
     },
     editClient: function () {
       if (this.editButton) {
-        this.clients[this.getFormClientId()] = this.formData;
+      	// seccond edit
+		  this.formData.client_id = this.getFormClientId();
+		this.$store.dispatch('UPDATE_CLIENT', this.formData)
+				.then(response => {
+					const setClientVendorPayload = {
+						client_id: this.getFormClientId(),
+						vendor_id: this.vendorSelected
+					};
+					this.$store.dispatch('SET_CLIENT_VENDOR',setClientVendorPayload )
+							.then(response2 => {
+								const payload = {
+									limit: 1000,
+									addTasks: true,
+									addVendor: true
+								};
+								this.$store.dispatch('GET_VENDOR_LIST', payload)
+							});
+				});
+		  this.hideForm();
+        //this.clients[this.getFormClientId()] = this.formData;
       }
       this.editButton = !this.editButton;
       var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];

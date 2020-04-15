@@ -48,6 +48,7 @@ export default {
   },
   created() {
     console.log(this.getShowClientForm);
+    console.log('grouby',this.getGroupByFilter)
   },
   computed: {
     ...mapGetters(['getShowClientForm', 'getGroupByFilter']),

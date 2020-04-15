@@ -22,11 +22,22 @@ export default {
     }
   },
   actions: {
-    GET_CLIENTS_LIST: async ({ commit }) => {
+    GET_CLIENTS_LIST: async ({ commit }, payload) => {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Client/getAll', headers);
+      const { limit, addTasks, addVendor, textSearch} = payload
+      var endPoint = '/Client/getAll?limit=' + limit;
+      if(addVendor) {
+        endPoint += '&addVendor=' + addVendor;
+      }
+      if(addTasks) {
+        endPoint += '&addTasks=' + addTasks;
+      }
+      if(textSearch) {
+        endPoint += '&textSearch=' + textSearch;
+      }
+      const response = await axios.get(process.env.VUE_APP_API + endPoint, headers);
       if (!response.data.error) {
         console.log('clients!!!!!!!!!!!!!!!!!!!!!!!!!!!', response.data.data.data);
         commit('SET_CLIENTS', response.data.data.data);
