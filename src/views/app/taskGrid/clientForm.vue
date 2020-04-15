@@ -83,7 +83,9 @@
 								>
 									<b-form-select
 										v-model="vendorSelected"
-										:options="vendorSelectList"
+										:options="VENDOR_LIST.map(function(x) {
+										  return {value: x.id.id, text: x.additionalInfo.firstName}
+										} )"
 										id="clientVendor"
 										required
 									>
@@ -238,7 +240,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST']),
+    ...mapGetters(['getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST']),
 	  formData: {
       get() {
         if (this.getFormClientId() === ''){
@@ -372,13 +374,20 @@ export default {
 		  this.formData.client_id = this.getFormClientId();
 		this.$store.dispatch('UPDATE_CLIENT', this.formData)
 				.then(response => {
-					const payload = {
-						limit: 1000,
-						addTasks: true,
-						addVendor: true
+					const setClientVendorPayload = {
+						client_id: this.getFormClientId(),
+						vendor_id: this.vendorSelected
 					};
-					this.$store.dispatch('GET_CLIENTS_LIST', payload)
-				})
+					this.$store.dispatch('SET_CLIENT_VENDOR',setClientVendorPayload )
+							.then(response2 => {
+								const payload = {
+									limit: 1000,
+									addTasks: true,
+									addVendor: true
+								};
+								this.$store.dispatch('GET_VENDOR_LIST', payload)
+							});
+				});
 		  this.hideForm();
         //this.clients[this.getFormClientId()] = this.formData;
       }
