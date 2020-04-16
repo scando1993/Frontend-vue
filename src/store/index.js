@@ -9,7 +9,7 @@ import invoice from './modules/invoice';
 import cart from './modules/cart';
 import verticalSidebar from './modules/verticalSidebar';
 import scrumboard from './modules/scrumboard';
-import taskGridNavbar from './modules/taskGridNavbar';
+import clientNavbar from './modules/clientNavbar';
 import planiVerticalSidebar from './modules/planiVerticalSidebar';
 import calendarNavbar from './modules/calendarNavBar';
 import clientData from './modules/clientData';
@@ -35,7 +35,7 @@ export default new Vuex.Store({
     scrumboard,
     planiVerticalSidebar,
     calendarNavbar,
-    taskGridNavbar,
+    clientNavbar,
     clientData,
     vendorData,
     taskData,

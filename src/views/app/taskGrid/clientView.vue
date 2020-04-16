@@ -1,7 +1,6 @@
 <template>
 	<div class="box">
 		<client-navbar/>
-		<breadcumb :page="'Clientes'" :folder="'Main menu'"/>
 		<div id="body" class="view-content">
 			<div class="client-view">
 				<div class="client-content"
@@ -63,6 +62,7 @@ export default {
 		flex-flow: row;
 		height: 100%;
 		width: 100%;
+		align-self: stretch;
 	}
 
 	.client-content{

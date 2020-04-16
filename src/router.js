@@ -43,7 +43,7 @@ const routes = [
         children: [
           {
             path: '',
-            component: () => import('./views/app/taskGrid/taskGrid')
+            component: () => import('./views/app/taskGrid/clientView')
           }
         ]
       },

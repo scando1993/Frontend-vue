@@ -76,6 +76,10 @@ export default {
       ]
     };
   },
+	mounted: function() {
+    let option = this.loggedInUser.admin ? this.group_options_admin[1].value : this.group_options_user[0].value;
+    this.currentGroupByFilter(option);
+	},
   methods: {
     ...mapActions(
       ['changeShowFormClient',

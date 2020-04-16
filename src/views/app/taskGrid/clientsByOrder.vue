@@ -1,11 +1,12 @@
 <template>
-	<div class="d-flex flex-row flex-wrap justify-content-between m-2">
-		<template v-for="(task, indexTask) in filterSearch(orderClientsByName(orderClientByVendors(CLIENTS_LIST)))">
+	<div class="d-flex flex-row flex-wrap m-2">
+		<template v-for="(task, indexTask) in filterSearch(orderClientsByName(orderClientByVendors(membersTasks)))">
 			<client-card-widget :task_id="indexTask"
 			                    :show_vendor="true"
 			                    :task="task"
 			                    :client="task.client"
-			                    v-bind:key="indexTask"/>
+			                    v-bind:key="indexTask"
+			                    class="mx-3"/>
 		</template>
 	</div>
 </template>
