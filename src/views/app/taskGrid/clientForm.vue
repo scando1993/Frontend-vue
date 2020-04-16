@@ -127,7 +127,6 @@
 									placeholder="Nombre"
 									type="text"
 									v-model="formData.contacts[0].name"
-									required
 									:readonly="editForm"
 								/>
 							</b-form-group>
@@ -140,7 +139,6 @@
 									placeholder="E-mail"
 									type="email"
 									v-model="formData.contacts[0].email"
-									required
 									:readonly="editForm"
 								/>
 							</b-form-group>
@@ -153,7 +151,6 @@
 									placeholder="Teléfono"
 									type="tel"
 									v-model="formData.contacts[0].phoneNumber"
-									required
 									:readonly="editForm"
 								/>
 							</b-form-group>
@@ -184,7 +181,6 @@
 									placeholder="E-mail"
 									type="email"
 									v-model="formData.contacts[1].email"
-									required
 									:readonly="editForm"
 								/>
 							</b-form-group>
@@ -197,7 +193,6 @@
 									placeholder="Teléfono"
 									type="number"
 									v-model="formData.contacts[1].phoneNumber"
-									required
 									:readonly="editForm"
 								/>
 							</b-form-group>

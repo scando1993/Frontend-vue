@@ -1,6 +1,5 @@
 <template>
-	<vue-perfect-scrollbar class="scrollable d-flex flex-row flew-wrap justify-content-between mr-3"
-	                       ref="scrollable_content">
+	<vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
 		<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
 			<template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
 				<div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
@@ -154,6 +153,8 @@ export default {
 		width: 100%;
 		/*height: 500px;*/
 		position: relative;
-		overflow: scroll;
+		overflow-x: scroll;
+		overflow-y: scroll;
+		height: 100%
 	}
 </style>
