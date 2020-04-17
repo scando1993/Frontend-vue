@@ -33,7 +33,7 @@ export default {
           },
         };
         axios
-          .post(process.env.VUE_APP_API + '/Vendor/delete?vendorID=' + vendor_id, data, config)
+          .delete(process.env.VUE_APP_API + '/Team/delete?vendor_id=' + vendor_id, config)
           .then(({ data, status }) => {
             console.log(data, status);
             // commit('ADD_CLIENT', data);
@@ -64,7 +64,8 @@ export default {
               reject(error);
             });
       });
-    }
+    },
+
   },
 
 };
