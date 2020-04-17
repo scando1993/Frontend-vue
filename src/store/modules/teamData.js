@@ -65,6 +65,27 @@ export default {
             });
       });
     },
+    LEAVE_TEAM: async ({ commit }) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+        };
+        axios
+            .post(process.env.VUE_APP_API + '/Team/leave' ,null, config)
+            .then(({data, status}) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              this.$store.dispatch('signOut');
+              resolve({data, status});
+            })
+            .catch(error => {
+              reject(error);
+            });
+      });
+    },
 
   },
 
