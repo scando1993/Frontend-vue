@@ -166,8 +166,15 @@ export default {
       this.$bvModal.hide('m-confirm-delete');
     },
     addNewMember() {
-      this.teamData.push(Object.assign({}, this.newMemberForm));
-      this.hideNewMemberModal();
+      //this.teamData.push(Object.assign({}, this.newMemberForm));
+      this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
+          .then(response => {
+              this.$store.dispatch('GET_TEAM');
+          })
+          .catch(error =>{
+
+          });
+        this.hideNewMemberModal();
     },
     showNewMemberModal () {
       this.$modal.show('m-new-admin');
