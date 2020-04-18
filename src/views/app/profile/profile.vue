@@ -1,170 +1,170 @@
 <template>
-    <div class="main-content">
-        <profile-nav-bar/>
-        <div id="avatarProfile" class="d-flex justify-content-center">
-            <div class="user-profile-img">
-                <img class="profile-picture mb-2" src="@/assets/images/faces/1.jpg" alt="">
-	            <input
-		            type="file"
-		            @change="onChange"
-		            :style="fileInputStyles"
-		            :accept=accept />
-	            <div :style="wrapperStyles">
+	<div class="main-content">
+		<profile-nav-bar/>
+		<div id="avatarProfile" class="d-flex justify-content-center">
+			<div class="user-profile-img">
+				<img class="profile-picture mb-2" src="@/assets/images/faces/1.jpg" alt="">
+				<input
+					type="file"
+					@change="onChange"
+					:style="fileInputStyles"
+					:accept=accept>
+				<div :style="wrapperStyles">
 
-	            </div>
-            </div>
-        </div>
+				</div>
+			</div>
+		</div>
 
-        <div id="basic_info">
-            <div id="basicForm">
-                <b-row>
-                    <b-col md="12">
-                        <b-form @submit.prevent>
+		<div id="basic_info">
+			<div id="basicForm">
+				<b-row>
+					<b-col md="12">
+						<b-form @submit.prevent>
 
 							<div class="mt-3 mb-30 border-top"></div>
 
 							<b-row>
 
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-1"
-                                        label="Nombre"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="text"
-                                            required
-                                            placeholder="Nombre "
-                                            v-model = "PROFILE.additionalInfo.firstName"
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-2"
-                                        label="Apellido"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="text"
-                                            required
-                                            placeholder="Apellido"
-                                            v-model = "PROFILE.additionalInfo.lastName"
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-3"
-                                        label="Usuario"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="email"
-                                            required
-                                            placeholder="usuario"
-                                            v-model = "PROFILE.additionalInfo.email"
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-4"
-                                        label="Contraseña"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="password"
-                                            placeholder="Contraseña"
-                                            v-model = "password"
-                                    />
-                                </b-form-group>
-                            </b-row>
-                                <div class="mt-3 mb-30 border-top"></div>
-                            <b-row class="mb-5">
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-5"
-                                        label="Nombre de la compañia"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="text"
-                                            required
-                                            placeholder="Nombre Compañia"
-                                            v-model = "PROFILE.additionalInfo.company"
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-6"
-                                        label="Dirección"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="text"
-                                            required
-                                            placeholder="Dirección Compañia"
-                                            v-model = "PROFILE.additionalInfo.company_address"
-                                    />
-                                </b-form-group>
-                            </b-row>
-                            <div class="mt-3 mb-30 border-top"></div>
-                            <b-row class="mb-5">
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-7"
-                                        label="E-mail"
-                                        label-for="input-1"
-                                        description="We'll never share your email with anyone else."
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="email"
-                                            required
-                                            placeholder="usuario@mail.com"
-                                            v-model = "PROFILE.additionalInfo.email"
-                                    />
-                                </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-8"
-                                        label="Número de Télefono"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="number"
-                                            required
-                                            placeholder="Télefono"
-                                            v-model = "PROFILE.additionalInfo.phone"
-                                    />
-                                </b-form-group>
-                            </b-row>
-                            <b-col md="12" class="d-flex justify-content-end ">
-                                <b-button class="mr-2 " type="submit" v-on:click="save" variant="primary">Guardar</b-button>
-                                <b-button class="" type="cancel" variant="outline-secondary">Cancelar</b-button>
-                            </b-col>
-                        </b-form>
-                    </b-col>
-                </b-row>
-            </div>
-        </div>
-    </div>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-1"
+									label="Nombre"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="text"
+										required
+										placeholder="Nombre "
+										v-model="PROFILE.additionalInfo.firstName"
+									/>
+								</b-form-group>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-2"
+									label="Apellido"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="text"
+										required
+										placeholder="Apellido"
+										v-model="PROFILE.additionalInfo.lastName"
+									/>
+								</b-form-group>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-3"
+									label="Usuario"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="email"
+										required
+										placeholder="usuario"
+										v-model="PROFILE.additionalInfo.email"
+									/>
+								</b-form-group>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-4"
+									label="Contraseña"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="password"
+										placeholder="Contraseña"
+										v-model="password"
+									/>
+								</b-form-group>
+							</b-row>
+							<div class="mt-3 mb-30 border-top"></div>
+							<b-row class="mb-5">
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-5"
+									label="Nombre de la compañia"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="text"
+										required
+										placeholder="Nombre Compañia"
+										v-model="PROFILE.additionalInfo.company"
+									/>
+								</b-form-group>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-6"
+									label="Dirección"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="text"
+										required
+										placeholder="Dirección Compañia"
+										v-model="PROFILE.additionalInfo.company_address"
+									/>
+								</b-form-group>
+							</b-row>
+							<div class="mt-3 mb-30 border-top"></div>
+							<b-row class="mb-5">
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-7"
+									label="E-mail"
+									label-for="input-1"
+									description="We'll never share your email with anyone else."
+								>
+									<b-form-input
+										id="input-1"
+										type="email"
+										required
+										placeholder="usuario@mail.com"
+										v-model="PROFILE.additionalInfo.email"
+									/>
+								</b-form-group>
+								<b-form-group
+									class="col-md-6 mb-3"
+									id="input-group-8"
+									label="Número de Télefono"
+									label-for="input-1"
+								>
+									<b-form-input
+										id="input-1"
+										type="number"
+										required
+										placeholder="Télefono"
+										v-model="PROFILE.additionalInfo.phone"
+									/>
+								</b-form-group>
+							</b-row>
+							<b-col md="12" class="d-flex justify-content-end ">
+								<b-button class="mr-2 " type="submit" v-on:click="save" variant="primary">Guardar</b-button>
+								<b-button class="" type="cancel" variant="outline-secondary">Cancelar</b-button>
+							</b-col>
+						</b-form>
+					</b-col>
+				</b-row>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
 import ProfileNavBar from './navbar/profileNavBar';
-import { dummyProfileData } from './data/profileData';
-import { mapActions, mapGetters } from 'vuex';
+import {dummyProfileData} from './data/profileData';
+import {mapActions, mapGetters} from 'vuex';
 import Team from '../team/team';
 
 export default {
   name: 'profile',
-  components: { ProfileNavBar, Team },
+  components: {ProfileNavBar, Team},
   data() {
     return {
       customImageMaxSize: 3,

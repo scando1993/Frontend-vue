@@ -2,14 +2,20 @@ const axios = require('axios');
 
 export default {
   state: {
-    profile: {}
+    profile: {
+    },
+    edit: false
   },
   getters: {
-    PROFILE: state => state.profile
+    PROFILE: state => state.profile,
+    getEditProfile: state => state.edit
   },
   mutations: {
-    SET_PROFILE(state, data) {
+    SET_PROFILE: (state, data) => {
       state.profile = data;
+    },
+    toggleEditProfile: (state) => {
+      state.edit = !state.edit;
     }
   },
   actions: {
@@ -45,6 +51,9 @@ export default {
             reject(error);
           });
       });
+    },
+    toggleEditProfile: ({ commit }) => {
+      commit('toggleEditProfile');
     }
   }
 };
