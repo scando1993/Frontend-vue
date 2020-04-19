@@ -147,6 +147,7 @@ export default {
 
     },
     leaveTeam() {
+        this.$store.dispatch('LEAVE_TEAM');
       this.$bvModal.hide('m-confirm-leave');
     },
     cancelLeaveTeam() {
