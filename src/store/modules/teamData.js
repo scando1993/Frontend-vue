@@ -43,6 +43,27 @@ export default {
             reject(error);
           });
       });
+    },
+    INVITE_MEMBER: async ({ commit }, vendor_email) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+        };
+        const data = {vendor_email: vendor_email};
+        axios
+            .post(process.env.VUE_APP_API + '/Team/sendInvitation' , data, config)
+            .then(({data, status}) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              resolve({data, status});
+            })
+            .catch(error => {
+              reject(error);
+            });
+      });
     }
   },
 
