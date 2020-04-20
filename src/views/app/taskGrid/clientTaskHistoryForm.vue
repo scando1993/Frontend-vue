@@ -19,6 +19,8 @@
 import { taskHistories } from './data/historyTasks';
 import ClientTaskWidget from './clientTask';
 import { mapActions, mapGetters } from 'vuex';
+import { compareAsc, format } from 'date-fns'
+
 export default {
   name: 'clientTaskHistoryForm',
 	components: {
@@ -59,7 +61,7 @@ export default {
 			console.log("hhhhhhhhhhhhhhhhhhhhhhh", list);
 			for(var i = 0; i < list.length; i++){
 				let task = list[i];
-				task.last_activity = task.additionalInfo.start;
+				task.last_activity =  new Date(task.additionalInfo.start);
 				task.activity = {
 					name: task.additionalInfo.name
 				};
