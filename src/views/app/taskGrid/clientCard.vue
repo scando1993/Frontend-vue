@@ -8,7 +8,7 @@
 					<p>{{client.additionalInfo.name}}</p>
 				</div>
 				<div class="">
-					<button class="client-task-btn-history">Historial</button>
+					<button class="client-task-btn-history" v-on:click="showClientHistoryForm()">Historial</button>
 				</div>
 			</div>
 			<div v-if="show_vendor" class="row mb-2">
@@ -61,7 +61,7 @@ export default {
   },
   computed:{},
   methods:{
-    ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK']),
+    ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK', 'showClientHistoryForm']),
     getTaskName(tasks) {
       let name = 'N/A';
       try {
@@ -93,12 +93,11 @@ export default {
 
     formatDate: function (dateToFormat) {
     	try {
-			return dateToFormat.toString().split(' ', 4).join(' ');
-
-		}
-		catch (e) {
-			return 'N/A'
-		}
+        return dateToFormat.toString().split(' ', 4).join(' ');
+      }
+      catch (e) {
+        return 'N/A';
+      }
     },
 
     showClientInfo: function (client_id){

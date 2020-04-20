@@ -1,59 +1,67 @@
 <template>
-	<div>
-		<b-card>
-			<div id="options_headers" class="d-flex justify-content-between align-items-center">
-				<div
-					class="d-lg-inline-flex d-xl-inline-flex d-md-flex d-sm-flex flex-md-wrap flex-sm-wrap justify-content-lg-around">
-					<b-form-select
-						variant="outline-primary"
-						text="Día"
-						class="mx-1 mb-sm-1 mb-md-1 w-auto"
-						v-model="groupBy"
-						:options="loggedInUser.admin ? group_options_admin : group_options_user"
-					/>
-					<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>
-				</div>
-				<b-form-input
-					id="input-1"
-					type="text"
-					v-model="search"
-					class="form-control-rounded col-3 mx-1"
-					placeholder="Buscar cliente"
+	<b-card body-class="client-navbar-body" class="client-navbar">
+		<div id="options_headers" class="d-flex justify-content-start align-items-center">
+			<div class="d-lg-inline-flex
+									d-xl-inline-flex
+									d-md-flex
+									d-sm-flex
+									flex-md-wrap
+									flex-sm-wrap
+									justify-content-lg-around">
+				<b-form-select
+					variant="outline-primary"
+					text="Día"
+					class="mx-1 mb-sm-1 mb-md-1 w-auto"
+					v-model="groupBy"
+					:options="loggedInUser.admin ? group_options_admin : group_options_user"
 				/>
-				<div
-					class="d-lg-inline-flex d-xl-inline-flex d-md-flex d-sm-flex flex-md-wrap flex-sm-wrap justify-content-lg-around">
-					<div class="navbar-options-items">
-						<label>
-							<input type="checkbox" v-model="active" class="tui-full-calendar-checkbox-square">
-							<span :style="{'border-color': '#00b3ee', 'background-color': active ? '#00b3ee' : 'transparent'}"/>
-							<span class="font-weight-bold">Activos</span>
-						</label>
-					</div>
-					<div class="navbar-options-items">
-						<label>
-							<input type="checkbox" v-model="inactive" class="tui-full-calendar-checkbox-square">
-							<span :style="{'border-color': 'gray', 'background-color': inactive ? 'gray' : 'transparent'}"/>
-							<span class="font-weight-bold">Inactivos</span>
-						</label>
-					</div>
-					<div class="navbar-options-items">
-						<label>
-							<input type="checkbox" v-model="not_contact" class="tui-full-calendar-checkbox-square">
-							<span
-								:style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"/>
-							<span class="font-weight-bold">Sin Contactar</span>
-						</label>
-					</div>
-				</div>
-
-				<a class="text-adjust" @click="showNewClientForm()">
-					<i class="i-Add mr-2 btn-add-plani"/>
-					<span>Agregar nuevo cliente</span>
-				</a>
-
+				<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>
 			</div>
-		</b-card>
-	</div>
+			<b-form-input
+				id="input-1"
+				type="text"
+				v-model="search"
+				class="form-control-rounded col-3 mx-1"
+				placeholder="Buscar cliente"
+			/>
+			<div class="d-lg-inline-flex
+									d-xl-inline-flex
+									d-md-flex
+									d-sm-flex
+									flex-md-wrap
+									flex-sm-wrap
+									justify-content-lg-around">
+				<div class="navbar-options-items">
+					<label style="margin-bottom: 0;">
+						<input type="checkbox" v-model="active" class="tui-full-calendar-checkbox-square">
+						<span :style="{'border-color': '#00b3ee', 'background-color': active ? '#00b3ee' : 'transparent'}"/>
+						<span class="font-weight-bold">Activos</span>
+					</label>
+				</div>
+				<div class="navbar-options-items">
+					<label style="margin-bottom: 0;">
+						<input type="checkbox" v-model="inactive" class="tui-full-calendar-checkbox-square">
+						<span :style="{'border-color': 'gray', 'background-color': inactive ? 'gray' : 'transparent'}"/>
+						<span class="font-weight-bold">Inactivos</span>
+					</label>
+				</div>
+				<div class="navbar-options-items">
+					<label style="margin-bottom: 0;">
+						<input type="checkbox" v-model="not_contact" class="tui-full-calendar-checkbox-square">
+						<span
+							:style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"/>
+						<span class="font-weight-bold">Sin Contactar</span>
+					</label>
+				</div>
+			</div>
+
+			<a class="text-adjust" @click="showNewClientForm()">
+				<i class="i-Add mr-2 btn-add-plani"/>
+				<span>Agregar nuevo cliente</span>
+			</a>
+
+		</div>
+	</b-card>
 </template>
 
 <script>
@@ -76,10 +84,10 @@ export default {
       ]
     };
   },
-	mounted: function() {
+  mounted: function() {
     let option = this.loggedInUser.admin ? this.group_options_admin[1].value : this.group_options_user[0].value;
     this.currentGroupByFilter(option);
-	},
+  },
   methods: {
     ...mapActions(
       ['changeShowFormClient',
@@ -155,6 +163,14 @@ export default {
 	.client-navbar-btn-equip {
 		background-color: #00b3ee;
 		color: white;
+	}
+
+	.client-navbar-body{
+		padding: 0.5rem 0.75rem;
+	}
+
+	.client-navbar{
+		margin-bottom: 1rem;
 	}
 
 	.btn-outline-plani {

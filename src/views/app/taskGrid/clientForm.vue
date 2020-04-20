@@ -5,7 +5,7 @@
 			<div class="d-flex flex-row justify-content-between">
 				<button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
 				<p class="client-modal-heading">{{getFormTitle}}</p>
-				<button v-if="!getNewClientForm()" class="btn client-modal-btn-history">Ver Historial</button>
+				<button v-if="!getNewClientForm()" class="btn client-modal-btn-history" v-on:click="showClientHistoryForm()">Ver Historial</button>
 			</div>
 		</div>
 		<div class="card-body">
@@ -304,7 +304,7 @@ export default {
   },
   methods: {
     ...mapGetters(['getFormClientId', 'getNewClientForm']),
-    ...mapActions(['showNewClientForm', 'showClientForm', 'hideClientForm', 'setFormClientId']),
+    ...mapActions(['showNewClientForm', 'showClientForm', 'hideClientForm', 'setFormClientId', 'showClientHistoryForm']),
 
     addNewClient: function () {
     	this.$store.dispatch('POST_CLIENT', this.formData)

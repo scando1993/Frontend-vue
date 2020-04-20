@@ -10,7 +10,8 @@ const state = {
       active: true,
       inactive: true,
       not_contact: true
-    }
+    },
+    showHistoryForm: false
   }
 };
 
@@ -23,7 +24,8 @@ const getters = {
   getActiveClients: state => state.clients.clients_filters.active,
   getInactiveClients: state => state.clients.clients_filters.inactive,
   getNotContactClients: state => state.clients.clients_filters.not_contact,
-  getGroupByFilter: state => state.clients.groupBy
+  getGroupByFilter: state => state.clients.groupBy,
+  getShowHistoryForm: state => state.clients.showHistoryForm
 };
 
 const mutations = {
@@ -59,6 +61,12 @@ const mutations = {
   },
   setGroupByFilter: (state, payload) => {
     state.clients.groupBy = payload;
+  },
+  setShowHistoryForm: (state) => {
+    state.clients.showHistoryForm = true;
+  },
+  unsetShowHistoryForm: (state) => {
+    state.clients.showHistoryForm = false;
   }
 };
 const actions = {
@@ -100,10 +108,15 @@ const actions = {
   },
   currentGroupByFilter( { commit }, data ){
     commit('setGroupByFilter', data);
+  },
+  showClientHistoryForm({ commit }){
+    commit('unsetShowHistoryForm');
+    commit('setShowHistoryForm');
+  },
+  hideClientTaskHistory({ commit }){
+    commit('unsetShowHistoryForm');
   }
 };
-
-
 
 export default {
   state,
