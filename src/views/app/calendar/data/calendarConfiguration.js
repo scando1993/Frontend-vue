@@ -1,31 +1,31 @@
 export var calendarList = [
   {
     id: '0',
-    name: 'Expirada',
-    bgColor: 'black',
-    color: 'white'
+    name: 'expired',
+    bgColor: '#5D5F5E',
+    color: '#292B2A'
   },
   {
     id: '1',
-    name: 'Ahora',
-    bgColor: 'darkred',
-    color: 'white'
+    name: 'now',
+    bgColor: '#E27D7F',
+    color: '#D85557'
   },
   {
     id: '2',
-    name: 'Pronto',
-    bgColor: '#a24608',
-    color: 'white'
+    name: 'soon',
+    bgColor: '#FAD97B',
+    color: '#F9CD56'
   },
   {
     id: '3',
-    name: 'Temprano',
-    bgColor: 'lawngreen',
-    color: 'white'
+    name: 'early',
+    bgColor: '#D5E288',
+    color: '#C7D963'
   },
   {
     id: '4',
-    name: 'Pendiente',
+    name: 'pending',
     bgColor: 'darkgrey',
     color: 'white'
   }

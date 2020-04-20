@@ -1,29 +1,36 @@
 const state = {
-  selectedMapView: '',
-  selectedComponentView: '',
-  showNewTaskModal: false,
-  searchText: ''
+  calendar: {
+    selectedMapView: '',
+    selectedComponentView: '',
+    showNewTaskModal: false,
+    searchText: '',
+    rangeText: ''
+  },
 };
 
 const getters = {
-  getSelectedMapView: state => state.selectedMapView,
-  getShowNewTaskModal: state => state.showNewTaskModal,
-  getSearchText: state => state.searchText,
-  getSelectedComponentView: state => state.selectedComponentView
+  getSelectedMapView: state => state.calendar.selectedMapView,
+  getShowNewTaskModal: state => state.calendar.showNewTaskModal,
+  getSearchText: state => state.calendar.searchText,
+  getSelectedComponentView: state => state.calendar.selectedComponentView,
+  getRangeText: state => state.calendar.rangeText
 };
 
 const mutations = {
   setSelectedComponentView: (state, data) => {
-    state.selectedComponentView = data;
+    state.calendar.selectedComponentView = data;
   },
   setSelectedMapView: (state, data) => {
-    state.selectedMapView = data;
+    state.calendar.selectedMapView = data;
   },
   setSearchText: (state, data) => {
-    state.searchText = data;
+    state.calendar.searchText = data;
   },
   setShowNewTaskModal: (state, data) => {
-    state.showNewTaskModal = data;
+    state.calendar.showNewTaskModal = data;
+  },
+  setRangeText: (state, data) => {
+  	state.calendar.rangeText = data;
   }
 };
 
@@ -40,6 +47,9 @@ const actions = {
   },
   setSelectedComponentView({ commit }, data) {
     commit('setSelectedComponentView', data);
+  },
+  setRangeText({ commit }, data){
+  	commit('setRangeText', data);
   }
 };
 
