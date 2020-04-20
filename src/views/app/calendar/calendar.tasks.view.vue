@@ -7,16 +7,16 @@
                         <div class="task-body ml-5">
 
                             <span class="task-text">
-                                {{task.additionalInfo.client_data.additionalInfo.social_reason}}
+                                {{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason}}
                                 <br>
                                 {{task.additionalInfo.name}}
                             </span>
                             <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
+                                    {{!task.additionalInfo.client_data ? 'N/A' : task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
-                            <span class="task-text ml-4">Expiró: {{task.additionalInfo.start_date}}</span>
+                            <span class="task-text ml-4">Expiró: {{task.additionalInfo.start_date || 'N/A'}}</span>
                         </div>
                     </div>
                 </b-card>
@@ -29,16 +29,16 @@
                          :key="item">
                         <div class="task-body ml-5">
                             <span class="task-text">
-                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
                                 <br>
                                 {{task.additionalInfo.name}}
                             </span>
                             <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
+                                    {{!task.additionalInfo.client_data ? 'N/A' : task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
-                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date}}</span>
+                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date || 'N/A'}}</span>
                         </div>
                     </div>
                 </b-card>
@@ -48,17 +48,17 @@
                     <div class="task chip mr-1 pendingChip" v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'pending')" :key="item">
                         <div class="task-body ml-5">
                             <span class="task-text">
-                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
                                 <br>
                                 {{task.additionalInfo.name}}
                                 <br>
                             </span>
                             <div class="avatar ml-4">
                                 <div class="avatar-content">
-                                    {{task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
+                                    {{!task.additionalInfo.client_data ? 'N/A' : task.additionalInfo.client_data.additionalInfo.social_reason.slice(0,2)}}
                                 </div>
                             </div>
-                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date}}</span>
+                            <span class="task-text ml-4">Último contacto: {{task.additionalInfo.start_date || 'N/A'}}</span>
 
                         </div>
                     </div>
