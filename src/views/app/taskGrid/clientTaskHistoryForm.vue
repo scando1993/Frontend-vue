@@ -52,6 +52,7 @@ export default {
 		...mapActions(['hideClientTaskHistory']),
 		...mapGetters(['getFormClientId', 'CLIENT_HISTORY']),
 		hideForm: function () {
+			this.$store.dispatch('RESET_CLIENT_HISTORY');
 			this.hideClientTaskHistory();
 		},
 		prepareData(list) {

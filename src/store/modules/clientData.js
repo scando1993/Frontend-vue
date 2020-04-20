@@ -27,6 +27,9 @@ export default {
     }
   },
   actions: {
+    RESET_CLIENT_HISTORY: ({commit}) => {
+        commit('SET_CLIENT_HISTORY', []) ;
+    },
     GET_CLIENTS_LIST: async ({ commit }, payload) => {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
