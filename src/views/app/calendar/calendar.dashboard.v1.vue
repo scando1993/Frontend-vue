@@ -249,7 +249,7 @@
                             >
                                 <b-form-textarea v-model="newTaskForm.notes"/>
                             </b-form-group>
-                            <b-form-group
+                            <b-form-group v-if="isEditModal"
                                     label="Tarea completada"
                             >
                                 <div class="d-flex d-inline align-items-center">
