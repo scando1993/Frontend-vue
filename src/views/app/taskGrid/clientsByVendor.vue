@@ -98,7 +98,7 @@ export default {
           name: task.additionalInfo.name
         };
         task['vendor'] = vendor.additionalInfo.firstName || 'N/A';
-        task['last_activity'] = new Date(task.additionalInfo.tui_data.start);
+        task['last_activity'] = new Date(task.additionalInfo.tui_data.start) || 'N/A';
         // task['client'] = this.CLIENTS_LIST[0]
         console.log('task', task);
       }
