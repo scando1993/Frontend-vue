@@ -9,16 +9,16 @@
                 <div class="no-card-shadow container " id="card-drag-area-1" v-dragula bag="first-bag">
                     <div class="task chip mr-1"
                          v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
-                         v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now')"
+                         v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')"
                     >
                         <div class="task-body">
 
                             <span class="task-text ml-4">
-                                <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
                                 <br>
                                 {{task.additionalInfo.name}}
                                 <br>
-                                Último contacto: {{task.additionalInfo.start_date}}
+                                Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
                             </span>
                             <!--<div class="avatar ml-auto">
                                 <div class="avatar-content">
@@ -161,11 +161,11 @@
                                         <div class="task chip mr-1 expiredChip" v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
                                             <div class="task-body">
                                                 <span class="task-text ml-4">
-                                                    <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                                    <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
                                                     <br>
                                                     {{task.additionalInfo.name}}
                                                     <br>
-                                                    Último contacto: {{task.additionalInfo.start_date}}
+                                                    Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
                                                 </span>
                                                 <!--<div class="avatar ml-auto">
                                                     <div class="avatar-content">
@@ -193,11 +193,11 @@
                                         <div class="task chip mr-1 pendingChip"  v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
                                             <div class="task-body">
                                                 <span class="task-text ml-4">
-                                                    <b>{{task.additionalInfo.client_data.additionalInfo.social_reason}}</b>
+                                                    <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
                                                     <br>
                                                     {{task.additionalInfo.name}}
                                                     <br>
-                                                    Último contacto: {{task.additionalInfo.start_date}}
+                                                    Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
                                                 </span>
 
                                                 <!--<div class="avatar ml-auto">
