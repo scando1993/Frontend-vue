@@ -33,7 +33,7 @@ export default {
       addTasks: true,
       addVendor: true
     };
-    // this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
+     this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
     this.$store.dispatch('GET_CLIENTS_LIST', clientPayload);
   },
   computed: {
@@ -83,9 +83,14 @@ export default {
               name: 'N/A'
             },
             last_activity: 'N/A',
-            vendor: 'N/A',
             client: list[i]
-          };
+			};
+      		if(list[i].vendor) {
+            tmp.vendor = list[i].vendor.additionalInfo.firstName;
+			}
+      		else {
+      			tmp.vendor = 'N/A';
+          }
           clients.push(tmp);
         }
         for(let j = 0; j < list[i].tasks.length; j++){

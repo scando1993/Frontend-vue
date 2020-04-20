@@ -147,6 +147,7 @@ export default {
 
     },
     leaveTeam() {
+        this.$store.dispatch('LEAVE_TEAM');
       this.$bvModal.hide('m-confirm-leave');
     },
     cancelLeaveTeam() {
@@ -162,12 +163,22 @@ export default {
       console.log('deleting', this.indexMember);
       this.TEAM.splice(this.indexMember, 1);
       const selectedMember_id = this.TEAM[this.indexMember].id.id;
-      this.$store.dispatch('DELETE_MEMBER',selectedMember_id );
+      this.$store.dispatch('DELETE_MEMBER',selectedMember_id )
+          .then(response => {
+              this.$store.dispatch('GET_TEAM');
+          });
       this.$bvModal.hide('m-confirm-delete');
     },
     addNewMember() {
-      this.teamData.push(Object.assign({}, this.newMemberForm));
-      this.hideNewMemberModal();
+      //this.teamData.push(Object.assign({}, this.newMemberForm));
+      this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
+          .then(response => {
+              this.$store.dispatch('GET_TEAM');
+          })
+          .catch(error =>{
+
+          });
+        this.hideNewMemberModal();
     },
     showNewMemberModal () {
       this.$modal.show('m-new-admin');
