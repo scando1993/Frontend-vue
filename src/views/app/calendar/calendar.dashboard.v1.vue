@@ -249,10 +249,23 @@
                             >
                                 <b-form-textarea v-model="newTaskForm.notes"/>
                             </b-form-group>
+                            <b-form-group v-if="isEditModal"
+                                    label="Tarea completada"
+                            >
+                                <div class="d-flex d-inline align-items-center">
+                                    <b-form-checkbox v-model="newTaskForm.completed"/>
+                                    <div class="text-21 align-items-center">
+                                        {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+
+                                    </div>
+                                </div>
+
+                            </b-form-group>
 
                         </b-col>
                         <b-col md="5">
                             <b-form-group
+                                    required
                                     label="Cliente"
                             >
                                 <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"  :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
@@ -398,7 +411,8 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: ''
+        routine: '',
+          completed: ''
       },
       tuiCalendar: '',
       calendarList,
@@ -589,7 +603,8 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine
+        routine: taskSelected.additionalInfo.routine,
+          completed: taskSelected.additionalInfo.completed
       };
       this.setShowNewTaskModal(true);
 
@@ -616,7 +631,8 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: ''
+        routine: '',
+          completed: ''
       };
     },
     hideModal() {

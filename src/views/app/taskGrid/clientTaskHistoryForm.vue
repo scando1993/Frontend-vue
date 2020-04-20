@@ -8,7 +8,7 @@
 			</div>
 		</div>
 		<div class="card-body">
-			<template v-for="(task, indexTask) in historyTasks[tasks_list_id]">
+			<template v-for="(task, indexTask) in prepareData(history)">
 				<client-task-widget :task="task" v-bind:key="indexTask"/>
 			</template>
 		</div>
@@ -18,7 +18,9 @@
 <script>
 import { taskHistories } from './data/historyTasks';
 import ClientTaskWidget from './clientTask';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { compareAsc, format } from 'date-fns'
+
 export default {
   name: 'clientTaskHistoryForm',
 	components: {
@@ -35,10 +37,37 @@ export default {
       historyTasks: taskHistories
     };
 	},
+	computed: {
+		...mapGetters(['getFormClientId']),
+		history:  {
+			get() {
+				return this.CLIENT_HISTORY();
+
+			},
+			set(value) {
+				console.log(value);
+			}
+		}
+
+	},
 	methods:{
 		...mapActions(['hideClientTaskHistory']),
+		...mapGetters(['getFormClientId', 'CLIENT_HISTORY']),
 		hideForm: function () {
+			this.$store.dispatch('RESET_CLIENT_HISTORY');
 			this.hideClientTaskHistory();
+		},
+		prepareData(list) {
+			console.log("hhhhhhhhhhhhhhhhhhhhhhh", list);
+			for(var i = 0; i < list.length; i++){
+				let task = list[i];
+				task.last_activity =  new Date(task.additionalInfo.start);
+				task.activity = {
+					name: task.additionalInfo.name
+				};
+			};
+			console.log('new data', list);
+			return list;
 		}
 	}
 };

@@ -3,11 +3,13 @@ const axios = require('axios');
 export default {
   state: {
     client_list: [],
-    vendor_task_list: []
+    vendor_task_list: [],
+    client_history: []
   },
   getters: {
     CLIENTS_LIST: state => state.client_list,
-    VENDOR_TASKS: state => state.vendor_task_list
+    VENDOR_TASKS: state => state.vendor_task_list,
+    CLIENT_HISTORY: state => state.client_history
   },
   mutations: {
     SET_CLIENTS(state, payload) {
@@ -19,9 +21,15 @@ export default {
     SET_VENDOR_TASKS(state, paylodad) {
       console.log('DTA', paylodad);
       state.vendor_task_list = paylodad;
+    },
+    SET_CLIENT_HISTORY(state, paylodad) {
+      state.client_history = paylodad;
     }
   },
   actions: {
+    RESET_CLIENT_HISTORY: ({commit}) => {
+        commit('SET_CLIENT_HISTORY', []) ;
+    },
     GET_CLIENTS_LIST: async ({ commit }, payload) => {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
@@ -132,7 +140,24 @@ export default {
             reject(error);
           });
       });
-    }
+    },
+    GET_CLIENT_HISTORY: async ({ commit }, payload) => {
+      const headers = {
+        headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
+      };
+      const { client_id, limit, textSearch} = payload;
+      var endpoint = '/Client/getHistory?limit=' + limit + '&client_id=' + client_id;
+      if(textSearch) {
+        endpoint += '&textSearch=' + textSearch;
+      }
+      const response = await axios.get(process.env.VUE_APP_API + endpoint, headers);
+      if (!response.data.error) {
+        console.log('history get!!!!!!', response.data.data.data);
+        commit('SET_CLIENT_HISTORY', response.data.data.data);
+      } else {
+        console.log(response);
+      }
+    },
 
   }
 };

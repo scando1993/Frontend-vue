@@ -84,6 +84,26 @@ export default {
           });
       });
     },
+    SET_TASK_STATE: ({ commit }, data) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json' },
+        };
+        const { task_id, completed } = data;
+        var endpoint = '/Task/changeState?task_id=' + task_id + '&completed=' + completed;
+        axios
+            .put(process.env.VUE_APP_API + endpoint, null, config)
+            .then(({ data, status }) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              resolve({ data, status });
+            })
+            .catch( error => {
+              reject(error);
+            });
+      });
+    },
 
   }
 };
