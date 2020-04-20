@@ -117,7 +117,10 @@
       ],
       "no-undef": [
         2
-      ]
+      ],
+	    "mixed-spaces-and-tabs": [
+		    2
+	    ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
