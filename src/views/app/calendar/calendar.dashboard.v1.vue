@@ -4,38 +4,19 @@
 		<calendar_task_view v-if="showTaskView"/>
 		<div v-else class="main-content">
 
-
 			<div class="wrapper">
-				<div class="no-card-shadow container " id="card-drag-area-1" v-dragula bag="first-bag">
-					<div class="task chip mr-1"
-					     v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
-					     v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')"
-					>
-						<div class="task-body">
-
-                            <span class="task-text ml-4">
-                                <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                                <br>
-                                {{task.additionalInfo.name}}
-                                <br>
-                                Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                            </span>
-							<!--<div class="avatar ml-auto">
-									<div class="avatar-content">
-											LD
-									</div>
-							</div>-->
-						</div>
-					</div>
+				<div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
+					<template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')">
+						<calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
+					</template>
 				</div>
 			</div>
 
 			<b-row>
-				<b-col lg="9" xl="9" md="8" sm="11">
-					<b-card>
-						<div class="d-flex">
-							<calendar style="height: 800px;"
-							          class="w-100"
+				<b-col lg="9" xl="9" md="12" sm="12">
+					<div class="card d-flex flex-row mb-1">
+						<div class="card-body p-1">
+							<calendar class="w-100"
 							          ref="tuiCalendar"
 							          :calendars="calendarList"
 							          :schedules="TASKS_LIST.map( x => x.additionalInfo.tui_data)"
@@ -71,150 +52,33 @@
 								<l-tile-layer :url="mapConfigurations.url"/>
 							</l-map>
 						</div>
-						<div>
-
-						</div>
-					</b-card>
+					</div>
 				</b-col>
-				<b-col lg="2" xl="2" md="3" sm="11">
-					<b-row class="d-flex flex-column">
-						<b-card class="box-shadow-1 card flex-fill">
-							<b-card-header class="align-items-center d-flex">
-								<h4 class="card-title flex-grow-1">
-									Expiradas
-								</h4>
-								<b-dropdown
-									id="dropdown-2"
-									left
-									class="m-md-2  ml-auto"
-									toggle-class="text-decoration-none"
-									no-caret
-									variant="button"
-								>
-									<template slot="button-content">
-										<i class="i-Bell text-muted header-icon"/>
-										<span>New order received</span>
-									</template>
-									<div class="dropdown-item d-flex">
-										<div class="notification-icon">
-											<i class="i-Speach-Bubble-6 text-primary mr-1"/>
-										</div>
-									</div>
-									<div class="dropdown-item d-flex">
-										<div class="notification-icon">
-											<i class="i-Receipt-3 text-success mr-1"/>
-										</div>
-										<div class="notification-details flex-grow-1">
-											<p class="m-0 d-flex align-items-center">
-												<span>New order received</span>
-												<!-- <span class="badge badge-pill badge-success ml-1 mr-1">new</span> -->
-												<span class="flex-grow-1"/>
-												<span class="text-small text-muted ml-auto">2 hours ago</span>
-											</p>
-											<p class="text-small text-muted m-0">1 Headphone, 3 iPhone x</p>
-										</div>
-									</div>
-									<div class="dropdown-item d-flex">
-										<div class="notification-icon">
-											<i class="i-Empty-Box text-danger mr-1"/>
-										</div>
-										<div class="notification-details flex-grow-1">
-											<p class="m-0 d-flex align-items-center">
-												<span>Product out of stock</span>
-												<!-- <span class="badge badge-pill badge-danger ml-1 mr-1">3</span> -->
-												<span class="flex-grow-1"/>
-												<span class="text-small text-muted ml-auto"
-												>10 hours ago</span
-												>
-											</p>
-											<p class="text-small text-muted m-0">
-												Headphone E67, R98, XL90, Q77
-											</p>
-										</div>
-									</div>
-									<div class="dropdown-item d-flex">
-										<div class="notification-icon">
-											<i class="i-Data-Power text-success mr-1"/>
-										</div>
-										<div class="notification-details flex-grow-1">
-											<p class="m-0 d-flex align-items-center">
-												<span>Server Up!</span>
-												<!-- <span class="badge badge-pill badge-success ml-1 mr-1">3</span> -->
-												<span class="flex-grow-1"/>
-												<span class="text-small text-muted ml-auto"
-												>14 hours ago</span
-												>
-											</p>
-											<p class="text-small text-muted m-0">
-												Server rebooted successfully
-											</p>
-										</div>
-									</div>
-								</b-dropdown>
-							</b-card-header>
-							<b-card-body>
-
-								<div class="card-body wrapper">
-									<ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula bag="first-bag">
-
-
-										<div class="task chip mr-1 expiredChip"
-										     v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-											<div class="task-body">
-                                                <span class="task-text ml-4">
-                                                    <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                                                    <br>
-                                                    {{task.additionalInfo.name}}
-                                                    <br>
-                                                    Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                                                </span>
-												<!--<div class="avatar ml-auto">
-														<div class="avatar-content">
-																LD
-														</div>
-												</div>-->
-											</div>
-										</div>
-									</ul>
+				<b-col lg="3" xl="3" md="12" sm="12" class="d-flex flex-column ml-0">
+					<div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-1" style="flex-basis: 50%;">
+						<div class="card-header align-items-center py-2">
+							<h4 class="text-center mb-0">Expiradas</h4>
+						</div>
+						<div class="card-body p-2">
+							<vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content">
+								<div id="scrollable_content" v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
+									<calendar-task-widget :task="task" :key="taskIndex"/>
 								</div>
-
-							</b-card-body>
-						</b-card>
-					</b-row>
-					<b-row class="d-flex flex-column">
-						<b-card class="box-shadow-1 card flex-fill">
-							<b-card-header class="align-items-center d-flex">
-								<h4 class="card-title flex-grow-1">
-									Pendientes
-								</h4>
-							</b-card-header>
-							<b-card-body>
-								<div class="card-body wrapper">
-									<ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula bag="first-bag">
-										<div class="task chip mr-1 pendingChip"
-										     v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-											<div class="task-body">
-                        <span class="task-text ml-4">
-                            <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                            <br>
-                            {{task.additionalInfo.name}}
-                            <br>
-                            Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                        </span>
-
-												<!--<div class="avatar ml-auto">
-														<div class="avatar-content">
-																LD
-														</div>
-												</div>-->
-											</div>
-										</div>
-									</ul>
+							</vue-perfect-scrollbar>
+						</div>
+					</div>
+					<div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-0" style="flex-basis: 50%;">
+						<div class="card-header align-items-center py-2">
+							<h4 class="text-center mb-0">Pendientes</h4>
+						</div>
+						<div class="card-body p-2">
+							<vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
+								<div id="scrollable_content_2" v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
+									<calendar-task-widget :task="task" :key="taskIndex"/>
 								</div>
-
-							</b-card-body>
-						</b-card>
-					</b-row>
+							</vue-perfect-scrollbar>
+						</div>
+					</div>
 				</b-col>
 			</b-row>
 
@@ -329,8 +193,6 @@
 import { Calendar } from '@toast-ui/vue-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
 import VueTimepicker from 'vue2-timepicker';
-
-
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import CalendarNavBar from './calendarNavbar/calendarNavBar';
@@ -354,7 +216,7 @@ import {
 } from './data/calendarConfiguration';
 import { taskCategories, vendors, clients, routines } from './data/formData';
 import Calendar_task_view from './calendar.tasks.view';
-
+import CalendarTaskWidget from './calendar.task.widget';
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -370,10 +232,11 @@ export default {
     'calendar': Calendar,
     LMap,
     LTileLayer,
+		CalendarTaskWidget
   },
   computed: {
     ...mapGetters([
-    	'getSelectedMapView',
+	    'getSelectedMapView',
 	    'getSelectedComponentView',
 	    'getShowNewTaskModal',
 	    'getSearchText',
@@ -436,11 +299,11 @@ export default {
       isReadOnly,
       template,
       useCreationPopup,
-      useDetailPopup
-
+      useDetailPopup,
     };
   },
   mounted() {
+  	console.log('schedule_list', this.TASKS_LIST.map( x => x.additionalInfo.tui_data));
       const vendor_params = {
           limit: 1000
       }
@@ -501,18 +364,22 @@ export default {
       this.tuiCalendar = this.$refs.tuiCalendar;
     },
     findCalendar(id) {
-      var found;
+      let found = null;
       console.log(id);
-      console.log(this.CalendarList);
+      console.log(this.calendarList);
+      if (id === undefined)
+      	return this.calendarList[0];
+
       this.calendarList.forEach(function (calendar) {
         if (calendar.id === id) {
           found = calendar;
         }
       });
 
-      return found || this.CalendarList[0];
+      return found !== null ? found : this.calendarList[0];
     },
     saveNewSchedule(scheduleData) {
+    	console.log(scheduleData);
       var calendar = scheduleData.calendar || this.findCalendar(scheduleData.calendarId);
       var schedule = {
         id: String(this.scheduleList.length + 1),
@@ -527,9 +394,9 @@ export default {
         dragBgColor: calendar.bgColor,
         borderColor: calendar.borderColor,
         location: scheduleData.location,
-        raw: {
-          class: scheduleData.raw['class']
-        },
+        // raw: {
+        //   class: scheduleData.raw['class'] || ''
+        // },
         state: scheduleData.state
       };
       if (calendar) {
@@ -559,7 +426,6 @@ export default {
     },
     onAfterRenderSchedule(e) {
       // implement your code
-      console.log('AfterRender', e);
     },
     onBeforeCreateSchedule(e) {
       // implement your code
@@ -615,9 +481,6 @@ export default {
           completed: taskSelected.additionalInfo.completed
       };
       this.setShowNewTaskModal(true);
-
-      console.log(e);
-      // implement your code
     },
     // eslint-disable-next-line no-unused-vars
     onClickTimezonesCollapseBtn(e) {
@@ -698,7 +561,6 @@ export default {
         this.saveTask();
       }
     }
-
   },
 };
 </script>
@@ -706,89 +568,11 @@ export default {
 <style scoped>
 	@import '~vue2-timepicker/dist/VueTimepicker.css';
 
-	.expiredChip {
+	.card-scrollable {
+		width: 100%;
+		height: 245px;
 		position: relative;
+		overflow-x: scroll;
+		overflow-y: scroll;
 	}
-
-	.expiredChip:after {
-		content: '\A';
-		position: absolute;
-		background: black;
-		border-radius: 0.8rem;
-		border-bottom-right-radius: 0rem;
-		border-top-right-radius: 0rem;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 10%;
-	}
-
-	.pendingChip {
-		position: relative;
-	}
-
-	.pendingChip:after {
-		content: '\A';
-		position: absolute;
-		background: grey;
-		border-radius: 0.8rem;
-		border-bottom-right-radius: 0rem;
-		border-top-right-radius: 0rem;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 10%;
-	}
-
-	.soonChip {
-		position: relative;
-	}
-
-	.soonChip:after {
-		content: '\A';
-		position: absolute;
-		background: yellow;
-		border-radius: 0.8rem;
-		border-bottom-right-radius: 0rem;
-		border-top-right-radius: 0rem;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 10%;
-	}
-
-	.earlyChip {
-		position: relative;
-	}
-
-	.earlyChip:after {
-		content: '\A';
-		position: absolute;
-		background: greenyellow;
-		border-radius: 0.8rem;
-		border-bottom-right-radius: 0rem;
-		border-top-right-radius: 0rem;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 10%;
-	}
-
-	.nowChip {
-		position: relative;
-	}
-
-	.nowChip:after {
-		content: '\A';
-		position: absolute;
-		background: darkred;
-		border-radius: 0.8rem;
-		border-bottom-right-radius: 0rem;
-		border-top-right-radius: 0rem;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		width: 10%;
-	}
-
 </style>

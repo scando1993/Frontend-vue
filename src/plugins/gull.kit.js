@@ -11,17 +11,23 @@ import VueGoodTablePlugin from 'vue-good-table';
 // import VueSlider from "vue-slider-component";
 import Meta from 'vue-meta';
 import FlagIcon from 'vue-flag-icon';
-
 import '@/assets/styles/sass/theme.scss';
 import '@/plugins/echarts';
 import '@/plugins/apexChart.js';
 import '@/plugins/sweetalert2.js';
 import '@/plugins/tour.js';
 
+const moment = require('moment');
+import VueMoment from 'vue-moment';
+
+require('moment/locale/es');
+moment.locale('es');
+
 // locale.use(lang);
 export default {
   install(Vue) {
     Vue.use(BootstrapVue);
+    Vue.use(VueMoment, { moment });
     Vue.component(
       'large-sidebar',
       // The `import` function returns a Promise.

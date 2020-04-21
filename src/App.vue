@@ -42,10 +42,6 @@ export default {
 
 <style lang="scss">
   @import "assets/styles/css/bootstrap-extended.css";
-  @import "assets/styles/css/colors.css";
-  @import "assets/styles/css/components-plani.css";
-  @import "assets/styles/css/core/menu/menu-types/vertical-menu-plani.css";
-  @import "assets/styles/css/plugins/calendars-plani/app-calendar.css";
 </style>
 
 
