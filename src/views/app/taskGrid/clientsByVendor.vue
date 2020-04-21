@@ -1,7 +1,7 @@
 <template>
 	<vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
 		<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
-			<template v-for="(vendor, indexVendor) in (VENDOR_LIST)">
+			<template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
 				<div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
 				     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
 				<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
