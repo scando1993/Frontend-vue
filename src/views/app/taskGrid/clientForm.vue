@@ -241,8 +241,8 @@ export default {
         if (this.getFormClientId() === ''){
           return {
             name: '',
-			  lat: "0",
-			  lng: "0",
+			  lat: 0,
+			  lng: 0,
             social_reason: '',
             address: '',
             vendor: {
@@ -268,19 +268,29 @@ export default {
         	console.log("id client", this.getFormClientId());
           const client = this.CLIENTS_LIST.find(x => x.id.id === this.getFormClientId());
           console.log('client_selected', client);
-          return {
+          const form = {
 			  name: client.additionalInfo.name,
 			  lat: "0",
 			  lng: "0",
 			  social_reason: client.additionalInfo.social_reason,
-			  address: client.additionalInfo.address,
+			  address: client.additionalInfo.address || 'N/A',
 			  vendor: {
 				  id: '',
 				  name: ''
 			  },
 			  notes: client.additionalInfo.notes,
 			  contacts: client.additionalInfo.contacts
+		  };
+          if(client.additionalInfo.contacts.length < 2) {
+          	while (form.contacts.length != 2) {
+          		form.contacts.push({
+					name: 'N/A',
+					phone: '',
+					email: ''
+				})
+			}
 		  }
+          return form;
         }
       },
 		  set(value){

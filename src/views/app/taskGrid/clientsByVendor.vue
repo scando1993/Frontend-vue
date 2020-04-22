@@ -9,7 +9,7 @@
 					<div>
 						<b-row>
 							<b-col md="6" sm="6" xl="6" lg="6"
-							       v-for="(task, indextask) in filterSearch(prepareTask(vendor.tasks, vendor))"
+							       v-for="(task, indextask) in filterSearch(prepareTask(vendor.clients, vendor))"
 							       :key="indexVendor + '_' + indextask">
 								<client-card-widget :task_id="indextask"
 								                    :task="task"
@@ -38,19 +38,13 @@ export default {
   },
   computed: {
     ...mapGetters(['CLIENTS_LIST', 'VENDOR_LIST']),
-    vendorSelectList: function () {
-      var options = {};
-      for (const i in this.vendors) {
-        options[this.vendors[i].id] = this.vendors[i].name;
-      }
-      return options;
-    }
+
   },
   mounted() {
     console.log('mounted in client by vendor');
     const vendorPayload = {
       limit: 1000,
-      addTasks: true
+		addClients: true
     };
     const clientPayload = {
       limit: 1000
@@ -91,19 +85,49 @@ export default {
       return newStatus;
     },
     prepareTask(list, vendor) {
-      for (var i = 0; i < list.length; i++) {
-        const task = list[i];
-        task.activity = {
-          state: this.parseStatus(task.additionalInfo.status),
-          name: task.additionalInfo.name
-        };
-        task['vendor'] = vendor.additionalInfo.firstName || 'N/A';
-        task['last_activity'] = new Date(task.additionalInfo.tui_data.start) || 'N/A';
-        // task['client'] = this.CLIENTS_LIST[0]
-        console.log('task', task);
-      }
-      console.log('new list', list);
-      return list;
+
+    	console.log('Vendor', vendor);
+    	console.log('Vendor clients', list);
+    	var new_tasks = [];
+    	for(var i = 0; i < list.length; i++) {
+    		const client = list[i];
+			const tasks = client.tasks;
+			const aaa = tasks.length;
+			if(tasks.length === 0) {
+				const empty = {
+					vendor: vendor.additionalInfo.firstName,
+					last_activity: 'N/A',
+					client: client,
+					activity: {
+						state: 'Without contact',
+						name: 'N/A'
+					}
+				};
+				new_tasks.push(empty);
+				continue;
+			}
+			//for (var j = 0; j < tasks.length; j++) {
+				//const task = tasks[j];
+				const task = tasks[tasks.length -1];
+				try {
+					var status = task.additionalInfo.status;
+				} catch (e) {
+					var status = 'pending'
+				}
+
+				task.activity = {
+					state: this.parseStatus(status),
+					name: task.additionalInfo.name
+				};
+				task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
+				task['last_activity'] = task.additionalInfo.tui_data ?  new Date(task.additionalInfo.tui_data.start) : 'N/A';
+				task['client'] = client;
+				console.log('task', task);
+				new_tasks.push(task);
+			// }
+		}
+      console.log('new list', new_tasks);
+      return new_tasks;
     },
 
     filterSearch(list) {
@@ -139,11 +163,11 @@ export default {
 
     orderVendors(list) {
       return list.slice().sort(function (a, b) {
-        let textA = this.vendor_name(a).toUpperCase();
-        let textB = this.vendor_name(b).toUpperCase();
+        let textA = a.additionalInfo.firstName.toUpperCase();
+        let textB = b.additionalInfo.firstName.toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       }).filter(vendor => {
-        return vendor.tasks.length !== 0;
+        return vendor.clients.length !== 0;
       });
     },
   }
