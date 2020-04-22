@@ -241,8 +241,8 @@ export default {
         if (this.getFormClientId() === ''){
           return {
             name: '',
-			  lat: "0",
-			  lng: "0",
+			  lat: 0,
+			  lng: 0,
             social_reason: '',
             address: '',
             vendor: {
