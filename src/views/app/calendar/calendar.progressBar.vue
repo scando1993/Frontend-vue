@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-progress class="mt-2" :precision="precision" :max="max" show-value>
+        <b-progress class="mt-2" :height="height" :precision="precision" :max="max" show-value>
             <b-progress-bar :class="getBGColor(key)" :value="value * 100 " v-for="(value, key) in TASKS_PROGRESS "></b-progress-bar>
         </b-progress>
 
@@ -15,7 +15,8 @@
         data() {
             return {
                 max: 100,
-                precision: 2
+                precision: 2,
+                height: '2rem'
 
             }
         },
