@@ -6,7 +6,7 @@ export default {
   },
   getters: {
     TASKS_LIST: state => state.tasks_list,
-    TASKS_PROGESS: state => state.tasks_progress
+    TASKS_PROGRESS: state => state.tasks_progress
   },
   mutations: {
     SET_TASK_LIST(state, payload) {
