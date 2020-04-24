@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-progress class="mt-2" :precision="precision" :max="max" show-value>
+        <b-progress class="mt-2" :height="height" :precision="precision" :max="max" show-value>
             <b-progress-bar :value="value * 100 " v-for="(value, key) in CLIENT_PROGRESS "></b-progress-bar>
         </b-progress>
 
@@ -14,7 +14,8 @@
         data() {
             return {
                 precision: 2,
-                max: 100
+                max: 100,
+                height: "2rem",
             }
         },
         computed: {
