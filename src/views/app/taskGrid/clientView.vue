@@ -19,6 +19,9 @@
 				</div>
 			</div>
 		</div>
+		<div id ="progressBar">
+			<client_progressBar/>
+		</div>
 	</div>
 </template>
 
@@ -30,6 +33,7 @@ import ClientsByVendor from './clientsByVendor';
 import { mapGetters } from 'vuex';
 import ClientForm from './clientForm';
 import ClientTaskHistoryForm from './clientTaskHistoryForm';
+import client_progressBar from './client.progressBar';
 
 export default {
   name: 'taskGrid',
@@ -39,7 +43,8 @@ export default {
 	  ClientsByVendor,
 	  ClientsByOrder,
 	  ClientsByTask,
-	  ClientTaskHistoryForm
+	  ClientTaskHistoryForm,
+	  client_progressBar
   },
   data() {
     return {};
