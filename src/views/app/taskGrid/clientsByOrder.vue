@@ -96,7 +96,7 @@ export default {
 					tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
 					tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
 					tmp.activity = {
-						state: this.parseStatus(tmp.additionalInfo.status),
+						state: list[i].additionalInfo.status,
 						name: tmp.additionalInfo.name
 					};
 					tmp.client = list[i];
