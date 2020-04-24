@@ -215,6 +215,8 @@
                     </b-row>
                 </b-col>
             </b-row>
+            <br>
+            <calendar_progressBar></calendar_progressBar>
 
 
 
@@ -351,6 +353,7 @@ import  { calendarList,
   useDetailPopup } from './data/calendarConfiguration';
 import { taskCategories, vendors, clients, routines } from './data/formData';
 import Calendar_task_view from './calendar.tasks.view';
+import calendar_progressBar from './calendar.progressBar'
 
 export default {
   metaInfo: {
@@ -359,6 +362,7 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
+      calendar_progressBar,
     VueTimepicker,
     // eslint-disable-next-line vue/no-unused-components
     Calendar_task_view,
