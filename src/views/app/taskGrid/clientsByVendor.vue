@@ -109,14 +109,9 @@ export default {
 			//for (var j = 0; j < tasks.length; j++) {
 				//const task = tasks[j];
 				const task = tasks[tasks.length -1];
-				try {
-					var status = task.additionalInfo.status;
-				} catch (e) {
-					var status = 'pending'
-				}
 
 				task.activity = {
-					state: this.parseStatus(status),
+					state: client.additionalInfo.status,
 					name: task.additionalInfo.name
 				};
 				task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
