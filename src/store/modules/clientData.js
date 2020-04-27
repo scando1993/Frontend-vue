@@ -4,14 +4,19 @@ export default {
   state: {
     client_list: [],
     vendor_task_list: [],
-    client_history: []
+    client_history: [],
+    clients_progress: {}
   },
   getters: {
     CLIENTS_LIST: state => state.client_list,
     VENDOR_TASKS: state => state.vendor_task_list,
-    CLIENT_HISTORY: state => state.client_history
+    CLIENT_HISTORY: state => state.client_history,
+    CLIENT_PROGRESS: state => state.clients_progress
   },
   mutations: {
+    SET_CLIENTS_PROGRESS(state, payload) {
+      state.clients_progress = payload;
+    },
     SET_CLIENTS(state, payload) {
       state.client_list = payload;
     },
@@ -154,6 +159,18 @@ export default {
       if (!response.data.error) {
         console.log('history get!!!!!!', response.data.data.data);
         commit('SET_CLIENT_HISTORY', response.data.data.data);
+      } else {
+        console.log(response);
+      }
+    },
+    GET_CLIENTS_PROGRESS: async ({ commit }) => {
+      const headers = {
+        headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
+      };
+      const response = await axios.get(process.env.VUE_APP_API + '/Client/getProgress', headers);
+      if (!response.data.error) {
+        console.log('clients progress', response.data.data);
+        commit('SET_CLIENTS_PROGRESS', response.data.data);
       } else {
         console.log(response);
       }

@@ -81,6 +81,8 @@
 					</div>
 				</b-col>
 			</b-row>
+            <br>
+            <calendar_progressBar></calendar_progressBar>
 
 
 			<b-modal id="newTask_modal" :title="getModalTitle" centered size="lg" @hidden="resetModal">
@@ -217,6 +219,8 @@ import {
 import { taskCategories, vendors, clients, routines } from './data/formData';
 import Calendar_task_view from './calendar.tasks.view';
 import CalendarTaskWidget from './calendar.task.widget';
+import calendar_progressBar from './calendar.progressBar'
+
 export default {
   metaInfo: {
     // if no subcomponents specify a metaInfo.title, this title will be used
@@ -224,6 +228,7 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
+      calendar_progressBar,
     VueTimepicker,
     // eslint-disable-next-line vue/no-unused-components
     Calendar_task_view,

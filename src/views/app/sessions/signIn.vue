@@ -138,7 +138,8 @@ export default {
         this.makeToast('success', 'Successfully Logged In');
 
         setTimeout(() => {
-          this.$router.push('/');
+          // this.$router.push('/');
+	        window.location.href = '/';
         }, 500);
       }
     },
