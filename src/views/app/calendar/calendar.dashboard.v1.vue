@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <calendar-nav-bar/>
-    <calendar_task_view v-if="showTaskView" class="view-content"/>
+    <calendar-task-view v-if="showTaskView" class="view-content"/>
     <div v-else class="view-content">
 
       <div class="wrapper">
@@ -64,7 +64,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content">
                 <div id="scrollable_content"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-                  <calendar-task-widget :task="task" :key="taskIndex"/>
+                  <calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -77,7 +77,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
                 <div id="scrollable_content_2"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget :task="task" :key="taskIndex" class="box-shadow-1"/>
+                  <calendar-task-widget :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -184,6 +184,7 @@
         </template>
       </b-modal>
     </div>
+    <calendar-progress-bar/>
   </div>
 </template>
 
@@ -213,7 +214,7 @@ import {
 import { taskCategories, vendors, clients, routines } from './data/formData';
 import CalendarTaskView from './calendar.tasks.view';
 import CalendarTaskWidget from './calendar.task.widget';
-import calendar_progressBar from './calendar.progressBar';
+import CalendarProgressBar from './calendar.progressBar';
 
 export default {
   metaInfo: {
@@ -222,7 +223,7 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
-    calendar_progressBar,
+    CalendarProgressBar,
     VueTimepicker,
     CalendarTaskView,
     CalendarNavBar,
@@ -250,20 +251,23 @@ export default {
       return this.isEditModal ? 'Editar o eliminar tarea' : 'Agregar nueva tarea';
     },
     scheduleList() {
-      return this.TASKS_LIST.slice().map(x => {
+      return this.TASKS_LIST.map(x => {return x.additionalInfo.tui_data;});
+      let scheduleList = this.TASKS_LIST.map(x => {
         let schedule = x.additionalInfo;
         let calendarId = calendarList.find(x => x.name === schedule.status).id;
         return {
           id: schedule.tui_data.id,
           calendarId: calendarId,
           title: schedule.name,
-          category: schedule.category,
+          category: taskCategories[schedule.category],
           location: `${ schedule.lat }, ${ schedule.lng }`,
           dueDateClass: '',
           start: schedule.start,
           end: schedule.end
         };
       });
+      console.log(scheduleList);
+      return scheduleList;
     }
   },
   data() {
@@ -308,7 +312,7 @@ export default {
       timezones,
       disableDblClick,
       isReadOnly,
-      template: this.template(),
+      template: this.calendarTemplate(),
       useCreationPopup,
       useDetailPopup,
     };
@@ -408,7 +412,7 @@ export default {
     },
 
     // Calendar template functions
-    template() {
+    calendarTemplate() {
       let self = this;
       return {
         milestone: function (schedule) {
@@ -425,32 +429,35 @@ export default {
     // Create Event according to their Template
     getTimeTemplate(schedule, isAllDay) {
       const id = schedule.id;
-      const taskSelected = this.TASKS_LIST[id];
-      var html = [ '<div class="d-flex flex-row flex-wrap">' ];
-      var start = this.$moment(schedule.start.toUTCString());
-      var calendar = calendarList[schedule.calendarId];
+      const taskSelected = this.TASKS_LIST.find(x => {return x.additionalInfo.name === schedule.title; });
+      console.log('taskTemplate', taskSelected);
+      let html = [ '<div class="d-flex flex-row flex-nowrap" style="height: 100%">' ];
+      let start = this.$moment(schedule.start.toUTCString());
+      let calendar = calendarList.find(({ name }) => name === taskSelected.additionalInfo.status);
 
       console.log('schedule Tui', schedule);
       console.log('schedule Plani', taskSelected);
 
       if ( !isAllDay ) {
         // html.push('<span style="background:' + schedule.borderColor + '">' + start.format('HH:mm') + '</span> ');
-        html.push('<span>' + start.format('HH:mm') + '</span> ');
+        html.push(`<span class="align-self-strech" style="background:${calendar.color}; color: #fff;">`
+          + start.format('HH:mm') + '</span> ');
       }
       if ( schedule.isPrivate ) {
         html.push('<span class="bx bxs-lock-alt font-size-small align-middle"></span>');
         html.push(' Private');
       } else {
-        if ( schedule.isReadOnly ) {
-          html.push('<span class="bx bx-block font-size-small align-middle"></span>');
-        } else if ( schedule.recurrenceRule ) {
-          html.push('<span class="bx bx-repeat font-size-small align-middle"></span>');
-        } else if ( schedule.attendees.length ) {
-          html.push('<span class="bx bxs-user font-size-small align-middle"></span>');
-        } else if ( schedule.location ) {
-          html.push('<span class="bx bxs-map font-size-small align-middle"></span>');
-        }
-        html.push(' ' + schedule.title);
+        // if ( schedule.isReadOnly ) {
+        //   html.push('<span class="bx bx-block font-size-small align-middle"></span>');
+        // } else if ( schedule.recurrenceRule ) {
+        //   html.push('<span class="bx bx-repeat font-size-small align-middle"></span>');
+        // } else if ( schedule.attendees.length ) {
+        //   html.push('<span class="bx bxs-user font-size-small align-middle"></span>');
+        // } else if ( schedule.location ) {
+        //   html.push('<span class="bx bxs-map font-size-small align-middle"></span>');
+        // }
+        // html.push(' ' + schedule.title);
+        html.push(`<span class="align-self-stretch" style="background:${calendar.bgColor}; flex-basis: 100%;">` + schedule.title + '</span> ');
       }
       html.push('' + '</div>');
       return html.join(' ');
