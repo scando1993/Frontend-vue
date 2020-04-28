@@ -9,7 +9,7 @@
                           v-if="task.client.additionalInfo.social_reason !== '_private_'"
                           :lock="Math.random() >= 0.5"
       />
-      <span v-bind:key="'_span_' + indexTask" class="mx-auto"/>
+      <span v-bind:key="'_span_' + indexTask" class="mx-auto" v-if="task.client.additionalInfo.social_reason !== '_private_'"/>
     </template>
   </div>
 </template>
