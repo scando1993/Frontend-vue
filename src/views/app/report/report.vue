@@ -90,27 +90,35 @@ export default {
     //   set(value){}
     // },
     tasksPriorityOptions(){
-      return reportSetup.tasksPriorityOptions(this.categories);
+      return reportSetup.tasksPriorityOptions(this.TASKS_TYPE_REPORT);
     },
     clientPriorityOptions(){
-      return reportSetup.clientPriorityOptions(this.clients_interaction);
+      return reportSetup.clientPriorityOptions(this.CLIENT_REPORT);
     },
     calendarPriorityOptions(){
-      return reportSetup.calendarPriorityOptions(this.tasks);
+      return reportSetup.calendarPriorityOptions(this.TASKS_PRIORITY_REPORT);
     },
     clientsColumnOptions(){
-      return reportSetup.clientsOptions(this.clients_column);
+      return reportSetup.clientsOptions(this.CLIENT_COLUMN_REPORT);
     },
     clientsTimeseriesOptions(){
 
     },
     ...mapGetters([
-      'getSelectedFilter'
+      'getSelectedFilter',
+            'TASKS_PRIORITY_REPORT',
+            'TASKS_TYPE_REPORT',
+            'CLIENT_REPORT',
+      'CLIENT_COLUMN_REPORT'
+
     ])
   },
   mounted() {
-    this.$store.dispatch('GET_CLIENTS_PROGRESS');
-    this.$store.dispatch('GET_TASKS_PROGRESS');
+    this.$store.dispatch('GET_TASKS_PRIORITY_REPORT');
+    this.$store.dispatch('GET_TASKS_TYPE_REPORT');
+    this.$store.dispatch('GET_CLIENT_REPORT');
+    this.$store.dispatch('GET_CLIENT_COLUMN_REPORT');
+
     this.$store.subscribe((mutation, state) => {
       if ( mutation.type === 'setGeneratePDF' ) {
         console.log('pdf clicked');
