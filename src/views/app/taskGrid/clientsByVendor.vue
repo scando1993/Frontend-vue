@@ -1,26 +1,26 @@
 <template>
-	<vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
-		<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
-			<template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
-				<div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
-				     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
-				<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
-					<h3 class="text-center">{{vendor_name(vendor)}}</h3>
-					<div>
-						<b-row>
-							<b-col md="6" sm="6" xl="6" lg="6"
-							       v-for="(task, indextask) in filterSearch(prepareTask(vendor.clients, vendor))"
-							       :key="indexVendor + '_' + indextask">
-								<client-card-widget :task_id="indextask"
-								                    :task="task"
-								                    :client="task.client"/>
-							</b-col>
-						</b-row>
-					</div>
-				</div>
-			</template>
-		</div>
-	</vue-perfect-scrollbar>
+  <vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
+    <div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
+      <template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
+        <div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
+             class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
+        <div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
+          <h3 class="text-center">{{vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName}}</h3>
+          <div>
+            <b-row>
+              <b-col md="6" sm="6" xl="6" lg="6"
+                     v-for="(task, indextask) in filterSearch(prepareTask(vendor.tasks, vendor))"
+                     :key="indexVendor + '_' + indextask">
+                <client-card-widget :task_id="indextask"
+                                    :task="task"
+                                    :client="task.client"/>
+              </b-col>
+            </b-row>
+          </div>
+        </div>
+      </template>
+    </div>
+  </vue-perfect-scrollbar>
 </template>
 
 <script>
@@ -31,8 +31,7 @@ export default {
   name: 'ClientsByVendor',
   components: { ClientCardWidget },
   data() {
-    return {
-    };
+    return {};
   },
   created() {
   },
@@ -53,18 +52,22 @@ export default {
     this.$store.dispatch('GET_CLIENTS_LIST', clientPayload);
   },
   methods: {
-    ...mapGetters(['getSearchText',
+    ...mapGetters([ 'getSearchText',
       'getActiveClients',
       'getInactiveClients',
-      'getNotContactClients']),
+      'getNotContactClients' ]),
 
-	  vendor_name: function (vendor) {
-		  return vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName;
-	  },
+    vendor_name(vendor) {
+      try {
+        return vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName;
+      } catch ( e ) {
+        return '';
+      }
+    },
 
-	  parseStatus(status) {
+    parseStatus(status) {
       var newStatus = '';
-      switch (status) {
+      switch ( status ) {
       case 'expired':
         newStatus = 'Inactive';
         break;
@@ -126,42 +129,54 @@ export default {
     },
 
     filterSearch(list) {
+      let self = this;
+      let active = self.getActiveClients();
+      let inactive = self.getInactiveClients();
+      let not_contact = self.getNotContactClients();
+
       return list.filter(task => {
-        let active = this.getActiveClients();
-        let inactive = this.getInactiveClients();
-        let not_contact = this.getNotContactClients();
-
-        switch (task.activity.state) {
+        switch ( task.activity.state ) {
         case 'Active': {
-          if (!active) {
+          if ( !active ) {
             return false;
           }
-        }
-          break;
+        }break;
         case 'Inactive': {
-          if (!inactive) {
+          if ( !inactive ) {
             return false;
           }
-        }
-          break;
+        }break;
         case 'Without contact': {
-          if (!not_contact) {
+          if ( !not_contact ) {
             return false;
-
+          }
+        }break;
+        }
+        console.log(task);
+        if (task.client !== undefined && task.client !== null){
+          let social_reason =  self.CLIENTS_LIST.find(x => x.id.id === task.client.id.id)
+            .additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
+          if (social_reason === null){
+            let name = self.CLIENTS_LIST.find(x => x.id.id === task.client.id.id)
+              .additionalInfo.name.toLowerCase().match(this.getSearchText().toLowerCase());
+            return name !== null;
+          }else {
+            return true;
           }
         }
-          break;
-        }
-        return this.CLIENTS_LIST.find(x => x.id.id === task.client.id.id).additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
+        return false;
       });
     },
 
     orderVendors(list) {
+      console.log('vendor list', list);
+      let self = this;
       return list.slice().sort(function (a, b) {
-        let textA = a.additionalInfo.firstName.toUpperCase();
-        let textB = b.additionalInfo.firstName.toUpperCase();
+        let textA = self.vendor_name(a).toUpperCase();
+        let textB = self.vendor_name(b).toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       }).filter(vendor => {
+        return vendor.tasks !== undefined ? vendor.tasks.length !== 0 : false;
         return vendor.clients.length !== 0;
       });
     },
@@ -170,12 +185,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.scrollable {
-		width: 100%;
-		/*height: 500px;*/
-		position: relative;
-		overflow-x: scroll;
-		overflow-y: scroll;
-		height: 100%
-	}
+  .scrollable {
+    width: 100%;
+    /*height: 500px;*/
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: 100%
+  }
 </style>

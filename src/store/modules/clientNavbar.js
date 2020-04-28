@@ -3,7 +3,7 @@ const state = {
     showClientForm: false,
     isNewClientForm: false,
     formTitle: '',
-    client_id: '',
+    client: '',
     searchFilter: '',
     groupBy: '',
     clients_filters: {
@@ -19,7 +19,7 @@ const getters = {
   getShowClientForm: state => state.clients.showClientForm,
   getNewClientForm: state => state.clients.isNewClientForm,
   getFormTitle: state => state.clients.formTitle,
-  getFormClientId: state => state.clients.client_id,
+  getFormClientId: state => state.clients.client,
   getSearchText: state => state.clients.searchFilter,
   getActiveClients: state => state.clients.clients_filters.active,
   getInactiveClients: state => state.clients.clients_filters.inactive,
@@ -33,7 +33,7 @@ const mutations = {
     state.clients.formTitle = payload;
   },
   setFormClientId: (state, payload) => {
-    state.clients.client_id = payload;
+    state.clients.client = payload;
   },
   setShowClientForm: state => {
     state.clients.showClientForm = true;

@@ -24,40 +24,42 @@
 				class="form-control-rounded col-3 mx-1"
 				placeholder="Buscar cliente"
 			/>
-			<div class="d-lg-inline-flex
-									d-xl-inline-flex
-									d-md-flex
-									d-sm-flex
-									flex-md-wrap
-									flex-sm-wrap
+			<div class="d-inline-flex
+									flex-nowrap
+									flex-sm-column
+									flex-md-row
+									flex-lg-row
+									flex-xl-row
 									justify-content-lg-around">
-				<div class="navbar-options-items">
-					<label style="margin-bottom: 0;">
-						<input type="checkbox" v-model="active" class="tui-full-calendar-checkbox-square">
-						<span :style="{'border-color': '#00b3ee', 'background-color': active ? '#00b3ee' : 'transparent'}"/>
-						<span class="font-weight-bold">Activos</span>
+				<div class="client-navbar-options-items">
+					<label class="d-flex flex-row mb-0 client-option-list">
+						<input type="checkbox" v-model="active" class="client-navbar-checkbox-square">
+						<span :style="{'border-color': '#00b3ee', 'background-color': active ? '#00b3ee' : 'transparent'}"
+                  class="client-option-list"/>
+						<span class="client-option-list">Activos</span>
 					</label>
 				</div>
-				<div class="navbar-options-items">
-					<label style="margin-bottom: 0;">
-						<input type="checkbox" v-model="inactive" class="tui-full-calendar-checkbox-square">
-						<span :style="{'border-color': 'gray', 'background-color': inactive ? 'gray' : 'transparent'}"/>
-						<span class="font-weight-bold">Inactivos</span>
+				<div class="client-navbar-options-items">
+					<label class="d-flex flex-row mb-0 client-option-list">
+						<input type="checkbox" v-model="inactive" class="client-navbar-checkbox-square">
+						<span :style="{'border-color': 'gray', 'background-color': inactive ? 'gray' : 'transparent'}"
+                  class="client-option-list"/>
+						<span class="client-option-list">Inactivos</span>
 					</label>
 				</div>
-				<div class="navbar-options-items">
-					<label style="margin-bottom: 0;">
-						<input type="checkbox" v-model="not_contact" class="tui-full-calendar-checkbox-square">
-						<span
-							:style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"/>
-						<span class="font-weight-bold">Sin Contactar</span>
+				<div class="client-navbar-options-items">
+					<label class="d-flex flex-row mb-0 client-option-list">
+						<input type="checkbox" v-model="not_contact" class="client-navbar-checkbox-square">
+						<span :style="{'border-color': 'gainsboro', 'background-color': not_contact ? 'gainsboro' : 'transparent'}"
+                  class="client-option-list"/>
+						<span class="client-option-list">Sin Contactar</span>
 					</label>
 				</div>
 			</div>
 
-			<a class="text-adjust" @click="showNewClientForm()">
-				<i class="i-Add mr-2 btn-add-plani"/>
-				<span>Agregar nuevo cliente</span>
+			<a class="d-flex flex-row" @click="showNewClientForm()">
+        <i class="i-Add mr-1 btn-add-plani align-self-center"/>
+        <span class="text-adjust align-self-center">Agregar nuevo cliente</span>
 			</a>
 
 		</div>
@@ -155,15 +157,30 @@ export default {
 };
 </script>
 
-<style scoped>
-	.btn-add-plani {
-		color: #00b3ee;
-	}
+<style scoped lang="scss">
+  .btn-add-plani {
+    color: #FFFFFF;
+    background: #00b3ee;
+    border: 1px solid #00b3ee;
+    border-radius: 50%;
+    font-size: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    line-height: 1.15;
+  }
 
-	.client-navbar-btn-equip {
+  .client-navbar-btn-equip {
 		background-color: #00b3ee;
 		color: white;
 	}
+
+  .client-option-list {
+    font-size: 1em;
+    white-space: normal;
+    align-self: center;
+    text-transform: capitalize;
+  }
 
 	.client-navbar-body{
 		padding: 0.5rem 0.75rem;
@@ -173,37 +190,25 @@ export default {
 		margin-bottom: 1rem;
 	}
 
-	.btn-outline-plani {
-		color: #3765c9 !important;
-		border-color: #3765c9;
-		background: rgba(238, 238, 238, 0.6);
-	}
+  .client-navbar-options-items {
+    align-self: center;
+    margin-left: 1.2rem;
+    margin-right: 1.2rem;
+  }
 
-	.btn-outline-plani:hover {
-		background: #315bb5;
-		border-color: #315bb5;
-		color: #fff !important;
-	}
+  .text-adjust {
+    font-size: 1em;
+    white-space: normal;
+    align-self: center;
+    text-transform: capitalize;
+  }
 
-	.task-option-list {
 
-	}
-
-	.text-adjust {
-		font-size: 1rem;
-		white-space: normal;
-	}
-
-	.navbar-options-items {
-		margin-left: 1.2rem;
-		margin-right: 1.2rem;
-	}
-
-	input[type=checkbox].tui-full-calendar-checkbox-square {
+	input[type=checkbox].client-navbar-checkbox-square {
 		display: none;
 	}
 
-	input[type=checkbox].tui-full-calendar-checkbox-square + span {
+	input[type=checkbox].client-navbar-checkbox-square + span {
 		display: inline-block;
 		cursor: pointer;
 		width: 14px;
