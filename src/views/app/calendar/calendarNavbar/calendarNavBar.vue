@@ -12,22 +12,25 @@
         <!--				<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>-->
       </div>
 
-      <div id="calendar_selection" class="d-flex d-inline-block align-items-center">
-        <p class="text-adjust font-weight-bold">{{getRangeText}}</p>
-        <button type="button" class="btn btn-icon btn-action" data-action="move-prev">
+      <div id="calendar_selection" class="d-inline-flex flex-row flex-nowrap align-items-center">
+        <label class="text-range-date flex-grow-0 flex-shrink-1">{{getRangeText}}</label>
+        <button type="button" class="btn btn-icon btn-action" v-on:click="changePrevCalendar()">
           <i class="bx bx-chevron-left" style="font-size: 2em;"/>
         </button>
-        <button type="button" class="btn btn-icon btn-action" data-action="move-next">
+        <button type="button" class="btn btn-icon btn-action" v-on:click="changeNextCalendar()">
           <i class="bx bx-chevron-right" style="font-size: 2em;"/>
         </button>
       </div>
       <div class="d-inline-flex
 										flex-nowrap
-										flex-md-row
 										flex-lg-row
 										flex-xl-row
+										flex-md-column
 										flex-sm-column
-										flex-md-wrap
+										align-content-lg-stretch
+										align-content-xl-stretch
+										align-content-sm-start
+										align-content-md-start
 										justify-content-lg-around">
         <div class="calendar-navbar-options-items">
           <label class="d-flex flex-row mb-0 task-option-list">
@@ -157,7 +160,7 @@ export default {
       set(value){
         this.setSearchText(value);
       }
-    }
+    },
   },
   methods: {
     ...mapGetters([
@@ -177,7 +180,9 @@ export default {
       'toggleNowTasks',
       'toggleSoonTasks',
       'toggleEarlyTasks',
-      'togglePendingTasks'
+      'togglePendingTasks',
+      'togglePrevCalendar',
+      'toggleNextCalendar'
     ]),
     onChangeFilter() {
       if ( this.selectedFilter === 'day' || this.selectedFilter === 'month' || this.selectedFilter === 'week' ) {
@@ -192,6 +197,14 @@ export default {
     },
     showNewTaskModal() {
       this.setShowNewTaskModal(true);
+    },
+    changePrevCalendar(){
+      console.log('Prev calendar clicked');
+      this.togglePrevCalendar();
+    },
+    changeNextCalendar(){
+      console.log('Next calendar clicked');
+      this.toggleNextCalendar();
     }
   }
 };
@@ -206,7 +219,7 @@ export default {
     width: 1.5rem;
     height: 1.5rem;
     text-align: center;
-    vertical-align: center;
+    line-height: 1.15;
   }
 
   .btn-action {
@@ -238,10 +251,22 @@ export default {
     font-size: 1em;
     white-space: normal;
     align-self: center;
+    text-transform: capitalize;
+  }
+
+  .text-range-date {
+    font-size: calc(0.75em + 1vmin);
+    white-space: normal;
+    align-self: center;
+    text-transform: capitalize;
+    margin-bottom: 0;
+    margin-right: 1em;
   }
 
   .calendar-navbar-options-items {
-    align-self: center;
+    align-self: start;
+    margin-left: 0.5em;
+    margin-right: 0.5em
   }
 
   input[type=checkbox].tui-full-calendar-checkbox-square {

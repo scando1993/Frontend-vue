@@ -9,7 +9,9 @@ const state = {
     now: true,
     soon: true,
     early: true,
-    pending: true
+    pending: true,
+    nextCalendar: true,
+    prevCalendar: true
   },
 };
 
@@ -24,6 +26,8 @@ const getters = {
   getSoonTasks: state => state.calendar.soon,
   getEarlyTasks: state => state.calendar.early,
   getPendingTasks: state => state.calendar.pending,
+  getPrevCalendar: state => state.calendar.prevCalendar,
+  getNextCalendar: state => state.calendar.nextCalendar
 };
 
 const mutations = {
@@ -57,6 +61,12 @@ const mutations = {
   togglePendingTasks: (state) => {
     state.calendar.pending = !state.calendar.pending;
   },
+  togglePrevCalendar: (state) => {
+    state.calendar.prevCalendar = !state.calendar.prevCalendar;
+  },
+  toggleNextCalendar: (state) => {
+    state.calendar.nextCalendar = !state.calendar.nextCalendar;
+  }
 };
 
 const actions = {
@@ -90,6 +100,12 @@ const actions = {
   },
   togglePendingTasks({ commit }){
     commit('togglePendingTasks');
+  },
+  togglePrevCalendar({ commit }){
+    commit('togglePrevCalendar');
+  },
+  toggleNextCalendar({ commit }){
+    commit('toggleNextCalendar');
   }
 };
 
