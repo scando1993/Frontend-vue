@@ -26,8 +26,8 @@
 
 
                     <div class="col-md-6 ">
-                        <h3 class="d-inline">Miembro</h3>
-                        <b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                        <h3 class="d-inline">{{getMemberType(item)}}</h3>
+                        <b-dropdown v-if="showDropDown(item)" size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
                             <template slot="button-content" >
                                 <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
                             </template>
@@ -190,7 +190,25 @@ export default {
     getImageForUser (value){
       let images = require.context('@/assets/images/faces/', false, /\.jpg$/);
       return images('./' + value + '.jpg');
-    }
+    },
+      getMemberType(member) {
+        const type = member.additionalInfo.type;
+        var display = 'Member';
+        switch (type) {
+            case 'Team Admin':
+                display = 'Administrador';
+                break;
+            case 'Vendor':
+                display = 'Member';
+                break;
+        }
+        return display;
+      },
+      showDropDown(member) {
+          const condition1 = this.getMemberType(member) !== 'Administrador';
+          const condition2 = this.loggedInUser.admin;
+          return condition1 && condition2;
+      }
   }
 };
 
