@@ -1,59 +1,176 @@
 <template>
-    <div>
-       <reports-nav-bar></reports-nav-bar>
-        <div id="body">
-            <br>
-            <br><br>
-            <br>
-            <b-row>
-                <b-col md="4">
-                    <h3 class="text-center">Cumplimiento de tareas</h3>
-                    <div class="chart-wrapper" style="height: 300px">
-                        <v-chart :options="basicDoughnut" :autoresize="true"></v-chart>
-                    </div>
-                </b-col>
-                <b-col md="4">
-                    <h3 class="text-center">Iteracción con clintes</h3>
-                    <div class="chart-wrapper" style="height: 300px">
-                        <v-chart :options="basicDoughnut" :autoresize="true"></v-chart>
-                    </div>
-                </b-col>
-                <b-col md="4">
-                    <h3 class="text-center">Tipos de tareas</h3>
-                    <div class="chart-wrapper" style="height: 300px">
-                        <v-chart :options="basicDoughnut" :autoresize="true"></v-chart>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col md="12">
-                    <h3 class="text-center">Status del Cliente</h3>
-                    <div class="chart-wrapper" style="height: 300px">
-                        <v-chart :options="stackedArea" :autoresize="true"></v-chart>
-                    </div>
-                </b-col>
-            </b-row>
-        </div>
+  <div>
+    <reports-nav-bar/>
+    <div id="body" ref="report_body">
+      <b-row class="mb-2">
+        <b-col md="12" sm="12" lg="4">
+          <h3 class="text-center">Cumplimiento de tareas</h3>
+          <p>Dentro del control de linea roja durante x cantidad de tiempo</p>
+          <div class="chart-wrapper">
+            <apexchart type="donut" :options="calendarPriorityOptions" :series="calendarPriorityOptions.series" :autoresize="true"/>
+          </div>
+        </b-col>
+        <b-col md="12" sm="12" lg="4">
+          <h3 class="text-center">Interacción con el clinte</h3>
+          <p>Cantidades de veces que se interactuo con el cliente durante x cantidad de tiempo</p>
+          <div class="chart-wrapper" >
+            <apexchart type="donut" :options="clientPriorityOptions" :series="clientPriorityOptions.series" :autoresize="true"/>
+          </div>
+        </b-col>
+        <b-col md="12" sm="12" lg="4">
+          <h3 class="text-center">Tipos de tarea</h3>
+          <p>Dentro de las horas de actividad durante x cantidad de tiempo</p>
+          <div class="chart-wrapper">
+            <apexchart type="donut" :options="tasksPriorityOptions" :series="tasksPriorityOptions.series" :autoresize="true"/>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col md="12">
+          <h3 class="text-center">Estatus del Cliente</h3>
+          <p class="mx-auto">Total de clientes activos o inactivos durante x cantidad de tiempo</p>
+          <div class="chart-wrapper mx-auto" style="width: 50%">
+            <apexchart type="bar" :options="clientsColumnOptions" :series="clientsColumnOptions.series" :autoresize="true"/>
+          </div>
+        </b-col>
+      </b-row>
     </div>
+  </div>
 </template>
 
 <script>
-import { basicPie,basicDoughnut, stackedArea } from '@/data/echarts';
+import { basicPie, stackedArea } from '@/data/echarts';
+import reportSetup from './data/report-analytics';
 import ReportsNavBar from './navbar/reportsNavBar';
+import { mapActions, mapGetters } from 'vuex';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import domtoimage from "dom-to-image";
+
 export default {
   name: 'report',
   components: { ReportsNavBar },
   data: () => ({
     basicPie,
     stackedArea,
-    basicDoughnut
-  })
+    tasks: {
+      'expired': 80,
+      'now': 20,
+      'soon': 40,
+      'early': 10,
+      'pending': 50
+    },
+    categories: {
+      'Llamada': 5,
+      'Reunion': 15,
+      'Mail': 20,
+      'Informe': 20,
+      'Otro': 40
+    },
+    clients_interaction: {
+      'clients_w_tasks': 12,
+      'clients_w_o_tasks': 18
+    },
+    clients_column: {
+      'active': 80,
+      'inactive': 20
+    }
+  }),
+  computed:{
+    // tasks: {
+    //   get(){
+    //     return this.TASKS_PROGRESS;
+    //   },
+    //   set(value){}
+    // },
+    // clients_column: {
+    //   get(){
+    //     return this.CLIENT_PROGRESS;
+    //   },
+    //   set(value){}
+    // },
+    tasksPriorityOptions(){
+      return reportSetup.tasksPriorityOptions(this.categories);
+    },
+    clientPriorityOptions(){
+      return reportSetup.clientPriorityOptions(this.clients_interaction);
+    },
+    calendarPriorityOptions(){
+      return reportSetup.calendarPriorityOptions(this.tasks);
+    },
+    clientsColumnOptions(){
+      return reportSetup.clientsOptions(this.clients_column);
+    },
+    clientsTimeseriesOptions(){
+
+    },
+    ...mapGetters([
+      'getSelectedFilter'
+    ])
+  },
+  mounted() {
+    this.$store.dispatch('GET_CLIENTS_PROGRESS');
+    this.$store.dispatch('GET_TASKS_PROGRESS');
+    this.$store.subscribe((mutation, state) => {
+      if ( mutation.type === 'setGeneratePDF' ) {
+        console.log('pdf clicked');
+        setTimeout(() => {
+          this.generatePDF();
+        }, 0);
+      } else if ( mutation.type === 'setSendEmail' ) {
+        console.log('email clicked');
+        setTimeout( () => {
+          this.sendEmail();
+        }, 0);
+      }
+    });
+  },
+  methods: {
+    ...mapGetters([
+      'TASKS_PROGRESS',
+      'CLIENT_PROGRESS'
+    ]),
+    ...mapActions([
+      'toggleGeneratePDF',
+      'toggleSendEmail',
+      'getStartDate',
+      'getEndDate',
+      'TASKS_PROGRESS',
+      'CLIENT_PROGRESS'
+    ]),
+    generatePDF: function(){
+      let currentDate = this.$moment((new Date()).getTime()).format('DD-MMMM');
+      /** WITH CSS */
+      domtoimage.toPng(this.$refs.content)
+        .then(function(dataUrl) {
+          let img = new Image();
+          img.src = dataUrl;
+          const doc = new jsPDF({
+            orientation: 'portrait',
+            format: [900, 1400]
+          });
+          doc.addImage(img, 'JPEG', 20, 20);
+          const filename = currentDate + '.pdf';
+          doc.save(filename);
+        })
+        .catch(function(error) {
+          console.error('oops, something went wrong!', error);
+        });
+      // console.log(currentDate);
+      // html2canvas(this.$refs.report_body, { canvas: canvasElement }).then(function (canvas) {
+      //   const img = canvas.toDataURL('image/jpeg', 1.0);
+      //   doc.addImage(img, 'JPEG', 20, 20);
+      //   doc.save(currentDate + '.pdf');
+      // });
+    },
+    sendEmail: function(){}
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-    .echarts {
-        width: 100%;
-        height: 100%;
-    }
+  .echarts {
+    width: 100%;
+    height: 100%;
+  }
 </style>

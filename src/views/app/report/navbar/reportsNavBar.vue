@@ -1,44 +1,86 @@
 <template>
-    <div>
-        <b-card>
-            <div id="header">
-                <div id="pageTitle">
-                    <h3>Reportes</h3>
-                </div>
-            </div>
-
-            <div id="calendar">
-
-                <b-dropdown variant="outline-primary" id="dropdown-1" text="Día" class="mb-1 d-inline  ">
-                    <b-dropdown-item>Día</b-dropdown-item>
-                    <b-dropdown-item>Semana</b-dropdown-item>
-                    <b-dropdown-item>Mes</b-dropdown-item>
-                    <b-dropdown-item>Customizar</b-dropdown-item>
-
-                </b-dropdown>
-                <div class="d-inline accionsButtons">
-                    <b-button variant="primary ripple m-1">Descargar PDF</b-button>
-                    <b-button variant="primary ripple m-1">Enviar Emai</b-button>
-
-                </div>
-                <div class="date d-inline" style="margin-left: 20px">
-                    <div class="d-inline" style="margin-right: 10px" id="display_date">May-12</div>
-                    <div id="navigate_dates" class="d-inline">
-                        <b-button id="left_button">&#60;</b-button>
-                        <b-button id="rifgt_button">&#62;</b-button>
-                    </div>
-                </div>
-            </div>
-        </b-card>
+  <b-card body-class="p-2">
+    <div id="calendar" class="d-flex flex-row flex-nowrap align-items-stretch">
+      <b-form-select v-model="selectedFilter"
+                     :options="options"
+                     @change="onChangeFilter"
+                     class="report-navbar-select"/>
+      <button class="btn report-navbar-btn mx-1" @click="toggleGeneratePDF">Descargar PDF</button>
+      <button class="btn report-navbar-btn mx-1" @click="toggleSendEmail">Enviar Email</button>
+      <label class="text-range-date flex-grow-0 flex-shrink-1 mx-2">{{getCurrentDate}}</label>
+      <button type="button" class="btn btn-icon btn-action" @click.prevent="togglePrevCalendar">
+        <i class="bx bx-chevron-left" style="font-size: 2em;"/>
+      </button>
+      <button type="button" class="btn btn-icon btn-action" @click.prevent="toggleNextCalendar">
+        <i class="bx bx-chevron-right" style="font-size: 2em;"/>
+      </button>
     </div>
+  </b-card>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-  name: 'reportsNavBar'
+  name: 'reportsNavBar',
+  data(){
+    return {
+      selectedFilter: 'day',
+      options: [
+        { value: 'day', text: 'Día' },
+        { value: 'week', text: 'Semana' },
+        { value: 'month', text: 'Mes' },
+        { value: 'Custom', text: 'Customizar' }
+      ],
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'getCurrentDate',
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'toggleGeneratePDF',
+      'toggleSendEmail',
+      'toggleNextCalendar',
+      'togglePrevCalendar',
+      'setSelectedCurrentView'
+    ]),
+    onChangeFilter() {
+      this.setSelectedCurrentView(this.selectedFilter);
+    },
+  }
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  .report-navbar-select {
+    align-self: center;
+    width: auto;
+    height: calc(1em + 1vmin);
+    padding: 0.25em 1.5rem;
+    line-height: 1;
+  }
+  .btn-action {
+    border: 1px solid lightgrey;
+    padding: 0.2em 0.5em;
+  }
+  .text-range-date {
+    font-size: calc(0.75em + 1vmin);
+    white-space: normal;
+    align-self: center;
+    text-transform: capitalize;
+    margin-bottom: 0;
+    margin-right: 1em;
+  }
+  .report-navbar-btn {
+    background-color: #4399B6;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    padding: 0 1.5rem;
+    border: 0;
+    align-self: center;
+  }
 </style>
