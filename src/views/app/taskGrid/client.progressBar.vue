@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-progress class="mt-2" :height="height" :precision="precision" :max="max" show-value>
-      <b-progress-bar :class="getBGColor(key)" :value="value * 100 "
-                      v-for="(value, key) in CLIENT_PROGRESS "></b-progress-bar>
+      <b-progress-bar :style="{background: getBGColor(key)}" :value="value * 100 "
+                      v-for="(value, key) in CLIENT_PROGRESS " :key="key" :label="`${(value * 100).toFixed(0)}%`"/>
     </b-progress>
 
   </div>
@@ -32,13 +32,13 @@ export default {
       console.log('color', name);
       switch ( name ) {
       case 'active':
-        bgColor = 'bg-primary';
+        bgColor = '#00b3ee';
         break;
       case 'inactive':
-        bgColor = 'bg-danger';
+        bgColor = 'gray';
         break;
       case 'without_contact':
-        bgColor = 'bg-dark';
+        bgColor = 'gainsboro';
         break;
       }
       return bgColor;

@@ -27,7 +27,7 @@
 			<div class="d-inline-flex
 									flex-nowrap
 									flex-sm-column
-									flex-md-row
+									flex-md-column
 									flex-lg-row
 									flex-xl-row
 									justify-content-lg-around">

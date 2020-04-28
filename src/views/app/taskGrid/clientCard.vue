@@ -86,6 +86,10 @@ export default {
       };
     },
   },
+  mounted() {
+    console.log(this.client.additionalInfo);
+    this.lock = !this.client.additionalInfo.activated;
+  },
   methods:{
     ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK', 'showClientHistoryForm']),
 
