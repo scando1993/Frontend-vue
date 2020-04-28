@@ -11,7 +11,7 @@
           </div>
         </b-col>
         <b-col md="12" sm="12" lg="4">
-          <h3 class="text-center">Interacción con el clinte</h3>
+          <h3 class="text-center">Interacción con el cliente</h3>
           <p>Cantidades de veces que se interactuo con el cliente durante x cantidad de tiempo</p>
           <div class="chart-wrapper" >
             <apexchart type="donut" :options="clientPriorityOptions" :series="clientPriorityOptions.series" :autoresize="true"/>
