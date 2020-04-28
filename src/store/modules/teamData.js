@@ -16,7 +16,7 @@ export default {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Vendor/getAll?limit=1000', headers);
+      const response = await axios.get(process.env.VUE_APP_API + '/Team/getAll', headers);
       if (!response.data.error) {
         console.log(response.data.data);
         commit('SET_TEAM', response.data.data.data);
@@ -79,6 +79,27 @@ export default {
               console.log(data, status);
               // commit('ADD_CLIENT', data);
               this.$store.dispatch('signOut');
+              resolve({data, status});
+            })
+            .catch(error => {
+              reject(error);
+            });
+      });
+    },
+    INVITE_ADMIN: async ({ commit }, vendor_email) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+        };
+        const data = {vendor_email: vendor_email};
+        axios
+            .post(process.env.VUE_APP_API + '/Team/inviteAdmin' , data, config)
+            .then(({data, status}) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
               resolve({data, status});
             })
             .catch(error => {
