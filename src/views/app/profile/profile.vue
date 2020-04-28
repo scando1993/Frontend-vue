@@ -67,19 +67,34 @@
                                             v-model = "PROFILE.additionalInfo.email"
                                     />
                                 </b-form-group>
-                                <b-form-group
-                                        class="col-md-6 mb-3"
-                                        id="input-group-4"
-                                        label="Contraseña"
-                                        label-for="input-1"
-                                >
-                                    <b-form-input
-                                            id="input-1"
-                                            type="password"
-                                            placeholder="Contraseña"
-                                            v-model = "password"
-                                    />
-                                </b-form-group>
+                                <div class="col-md-6 mb-3">
+                                    <b-form-group
+                                            id="input-group-8"
+                                            label="Contraseña Antigua"
+                                            label-for="input-1"
+                                    >
+                                        <b-form-input
+                                                id="input-1"
+                                                type="password"
+                                                placeholder="Contraseña"
+                                                v-model = "password_old"
+                                        />
+                                    </b-form-group>
+
+                                    <b-form-group
+                                            id="input-group-4"
+                                            label="Contraseña Nueva"
+                                            label-for="input-1"
+                                    >
+                                        <b-form-input
+                                                id="input-1"
+                                                type="password"
+                                                placeholder="Contraseña"
+                                                v-model = "password_new"
+                                        />
+                                    </b-form-group>
+                                </div>
+
                             </b-row>
                                 <div class="mt-3 mb-30 border-top"></div>
                             <b-row class="mb-5">
@@ -167,6 +182,8 @@ export default {
   components: { ProfileNavBar, Team },
   data() {
     return {
+        password_old: '',
+        password_new: '',
       customImageMaxSize: 3,
       user: dummyProfileData,
       background_image: '@/assets/images/photo-wide-5.jpeg',
@@ -235,6 +252,15 @@ export default {
     this.$store.dispatch('GET_PROFILE');
   },
   methods: {
+      changePassword() {
+          if(this.password_new && this.password_old) {
+              const body = {
+                  "currentPassword": this.password_old,
+                  "newPassword": this.password_new
+              };
+              this.$store.dispatch('CHANGE_PASSWORD', body);
+          }
+      },
     save() {
       const form = {
         'email': this.PROFILE.additionalInfo.email,
@@ -247,7 +273,11 @@ export default {
         'company_address': this.PROFILE.additionalInfo.company_address
       };
       console.log('in save', form);
-      this.$store.dispatch('UPDATE_PROFILE', form);
+      this.$store.dispatch('UPDATE_PROFILE', form)
+          .then(response => {
+              this.$store.dispatch('GET_PROFILE');
+          });
+      this.changePassword();
     },
     initForm() {
       this.setDummyData();
