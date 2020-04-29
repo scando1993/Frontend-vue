@@ -7,12 +7,14 @@ const state = {
   planiVerticalCompact: {
     isSidebarCompact: false,
     isItemName: false
-  }
+  },
+  showNotifications: false
 };
 
 const getters = {
   getPlaniVerticalSidebar: state => state.planiVerticalSidebar,
-  getPlaniVerticalCompact: state => state.planiVerticalCompact
+  getPlaniVerticalCompact: state => state.planiVerticalCompact,
+  getShowNotifications: state => state.showNotifications
 };
 
 const actions = {
@@ -27,6 +29,10 @@ const actions = {
   },
   planiMobileSidebar({ commit }, data) {
     commit('PLANI_MOBILE_SIDEBAR', data);
+  },
+  setShowNotifications({ commit }) {
+    commit('unsetShowNotifications');
+    commit('setShowNotifications');
   }
 };
 
@@ -62,6 +68,12 @@ const mutations = {
     state.planiVerticalSidebar.isMobileCompact = !state.planiVerticalSidebar
       .isMobileCompact;
     console.log('plani mobile sidebar');
+  },
+  setShowNotifications(state) {
+    state.showNotifications = true;
+  },
+  unsetShowNotifications(state) {
+    state.showNotifications = false;
   }
 };
 

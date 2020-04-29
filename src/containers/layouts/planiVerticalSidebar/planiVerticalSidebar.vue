@@ -38,7 +38,8 @@
 							<div>
 								<a class="has-arrow " href="#" :class="{ active: selectedParentMenu === 'calendar' }">
 									<router-link tag="div" to="/">
-										<i class="i-Bar-Chart text-20 mr-2 "/>
+<!--										<i class="i-Bar-Chart text-20 mr-2 "/>-->
+                    <img src="@/assets/images/svg/home.svg" class="text-20 mr-2 icon-sidebar"/>
 										<span
 											class="text-15"
 											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
@@ -55,7 +56,8 @@
 							<div>
 								<a class="has-arrow" href="#" :class="{ active: selectedParentMenu === 'taskGrid' }">
 									<router-link tag="div" to="/app/taskGrid">
-										<i class="i-Tablet-Secure text-20 mr-2"/>
+<!--										<i class="i-Tablet-Secure text-20 mr-2"/>-->
+                    <img src="@/assets/images/svg/clientes.svg" class="text-20 mr-2 icon-sidebar"/>
 										<span
 											class="text-15"
 											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
@@ -70,7 +72,8 @@
 							<div>
 								<a tag="a" class="has-arrow " href="#" :class="{ active: selectedParentMenu === 'reports' }">
 									<router-link tag="div" to="/app/reports">
-										<i class="i-Statistic text-20 mr-2"/>
+<!--										<i class="i-Statistic text-20 mr-2"/>-->
+                    <img src="@/assets/images/svg/reportes.svg" class="text-20 mr-2 icon-sidebar"/>
 										<span
 											class="text-15"
 											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
@@ -84,20 +87,41 @@
 						<li class="Ul_li--hover mb-2">
 							<div>
 								<a class="has-arrow " href="#" :class="{ active: selectedParentMenu === 'alerts' }">
-									<i class="i-Bell text-20 mr-2"></i>
-									<span
-										class="text-15"
-										:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
-									>Alertas</span>
+                  <router-link tag="div" to="#">
+                    <!--									<i class="i-Bell text-20 mr-2"></i>-->
+                    <img src="@/assets/images/svg/notificaciones.svg" class="text-20 mr-2 icon-sidebar"/>
+                    <span
+                      class="text-15"
+                      :class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
+                    >Alertas</span>
+                  </router-link>
 								</a>
 							</div>
 						</li>
-<!--						Profile menu-->
+
+
+            <!-- Monitor menu> -->
+            <li class="Ul_li--hover">
+              <div>
+                <a class="has-arrow " href="/app/monitor" :class="{ active: selectedParentMenu === 'monitor' }">
+                  <router-link tag="div" to="/app/monitor">
+                    <i class="i-Monitor-Analytics icons-text mr-2"/>
+                    <span
+                      class="text-15"
+                      :class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
+                    >Monitoreo</span>
+                  </router-link>
+                </a>
+              </div>
+            </li>
+
+            <!--						Profile menu-->
 						<li class="Ul_li--hover">
 							<div>
 								<a class="has-arrow " href="#" :class="{ active: selectedParentMenu === 'profile' }">
 									<router-link tag="div" to="/app/profile">
-										<i class="i-People-on-Cloud text-20 mr-2"/>
+<!--										<i class="i-People-on-Cloud text-20 mr-2"/>-->
+                    <img src="@/assets/images/svg/settings.svg" class="text-20 mr-2 icon-sidebar"/>
 										<span
 											class="text-15"
 											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
@@ -119,21 +143,6 @@
 									>Equipo</span>
 								</router-link>
 							</a>
-						</li>
-
-						<!-- Monitor menu> -->
-						<li class="Ul_li--hover">
-							<div>
-								<a class="has-arrow " href="/app/monitor" :class="{ active: selectedParentMenu === 'monitor' }">
-									<router-link tag="div" to="/app/monitor">
-										<i class="i-Map text-20 mr-2"/>
-										<span
-											class="text-15"
-											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
-										>Monitoreo</span>
-									</router-link>
-								</a>
-							</div>
 						</li>
 
 						<!-- Sign-out menu> -->
@@ -185,7 +194,8 @@ export default {
       'planiSidebarCompact',
       'planiRemoveSidebarCompact',
       'planiMobileSidebar',
-      'signOut'
+      'signOut',
+      'setShowNotifications'
     ]),
 
     logoutUser() {
@@ -218,7 +228,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped lang="scss">
 	.overrideCard {
 		margin-left: 100px !important;
 
@@ -229,4 +239,18 @@ export default {
 		width: 600px;
 		height: 400px;
 	}
+
+  .icon-sidebar {
+    width: 20px;
+    height: 20px;
+    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  }
+
+  .icons-text {
+    font-size: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    line-height: 1.15;
+  }
 </style>
