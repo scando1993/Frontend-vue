@@ -114,19 +114,7 @@
               <b-form-group
                 label="Notas"
               >
-                <b-form-textarea v-model="newTaskForm.notes"/>
-              </b-form-group>
-              <b-form-group v-if="isEditModal"
-                            label="Tarea completada"
-              >
-                <div class="d-flex d-inline align-items-center">
-                  <b-form-checkbox v-model="newTaskForm.completed"/>
-                  <div class="text-21 align-items-center">
-                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
-
-                  </div>
-                </div>
-
+                <b-form-textarea style="height: 100px;"v-model="newTaskForm.notes"/>
               </b-form-group>
 
             </b-col>
@@ -164,10 +152,21 @@
                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
               </b-form-group>
+              <!--
               <b-form-group
                 label="Rutina"
               >
                 <b-form-select v-model="newTaskForm.routine" :options="routineOptions"/>
+              </b-form-group>-->
+              <b-form-group v-if="isEditModal"
+                            label="Tarea completada"
+              >
+                <div class="d-flex d-inline  justify-content-center">
+                  <b-form-checkbox v-model="newTaskForm.completed"/>
+                  <div class="text-21 align-items-center justify-content-center" >
+                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+                  </div>
+                </div>
               </b-form-group>
             </b-col>
           </b-row>
