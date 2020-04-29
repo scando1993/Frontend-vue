@@ -7,8 +7,8 @@
       <div class="wrapper">
         <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
           <template
-            v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')">
-            <calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
+            v-for="(task, taskIndex) in getTopTasks()">
+            <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
           </template>
         </div>
       </div>
@@ -64,7 +64,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content">
                 <div id="scrollable_content"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-                  <calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -77,7 +77,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
                 <div id="scrollable_content_2"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -114,19 +114,7 @@
               <b-form-group
                 label="Notas"
               >
-                <b-form-textarea v-model="newTaskForm.notes"/>
-              </b-form-group>
-              <b-form-group v-if="isEditModal"
-                            label="Tarea completada"
-              >
-                <div class="d-flex d-inline align-items-center">
-                  <b-form-checkbox v-model="newTaskForm.completed"/>
-                  <div class="text-21 align-items-center">
-                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
-
-                  </div>
-                </div>
-
+                <b-form-textarea style="height: 100px;"v-model="newTaskForm.notes"/>
               </b-form-group>
 
             </b-col>
@@ -164,10 +152,21 @@
                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
               </b-form-group>
+              <!--
               <b-form-group
                 label="Rutina"
               >
                 <b-form-select v-model="newTaskForm.routine" :options="routineOptions"/>
+              </b-form-group>-->
+              <b-form-group v-if="isEditModal"
+                            label="Tarea completada"
+              >
+                <div class="d-flex d-inline  justify-content-center">
+                  <b-form-checkbox v-model="newTaskForm.completed"/>
+                  <div class="text-21 align-items-center justify-content-center" >
+                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+                  </div>
+                </div>
               </b-form-group>
             </b-col>
           </b-row>
@@ -232,6 +231,7 @@ export default {
     LTileLayer,
     CalendarTaskWidget
   },
+
   computed: {
     ...mapGetters([
       'getSelectedMapView',
@@ -299,7 +299,6 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: '',
         completed: ''
       },
       calendarList,
@@ -402,6 +401,7 @@ export default {
     },
 
     saveTask() {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       console.log('form', this.newTaskForm);
       this.$store.dispatch('POST_TASK', this.newTaskForm)
         .then(result => {
@@ -552,16 +552,18 @@ export default {
       console.log('beforeDeleteSchedule', e);
       this.deleteTask(e.schedule);
     },
-    onBeforeUpdateSchedule(e) {
-      // implement your code
-      console.log('Update', e);
-      e.schedule.start = e.start;
-      e.schedule.end = e.end;
-      const id = e.schedule.id;
-      const taskSelected = this.TASKS_LIST[id];
-      console.log('update task', taskSelected);
+    onClickChip(task) {
+      // const taskSelected = task;
+      console.log('tarea', task);
+
+      this.setFormData(task);
+      this.isEditModal = true;
+
+      this.setShowNewTaskModal(true);
+    },
+    setFormData(taskSelected) {
       this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
+        category: new Number(taskSelected.additionalInfo.category),
         name: taskSelected.additionalInfo.name,
         address: taskSelected.additionalInfo.address,
         lat: taskSelected.additionalInfo.lat,
@@ -573,7 +575,30 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine,
+        completed: taskSelected.additionalInfo.completed
+      };
+    },
+    onBeforeUpdateSchedule(e) {
+      // implement your code
+      console.log('Update', e);
+      e.schedule.start = e.start;
+      e.schedule.end = e.end;
+      const id = e.schedule.id;
+      const taskSelected = this.TASKS_LIST[id];
+      console.log('update task', taskSelected);
+      this.newTaskForm = {
+        category: new Number(taskSelected.additionalInfo.category),
+        name: taskSelected.additionalInfo.name,
+        address: taskSelected.additionalInfo.address,
+        lat: taskSelected.additionalInfo.lat,
+        lng: taskSelected.additionalInfo.lng,
+        vendor_id: taskSelected.customerId.id,
+        notes: taskSelected.additionalInfo.notes,
+        client_id: taskSelected.additionalInfo.client_data.id,
+        start_date: taskSelected.additionalInfo.start_date,
+        start_time: taskSelected.additionalInfo.start_time,
+        duration: taskSelected.additionalInfo.duration,
+        reminder: taskSelected.additionalInfo.reminder,
         completed: taskSelected.additionalInfo.completed
       };
       this.editTask(taskSelected.id.id);
@@ -593,11 +618,11 @@ export default {
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
       this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
+        category: new Number(taskSelected.additionalInfo.category),
         name: taskSelected.additionalInfo.name,
         address: taskSelected.additionalInfo.address,
-        lat: taskSelected.additionalInfo.category,
-        lng: taskSelected.additionalInfo.category,
+        lat: 0,
+        lng: 0,
         vendor_id: taskSelected.customerId.id,
         notes: taskSelected.additionalInfo.notes,
         client_id: taskSelected.additionalInfo.category,
@@ -605,7 +630,6 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine,
         completed: taskSelected.additionalInfo.completed
       };
       this.setShowNewTaskModal(true);
@@ -630,7 +654,6 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: '',
         completed: ''
       };
     },
@@ -664,6 +687,7 @@ export default {
       }
     },
     editTask(task_id) {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       const payload = {
         task_id: task_id,
         data: this.newTaskForm
@@ -676,7 +700,7 @@ export default {
     createOrUpdate() {
       console.log('is edit', this.isEditModal);
 
-      if ( this.isEditModal ) {
+      if (this.isEditModal) {
         console.log('In edit task');
         const schedule_id = this.scheduleSelected.id;
         const task_id = this.TASKS_LIST[schedule_id].id.id;
@@ -686,6 +710,34 @@ export default {
         console.log('IN save task');
         this.saveTask();
       }
+    },
+    categoryCoder(x) {
+      var value = 0;
+      if(x === 'now')
+        value = 1;
+      else if(x==="soon")
+        value = 2
+      else if (x==="early")
+        value = 3
+      else if(x==="expired")
+        value = 4;
+      else
+        value = 5
+      return value
+    },
+    sortTop(a, b ) {
+      var value1 = this.categoryCoder(a.additionalInfo.status);
+      var value2 = this.categoryCoder(b.additionalInfo.status);
+      return value1 - value2
+    },
+    getTopTasks() {
+      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
+      console.log('newArray--------------', newArray);
+      //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
+      const final = newArray.sort(this.sortTop);
+      console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
+      return final;
+
     }
 
 
