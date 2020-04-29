@@ -2,18 +2,25 @@
 	<div class="box">
 		<client-navbar/>
 		<div id="body" class="view-content">
-			<div class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
+			<div ref ="cards_container" class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
 <!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
-				<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-				     v-if="!getShowHistoryForm">
-					<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
-					<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
-					<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
-					<div v-else>No hay contenido</div>
-				</div>
+
+					<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
+						 v-if="!getShowHistoryForm">
+						<client_new-task_form v-if="SHOW_NEW_TASK_CLEINT_FORM"/>
+						<div v-else>
+							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
+							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
+							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
+							<div v-else>No hay contenido</div>
+						</div>
+
+					</div>
 				<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-				                          v-else
-				                          :tasks_list_id="0"/>
+										  v-else
+										  :tasks_list_id="0"/>
+
+
 				<div v-if="getShowClientForm" class="client-content order-lg-last order-xl-last order-sm-first order-md-first">
 					<client-form/>
 				</div>
@@ -34,29 +41,35 @@ import { mapGetters } from 'vuex';
 import ClientForm from './clientForm';
 import ClientTaskHistoryForm from './clientTaskHistoryForm';
 import client_progressBar from './client.progressBar';
+import client_newTask_form from './client.newTask.form';
 
 export default {
-  name: 'taskGrid',
-  components: {
-    ClientForm,
-	  ClientNavbar,
-	  ClientsByVendor,
-	  ClientsByOrder,
-	  ClientsByTask,
-	  ClientTaskHistoryForm,
-	  client_progressBar
-  },
-  data() {
-    return {};
-  },
-  created() {
-    console.log(this.getShowClientForm);
-    console.log('grouby',this.getGroupByFilter)
-  },
-  computed: {
-    ...mapGetters(['getShowClientForm', 'getGroupByFilter', 'getShowHistoryForm']),
-  },
-  methods: {}
+	name: 'taskGrid',
+	components: {
+		ClientForm,
+		ClientNavbar,
+		ClientsByVendor,
+		ClientsByOrder,
+		ClientsByTask,
+		ClientTaskHistoryForm,
+		client_progressBar,
+		client_newTask_form
+	},
+	data() {
+		return {};
+	},
+	mounted() {
+		this.a();
+	},
+	created() {
+
+		console.log(this.getShowClientForm);
+		console.log('grouby', this.getGroupByFilter)
+	},
+	computed: {
+		...mapGetters(['getShowClientForm', 'getGroupByFilter', 'getShowHistoryForm', 'SHOW_NEW_TASK_CLEINT_FORM']),
+	},
+	methods: {}
 };
 </script>
 

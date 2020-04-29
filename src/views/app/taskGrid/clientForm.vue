@@ -209,7 +209,7 @@
                     @click="editClient"
                     :class="{'client-modal-btn-pressed': editButton}">Editar
             </button>
-            <button class="btn client-modal-btn" type="button">Crear Tarea</button>
+            <button class="btn client-modal-btn" type="button" @click="showNewTaskForm()">Crear Tarea</button>
           </div>
         </div>
       </form>
@@ -330,7 +330,9 @@ export default {
         limit: 10000
       };
       this.$store.dispatch('GET_CLIENT_HISTORY', payload);
+      this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
       this.showClientHistoryForm();
+
     },
     addNewClient: function () {
       this.$store.dispatch('POST_CLIENT', this.formData)
@@ -434,6 +436,11 @@ export default {
           },
         ]
       };
+    },
+    showNewTaskForm() {
+      this.$store.dispatch('RESET_CLIENT_HISTORY');
+      this.$store.dispatch('hideClientTaskHistory');
+      this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', true);
     }
   },
 };
