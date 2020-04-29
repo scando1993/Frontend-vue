@@ -97,9 +97,11 @@ export default {
       			tmp.vendor = 'N/A';
           }
           clients.push(tmp);
-        }
-        for(let j = 0; j < list[i].tasks.length; j++){
-          let tmp = list[i].tasks[j];
+			continue
+		}
+		  // for(let j = 0; j < list[i].tasks.length; j++){
+		  const tasks = list[i].tasks;
+		  let tmp = tasks[tasks.length -1];
           tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
           tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
           tmp.activity = {
@@ -110,7 +112,7 @@ export default {
           console.log('tem2', tmp);
           clients.push(tmp);
         }
-      }
+     // }
       console.log('cleints list', clients);
       return clients;
     },

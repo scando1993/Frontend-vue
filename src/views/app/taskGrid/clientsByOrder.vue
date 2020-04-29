@@ -97,9 +97,11 @@ export default {
             company_name: 'N/A'
           };
           clients.push(tmp);
+          continue
         }
-        for ( let j = 0; j < list[i].tasks.length; j++ ) {
-          let tmp = list[i].tasks[j];
+        //for (let j = 0; j < list[i].tasks.length; j++) {
+        const tasks = list[i].tasks;
+        let tmp = tasks[tasks.length -1];
           tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
           tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
           tmp.activity = {
@@ -112,7 +114,7 @@ export default {
           //tmp['vendor'] = list[i].memberName;
           clients.push(tmp);
         }
-      }
+      // }
       console.log('clients list', clients);
 
       return clients;
