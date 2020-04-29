@@ -45,6 +45,32 @@ export default {
             reject(error);
           });
       });
-    }
+    },
+    CHANGE_PASSWORD: ({ commit }, data) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+        };
+        /*
+        data = {
+          "currentPassword": "",
+          "newPassword": ""
+         }
+         */
+        axios
+            .post(process.env.VUE_APP_API + '/Profile/changePassword', data, config)
+            .then(({ data, status }) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              resolve({ data, status });
+            })
+            .catch(error => {
+              reject(error);
+            });
+      });
+    },
   }
 };
