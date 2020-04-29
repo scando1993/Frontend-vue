@@ -95,6 +95,9 @@ export default {
       var new_tasks = [];
       for(var i = 0; i < list.length; i++) {
         const client = list[i];
+        if(client.additionalInfo.social_reason === '_private_'){
+          continue
+        }
         const tasks = client.tasks;
         const aaa = tasks.length;
         if(tasks.length === 0) {

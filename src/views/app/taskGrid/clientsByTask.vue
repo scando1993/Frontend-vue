@@ -76,7 +76,12 @@ export default {
     	console.log('aca en order' , list);
       let clients = [];
       for(let i = 0; i < list.length; i++){
-      	if(list[i].tasks.length === 0) {
+		  const client = list[i];
+		  if(client.additionalInfo.social_reason === '_private_'){
+		  	continue
+		  }
+
+		  if(list[i].tasks.length === 0) {
       		let tmp = {
       			activity: {
               state: 'Without contact',
