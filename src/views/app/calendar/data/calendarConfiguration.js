@@ -46,11 +46,11 @@ export const calendarTasksColors = {
     bgColor: '#eab5a9',
     color: '#d45454'
   },
-  'soon': {
+  'early': {
     bgColor: '#fae9b8',
     color: '#f5ce54'
   },
-  'early': {
+  'soon': {
     bgColor: '#e7edc0',
     color: '#c7db5f'
   },
