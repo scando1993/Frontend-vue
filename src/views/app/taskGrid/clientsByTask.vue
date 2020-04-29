@@ -6,7 +6,7 @@
 			                    :task="task"
 			                    :client="task.client"
 			                    v-bind:key="indexTask"/>
-			<span v-bind:key="indexTask" class="mx-auto"/>
+			<span v-bind:key="'_span_' + indexTask" class="mx-auto"/>
 		</template>
 	</div>
 </template>

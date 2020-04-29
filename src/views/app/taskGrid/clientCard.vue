@@ -1,37 +1,43 @@
 <template>
-	<div class="client-card shadow mb-2 mr-0" v-on:click="showClientInfo(task.client.id.id)">
-		<div class="card-header p-1" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-		<div class="client-card-body">
-			<div class="d-flex flex-row justify-content-between mb-2">
-				<div class="mr-auto">
-					<b>{{client.additionalInfo.social_reason}}</b>
-					<p>{{client.additionalInfo.name}}</p>
-				</div>
-				<div class="">
-					<button class="client-task-btn-history" v-on:click="showClientHistoryForm()">Historial</button>
-				</div>
-			</div>
-			<div v-if="show_vendor" class="row mb-2">
-				<div class="col-12">
-					<p><b>Vendedor: </b>{{task.vendor}}</p>
-				</div>
-			</div>
-			<div class="row mb-2">
-				<div class="col-12">
-					<b>Proxima actividad</b>
-					<span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
-				</div>
-			</div>
-			<div class="row mb-1">
-				<div class="col-12">
-					<p>{{task.activity.name}}</p>
-				</div>
-			</div>
-			<div class="row">
-				<p class="mb-2 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
-			</div>
-		</div>
-	</div>
+  <div class="client-card shadow mb-2 mr-0"
+       v-on:click="showClientInfo({vendor: task.vendor, client: client.additionalInfo})">
+    <div class="lock-overlay" v-if="lock" >
+      <img src="@/assets/images/svg/lock.png" class="lock-image"/>
+    </div>
+    <div v-blur="blurConfigs">
+      <div class="card-header p-1" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+      <div class="client-card-body">
+        <div class="d-flex flex-row justify-content-between mb-2">
+          <div class="mr-auto">
+            <b>{{client.additionalInfo.social_reason}}</b>
+            <p>{{client.additionalInfo.name}}</p>
+          </div>
+          <div class="">
+            <button class="client-task-btn-history" v-on:click="showClientHistoryForm()">Historial</button>
+          </div>
+        </div>
+        <div v-if="show_vendor" class="row mb-2">
+          <div class="col-12">
+            <p><b>Vendedor: </b>{{task.vendor}}</p>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-12">
+            <b>Proxima actividad</b>
+            <span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-12">
+            <p>{{task.activity.name}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <p class="mb-2 col-12 text-italic">Ultima acción: {{formatDate(task.last_activity)}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -42,7 +48,7 @@ export default {
   props: {
     task_id: {
       type: Number,
-	    required: true
+      required: true
     },
     show_vendor: {
       type: Boolean,
@@ -54,14 +60,39 @@ export default {
     },
     client: {
       type: Object
+    },
+    lock: {
+      type: Boolean,
+      default: false
     }
   },
   data: function (){
-    return {};
+    return {
+    };
   },
-  computed:{},
+  computed:{
+    blurConfigs: function(){
+      return {
+        isBlurred: this.lock,
+        opacity: 0.7,
+        filter: 'blur(5px)',
+        transition: 'all .3s linear'
+      };
+    },
+    imageLockDimensions: function(){
+      return {
+        width: '100px',
+        height: '100px'
+      };
+    },
+  },
+  mounted() {
+    console.log(this.client.additionalInfo);
+    this.lock = !this.client.additionalInfo.activated;
+  },
   methods:{
     ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK', 'showClientHistoryForm']),
+
     getTaskName(tasks) {
       let name = 'N/A';
       try {
@@ -100,8 +131,8 @@ export default {
       }
     },
 
-    showClientInfo: function (client_id){
-      this.showClientForm(client_id);
+    showClientInfo: function (client){
+      this.showClientForm(client);
     }
   }
 };
@@ -153,5 +184,24 @@ export default {
 		font-size: 0.8rem;
 		line-height: 0.75em;
 	}
+
+  .lock-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #fff;
+    background-color: rgba(231, 232, 236, 0.3);
+    z-index: 9;
+  }
+
+  .lock-image {
+    margin: 0 auto;
+    width: 50px;
+    height: 60px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 
 </style>

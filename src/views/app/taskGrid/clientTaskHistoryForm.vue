@@ -8,7 +8,8 @@
 			</div>
 		</div>
 		<div class="card-body">
-			<template v-for="(task, indexTask) in prepareData(history)">
+      <div v-if="prepareData(history).length === 0"> No hay historial disponible </div>
+			<template v-else v-for="(task, indexTask) in prepareData(history)">
 				<client-task-widget :task="task" v-bind:key="indexTask"/>
 			</template>
 		</div>

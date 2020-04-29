@@ -1,26 +1,26 @@
 <template>
-	<vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
-		<div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
-			<template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
-				<div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
-				     class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
-				<div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
-					<h3 class="text-center">{{vendor_name(vendor)}}</h3>
-					<div>
-						<b-row>
-							<b-col md="6" sm="6" xl="6" lg="6"
-							       v-for="(task, indextask) in filterSearch(prepareTask(vendor.clients, vendor))"
-							       :key="indexVendor + '_' + indextask">
-								<client-card-widget :task_id="indextask"
-								                    :task="task"
-								                    :client="task.client"/>
-							</b-col>
-						</b-row>
-					</div>
-				</div>
-			</template>
-		</div>
-	</vue-perfect-scrollbar>
+  <vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
+    <div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
+      <template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
+        <div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
+             class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
+        <div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
+          <h3 class="text-center">{{vendor_name(vendor)}}</h3>
+          <div>
+            <b-row>
+              <b-col md="6" sm="6" xl="6" lg="6"
+                     v-for="(task, indextask) in filterSearch(prepareTask(vendor.clients, vendor))"
+                     :key="indexVendor + '_' + indextask">
+                <client-card-widget :task_id="indextask"
+                                    :task="task"
+                                    :client="task.client"/>
+              </b-col>
+            </b-row>
+          </div>
+        </div>
+      </template>
+    </div>
+  </vue-perfect-scrollbar>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default {
     console.log('mounted in client by vendor');
     const vendorPayload = {
       limit: 1000,
-		addClients: true
+      addClients: true
     };
     const clientPayload = {
       limit: 1000
@@ -58,11 +58,15 @@ export default {
       'getInactiveClients',
       'getNotContactClients']),
 
-	  vendor_name: function (vendor) {
-		  return vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName;
-	  },
+    vendor_name(vendor) {
+      try {
+        return vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName;
+      } catch ( e ) {
+        return '';
+      }
+    },
 
-	  parseStatus(status) {
+    parseStatus(status) {
       var newStatus = '';
       switch (status) {
       case 'expired':
@@ -86,41 +90,41 @@ export default {
     },
     prepareTask(list, vendor) {
 
-    	console.log('Vendor', vendor);
-    	console.log('Vendor clients', list);
-    	var new_tasks = [];
-    	for(var i = 0; i < list.length; i++) {
-    		const client = list[i];
-			const tasks = client.tasks;
-			const aaa = tasks.length;
-			if(tasks.length === 0) {
-				const empty = {
-					vendor: vendor.additionalInfo.firstName,
-					last_activity: 'N/A',
-					client: client,
-					activity: {
-						state: 'Without contact',
-						name: 'N/A'
-					}
-				};
-				new_tasks.push(empty);
-				continue;
-			}
-			//for (var j = 0; j < tasks.length; j++) {
-				//const task = tasks[j];
-				const task = tasks[tasks.length -1];
+      console.log('Vendor', vendor);
+      console.log('Vendor clients', list);
+      var new_tasks = [];
+      for(var i = 0; i < list.length; i++) {
+        const client = list[i];
+        const tasks = client.tasks;
+        const aaa = tasks.length;
+        if(tasks.length === 0) {
+          const empty = {
+            vendor: vendor.additionalInfo.firstName,
+            last_activity: 'N/A',
+            client: client,
+            activity: {
+              state: 'Without contact',
+              name: 'N/A'
+            }
+          };
+          new_tasks.push(empty);
+          continue;
+        }
+        //for (var j = 0; j < tasks.length; j++) {
+        //const task = tasks[j];
+        const task = tasks[tasks.length -1];
 
-				task.activity = {
-					state: client.additionalInfo.status,
-					name: task.additionalInfo.name
-				};
-				task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
-				task['last_activity'] = task.additionalInfo.tui_data ?  new Date(task.additionalInfo.tui_data.start) : 'N/A';
-				task['client'] = client;
-				console.log('task', task);
-				new_tasks.push(task);
-			// }
-		}
+        task.activity = {
+          state: client.additionalInfo.status,
+          name: task.additionalInfo.name
+        };
+        task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
+        task['last_activity'] = task.additionalInfo.tui_data ?  new Date(task.additionalInfo.tui_data.start) : 'N/A';
+        task['client'] = client;
+        console.log('task', task);
+        new_tasks.push(task);
+        // }
+      }
       console.log('new list', new_tasks);
       return new_tasks;
     },
@@ -170,12 +174,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.scrollable {
-		width: 100%;
-		/*height: 500px;*/
-		position: relative;
-		overflow-x: scroll;
-		overflow-y: scroll;
-		height: 100%
-	}
+  .scrollable {
+    width: 100%;
+    /*height: 500px;*/
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: 100%
+  }
 </style>
