@@ -401,6 +401,7 @@ export default {
     },
 
     saveTask() {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       console.log('form', this.newTaskForm);
       this.$store.dispatch('POST_TASK', this.newTaskForm)
         .then(result => {
@@ -686,6 +687,7 @@ export default {
       }
     },
     editTask(task_id) {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       const payload = {
         task_id: task_id,
         data: this.newTaskForm
