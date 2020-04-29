@@ -48,6 +48,7 @@
     "vue-lazyload": "^1.2.6",
     "vue-material-design-icons": "^4.4.0",
     "vue-meta": "^2.2.1",
+    "vue-moment": "^4.1.0",
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.6",
     "vue-simple-calendar": "^4.2.2",
@@ -124,9 +125,9 @@
       "no-undef": [
         2
       ],
-	    "mixed-spaces-and-tabs": [
-		    2
-	    ]
+      "mixed-spaces-and-tabs": [
+        2
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
