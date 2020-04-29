@@ -7,13 +7,11 @@
 
 					<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
 						 v-if="!getShowHistoryForm">
-						<client_new-task_form v-if="SHOW_NEW_TASK_CLEINT_FORM"/>
-						<div v-else>
+
 							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
 							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
 							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
 							<div v-else>No hay contenido</div>
-						</div>
 
 					</div>
 				<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
@@ -26,6 +24,8 @@
 				</div>
 			</div>
 		</div>
+		<client_new-task_form/>
+
 		<div id ="progressBar">
 			<client_progressBar/>
 		</div>

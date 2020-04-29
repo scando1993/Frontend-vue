@@ -462,10 +462,11 @@ export default {
       };
     },
     showNewTaskForm() {
-      this.$store.dispatch('RESET_CLIENT_HISTORY');
-      this.$store.dispatch('hideClientTaskHistory');
-      this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', true);
-    }
+      // this.$store.dispatch('RESET_CLIENT_HISTORY');
+      // this.$store.dispatch('hideClientTaskHistory');
+      // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', true);
+      this.$bvModal.show("new_task_form")
+    },
   },
 };
 </script>
