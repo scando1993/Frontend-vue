@@ -229,7 +229,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([ 'getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST' ]),
+    ...mapGetters([ 'getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST', 'CLIENT_SELECTED' ]),
     formData: {
       get() {
         if ( this.getFormClientId() === '' ) {
@@ -285,8 +285,8 @@ export default {
           }
           return {
             name: client.name,
-            lat: '0',
-            lng: '0',
+            lat: 0,
+            lng: 0,
             social_reason: client.social_reason,
             address: client.address,
             vendor: data.vendor === 'N/A' ? { value: 0, text: 'N/A' } : this.VENDOR_LIST.map(x => {
@@ -301,8 +301,8 @@ export default {
       }
       return {
         name: '',
-        lat: '0',
-        lng: '0',
+        lat: 0,
+        lng: 0,
         social_reason: '',
         address: '',
         vendor: {
@@ -341,7 +341,30 @@ export default {
             limit: 1000,
             addTasks: true
           };
-          this.$store.dispatch('GET_CLIENTS_LIST', payload);
+          const client = response.data.data;
+          console.log('cliet........', client);
+          const client_id = client.id.id;
+          const setClientVendorPayload = {
+            client_id: client_id,
+            vendor_id: this.vendorSelected
+          };
+          this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
+                  .then(response2 => {
+                    const payload = {
+                      limit: 1000,
+                      addTasks: true,
+                      addVendor: true
+                    };
+                    this.$store.dispatch('GET_VENDOR_LIST', payload);
+                  })
+                  .catch( e => {
+                    const payload = {
+                      limit: 1000,
+                      addTasks: true,
+                      addVendor: true
+                    };
+                    this.$store.dispatch('GET_VENDOR_LIST', payload);
+                  });
         });
       this.hideForm();
     },
@@ -389,16 +412,17 @@ export default {
     editClient: function () {
       if ( this.editButton ) {
         // seccond edit
-        this.formData.client_id = this.getFormClientId();
+        this.formData.client_id = this.CLIENT_SELECTED.id.id;
         this.$store.dispatch('UPDATE_CLIENT', this.formData)
           .then(response => {
             const setClientVendorPayload = {
-              client_id: this.getFormClientId(),
+              client_id: this.CLIENT_SELECTED.id.id,
               vendor_id: this.vendorSelected
             };
             this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
               .then(response2 => {
                 const payload = {
+                  limit: 1000,
                   limit: 1000,
                   addTasks: true,
                   addVendor: true
