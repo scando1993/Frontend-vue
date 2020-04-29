@@ -17,6 +17,8 @@ import vendorData from './modules/VendorData';
 import taskData from './modules/taskData';
 import teamData from './modules/teamData';
 import profileData from './modules/profileData';
+import reportData from './modules/reportData';
+import reportsNavbar from './modules/reportsNavbar';
 
 // Load Vuex
 Vue.use(Vuex);
@@ -40,8 +42,9 @@ export default new Vuex.Store({
     vendorData,
     taskData,
     teamData,
-    profileData
-  
+    profileData,
+    reportsNavbar,
+    reportData
 }
 });
 
