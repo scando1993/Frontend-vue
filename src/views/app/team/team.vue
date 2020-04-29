@@ -1,10 +1,17 @@
 <template>
     <div>
         <team-navbar v-if="loggedInUser.admin"/>
-        <div v-b-modal.m-new-admin id="list_header" class="d-flex justify-content-end btn">
-            <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
-            </i>
-            <p  class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo integrante</p>
+        <div  id="list_header" class="d-flex justify-content-end btn">
+            <div v-b-modal.m-new-admin>
+                <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
+                </i>
+                <p  class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo integrante</p>
+            </div>
+            <div  @click="onAdminClick()">
+                <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
+                </i>
+                <p  class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo admin</p>
+            </div>
         </div>
 
         <vue-perfect-scrollbar>
@@ -73,10 +80,10 @@
             </template>
         </b-modal>
 
-        <b-modal id="m-new-admin" centered title="Confirmar" hide-footer>
+        <b-modal id="m-new-admin" centered title="Confirmar" @hide="hideNewMemberModal" hide-footer>
             <div class="d-flex justify-content-center ">
                 <p style="text-align: center" class="text-24">
-                    Elige nuevo admin
+                    {{getTitle}}
                 </p>
             </div>
             <div>
@@ -116,6 +123,8 @@ export default {
       boxOne: '',
       nameState: null,
       teamData: teamDummyData,
+        modal_title: "Añade un nuevo miembro",
+        isAdminModal: false,
       newMemberForm: {
         name: 'New Member',
         lastname: '',
@@ -130,7 +139,13 @@ export default {
   },
   computed:{
     ...mapGetters(['loggedInUser']),
-    ...mapGetters(['TEAM'])
+    ...mapGetters(['TEAM']),
+      getTitle: function () {
+          if(this.isAdminModal) {
+              return "Añade nuevo administrador"
+          }
+          return "Añade nuevo miembro"
+      }
   },
   methods: {
     changeToCalendar() {
@@ -170,20 +185,28 @@ export default {
       this.$bvModal.hide('m-confirm-delete');
     },
     addNewMember() {
-      //this.teamData.push(Object.assign({}, this.newMemberForm));
-      this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
-          .then(response => {
-              this.$store.dispatch('GET_TEAM');
-          })
-          .catch(error =>{
+        if(this.isAdminModal){
+            this.newAdmin()
+        }
+        else {
+            //this.teamData.push(Object.assign({}, this.newMemberForm));
+            this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
+                .then(response => {
+                    this.$store.dispatch('GET_TEAM');
+                })
+                .catch(error =>{
 
-          });
-        this.hideNewMemberModal();
+                });
+            this.hideNewMemberModal();
+        }
+
     },
     showNewMemberModal () {
       this.$modal.show('m-new-admin');
     },
     hideNewMemberModal () {
+        console.log("en hide")
+        this.isAdminModal = false;
       this.newMemberForm.email = '';
       this.$bvModal.hide('m-new-admin');
     },
@@ -211,6 +234,21 @@ export default {
           const condition1 = this.getMemberType(member) !== 'Administrador';
           const condition2 = this.loggedInUser.admin;
           return condition1 && condition2;
+      },
+      onAdminClick() {
+          this.isAdminModal = true;
+          this.$bvModal.show('m-new-admin');
+
+      },
+      newAdmin() {
+          this.$store.dispatch('INVITE_ADMIN', this.newMemberForm.email)
+              .then(response => {
+                  this.$store.dispatch('GET_TEAM');
+              })
+              .catch(error =>{
+
+              });
+          this.hideNewMemberModal();
       }
   }
 };
