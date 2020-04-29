@@ -81,6 +81,10 @@ export default {
     orderClientByVendors(list) {
       let clients = [];
       for ( let i = 0; i < list.length; i++ ) {
+        const client = list[i];
+        if(client.additionalInfo.social_reason === '_private_'){
+          continue
+        }
         if ( list[i].tasks.length === 0 ) {
           let tmp = {
             activity: {
