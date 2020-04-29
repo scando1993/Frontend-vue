@@ -189,6 +189,9 @@ export default {
     },
     getImageForUser (value){
       let images = require.context('@/assets/images/faces/', false, /\.jpg$/);
+      if(value > 5) {
+          value = 5
+      }
       return images('./' + value + '.jpg');
     },
       getMemberType(member) {
