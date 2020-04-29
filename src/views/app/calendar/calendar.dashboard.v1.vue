@@ -231,6 +231,7 @@ export default {
     LTileLayer,
     CalendarTaskWidget
   },
+
   computed: {
     ...mapGetters([
       'getSelectedMapView',
@@ -298,7 +299,6 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: '',
         completed: ''
       },
       calendarList,
@@ -554,12 +554,15 @@ export default {
     onClickChip(task) {
       // const taskSelected = task;
       console.log('tarea', task);
+
       this.setFormData(task);
+      this.isEditModal = true;
+
       this.setShowNewTaskModal(true);
     },
     setFormData(taskSelected) {
       this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
+        category: new Number(taskSelected.additionalInfo.category),
         name: taskSelected.additionalInfo.name,
         address: taskSelected.additionalInfo.address,
         lat: taskSelected.additionalInfo.lat,
@@ -571,7 +574,6 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine || '',
         completed: taskSelected.additionalInfo.completed
       };
     },
@@ -584,7 +586,7 @@ export default {
       const taskSelected = this.TASKS_LIST[id];
       console.log('update task', taskSelected);
       this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
+        category: new Number(taskSelected.additionalInfo.category),
         name: taskSelected.additionalInfo.name,
         address: taskSelected.additionalInfo.address,
         lat: taskSelected.additionalInfo.lat,
@@ -596,7 +598,6 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine,
         completed: taskSelected.additionalInfo.completed
       };
       this.editTask(taskSelected.id.id);
@@ -616,11 +617,11 @@ export default {
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
       this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
+        category: new Number(taskSelected.additionalInfo.category),
         name: taskSelected.additionalInfo.name,
         address: taskSelected.additionalInfo.address,
-        lat: taskSelected.additionalInfo.category,
-        lng: taskSelected.additionalInfo.category,
+        lat: 0,
+        lng: 0,
         vendor_id: taskSelected.customerId.id,
         notes: taskSelected.additionalInfo.notes,
         client_id: taskSelected.additionalInfo.category,
@@ -628,7 +629,6 @@ export default {
         start_time: taskSelected.additionalInfo.start_time,
         duration: taskSelected.additionalInfo.duration,
         reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine,
         completed: taskSelected.additionalInfo.completed
       };
       this.setShowNewTaskModal(true);
@@ -653,7 +653,6 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: '',
         completed: ''
       };
     },
