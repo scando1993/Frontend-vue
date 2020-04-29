@@ -1,5 +1,5 @@
 <template>
-  <div class="task" :style="{'background-color': getBackgroundColor()}">
+  <div class="task" @click="onClickChip()" :style="{'background-color': getBackgroundColor()}">
     <span id="banner" class="banner" :style="{'background-color': getTaskColor()}"/>
     <div class="task-body mr-auto">
       <p><strong>{{!task.additionalInfo.client_data ? 'N/A'
@@ -38,6 +38,10 @@ export default {
     },
     getBackgroundColor() {
       return calendarTasksColors[this.task.additionalInfo.status].bgColor;
+    },
+    onClickChip() {
+      this.$emit('chip_click', this.task);
+
     }
   }
 };

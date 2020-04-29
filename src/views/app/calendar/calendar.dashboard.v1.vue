@@ -8,7 +8,7 @@
         <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
           <template
             v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')">
-            <calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
+            <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
           </template>
         </div>
       </div>
@@ -64,7 +64,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content">
                 <div id="scrollable_content"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-                  <calendar-task-widget :task="task" :key="taskIndex" class="mx-auto"/>
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -77,7 +77,7 @@
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
                 <div id="scrollable_content_2"
                      v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </div>
               </vue-perfect-scrollbar>
             </div>
@@ -550,6 +550,30 @@ export default {
       console.log('En el delete');
       console.log('beforeDeleteSchedule', e);
       this.deleteTask(e.schedule);
+    },
+    onClickChip(task) {
+      // const taskSelected = task;
+      console.log('tarea', task);
+      this.setFormData(task);
+      this.setShowNewTaskModal(true);
+    },
+    setFormData(taskSelected) {
+      this.newTaskForm = {
+        category: taskSelected.additionalInfo.category,
+        name: taskSelected.additionalInfo.name,
+        address: taskSelected.additionalInfo.address,
+        lat: taskSelected.additionalInfo.lat,
+        lng: taskSelected.additionalInfo.lng,
+        vendor_id: taskSelected.customerId.id,
+        notes: taskSelected.additionalInfo.notes,
+        client_id: taskSelected.additionalInfo.client_data.id,
+        start_date: taskSelected.additionalInfo.start_date,
+        start_time: taskSelected.additionalInfo.start_time,
+        duration: taskSelected.additionalInfo.duration,
+        reminder: taskSelected.additionalInfo.reminder,
+        routine: taskSelected.additionalInfo.routine || '',
+        completed: taskSelected.additionalInfo.completed
+      };
     },
     onBeforeUpdateSchedule(e) {
       // implement your code
