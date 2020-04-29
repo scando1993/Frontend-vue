@@ -5,15 +5,25 @@ export default {
     client_list: [],
     vendor_task_list: [],
     client_history: [],
-    clients_progress: {}
+    clients_progress: {},
+    client_selected: {},
+    show_new_task_client_form: false
   },
   getters: {
+    SHOW_NEW_TASK_CLEINT_FORM: state => state.show_new_task_client_form,
+    CLIENT_SELECTED: state => state.client_selected,
     CLIENTS_LIST: state => state.client_list,
     VENDOR_TASKS: state => state.vendor_task_list,
     CLIENT_HISTORY: state => state.client_history,
     CLIENT_PROGRESS: state => state.clients_progress
   },
   mutations: {
+    SET_SHOW_NEW_TASK_CLIENT_FORM(state, payload) {
+      state.show_new_task_client_form = payload;
+    },
+    SET_CLIENT_SELECTED(state, payload) {
+      state.client_selected = payload;
+    },
     SET_CLIENTS_PROGRESS(state, payload) {
       state.clients_progress = payload;
     },
@@ -32,6 +42,12 @@ export default {
     }
   },
   actions: {
+    SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION: ({commit}, data) => {
+      commit('SET_SHOW_NEW_TASK_CLIENT_FORM', data);
+    },
+    SET_CLIENT_SELECTED_ACTION: ({commit}, data) => {
+      commit('SET_CLIENT_SELECTED', data);
+    },
     RESET_CLIENT_HISTORY: ({commit}) => {
         commit('SET_CLIENT_HISTORY', []) ;
     },

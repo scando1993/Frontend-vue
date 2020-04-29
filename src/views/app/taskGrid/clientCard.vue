@@ -1,6 +1,6 @@
 <template>
   <div class="client-card shadow mb-2 mr-0"
-       v-on:click="showClientInfo({vendor: task.vendor, client: client.additionalInfo})">
+       v-on:click="showClientInfo({vendor: task.vendor, client: client.additionalInfo}, client)">
     <div class="lock-overlay" v-if="lock" >
       <img src="@/assets/images/svg/lock.png" class="lock-image"/>
     </div>
@@ -131,7 +131,8 @@ export default {
       }
     },
 
-    showClientInfo: function (client){
+    showClientInfo: function (client, real_client){
+      this.$store.dispatch('SET_CLIENT_SELECTED_ACTION', real_client );
       this.showClientForm(client);
     }
   }
