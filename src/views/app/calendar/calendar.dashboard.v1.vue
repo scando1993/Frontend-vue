@@ -7,7 +7,7 @@
       <div class="wrapper">
         <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
           <template
-            v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')">
+            v-for="(task, taskIndex) in getTopTasks()">
             <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
           </template>
         </div>
@@ -700,7 +700,7 @@ export default {
     createOrUpdate() {
       console.log('is edit', this.isEditModal);
 
-      if ( this.isEditModal ) {
+      if (this.isEditModal) {
         console.log('In edit task');
         const schedule_id = this.scheduleSelected.id;
         const task_id = this.TASKS_LIST[schedule_id].id.id;
@@ -710,6 +710,34 @@ export default {
         console.log('IN save task');
         this.saveTask();
       }
+    },
+    categoryCoder(x) {
+      var value = 0;
+      if(x === 'now')
+        value = 1;
+      else if(x==="soon")
+        value = 2
+      else if (x==="early")
+        value = 3
+      else if(x==="expired")
+        value = 4;
+      else
+        value = 5
+      return value
+    },
+    sortTop(a, b ) {
+      var value1 = this.categoryCoder(a.additionalInfo.status);
+      var value2 = this.categoryCoder(b.additionalInfo.status);
+      return value1 - value2
+    },
+    getTopTasks() {
+      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
+      console.log('newArray--------------', newArray);
+      //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
+      const final = newArray.sort(this.sortTop);
+      console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
+      return final;
+
     }
 
 
