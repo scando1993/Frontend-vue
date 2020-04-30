@@ -131,6 +131,20 @@ export default {
     signUserUp({ commit }, data) {
       commit('setLoading', true);
       commit('clearError');
+        const url = process.env.VUE_APP_API + '/Account/register';
+
+        axios.post(url, data)
+            .then(function (response) {
+                response = response.data;
+                commit('setLoading', false);
+
+            })
+            .catch(error => {
+                commit('setLoading', false);
+                commit('setError', error);
+            })
+
+      /*
       firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password)
@@ -150,6 +164,7 @@ export default {
           localStorage.removeItem('userInfo');
           console.log(error);
         });
+      */
     },
     signOut({ commit }) {
       // localStorage.removeItem('userInfo');
