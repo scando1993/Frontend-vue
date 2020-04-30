@@ -17,14 +17,14 @@ export const calendarList = [
   },
   {
     id: '2',
-    name: 'soon',
+    name: 'early',
     bgColor: '#fae9b8',
     color: '#f5ce54',
     borderColor: '#f5ce54'
   },
   {
     id: '3',
-    name: 'early',
+    name: 'soon',
     bgColor: '#e7edc0',
     color: '#c7db5f',
     borderColor: '#C7D963'
