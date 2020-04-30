@@ -76,41 +76,46 @@ export default {
     	console.log('aca en order' , list);
       let clients = [];
       for(let i = 0; i < list.length; i++){
-		  const client = list[i];
-		  if(client.additionalInfo.social_reason === '_private_'){
-		  	continue
-		  }
-
-		  if(list[i].tasks.length === 0) {
-      		let tmp = {
-      			activity: {
-              state: 'Without contact',
-              name: 'N/A'
-            },
-            last_activity: 'N/A',
-            client: list[i]
-			};
-      		if(list[i].vendor) {
-            tmp.vendor = list[i].vendor.additionalInfo.firstName;
+      	try {
+			const client = list[i];
+			if(client.additionalInfo.social_reason === '_private_'){
+				continue
 			}
-      		else {
-      			tmp.vendor = 'N/A';
-          }
-          clients.push(tmp);
+
+			if(list[i].tasks.length === 0) {
+				let tmp = {
+					activity: {
+						state: 'Without contact',
+						name: 'N/A'
+					},
+					last_activity: 'N/A',
+					client: list[i]
+				};
+				if(list[i].vendor) {
+					tmp.vendor = list[i].vendor.additionalInfo.firstName;
+				}
+				else {
+					tmp.vendor = 'N/A';
+				}
+				clients.push(tmp);
+				continue
+			}
+			// for(let j = 0; j < list[i].tasks.length; j++){
+			const tasks = list[i].tasks;
+			let tmp = tasks[tasks.length -1];
+			tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
+			tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
+			tmp.activity = {
+				state: list[i].additionalInfo.status,
+				name: tmp.additionalInfo.name
+			};
+			tmp.client = list[i];
+			console.log('tem2', tmp);
+			clients.push(tmp);
+		} catch (e) {
 			continue
 		}
-		  // for(let j = 0; j < list[i].tasks.length; j++){
-		  const tasks = list[i].tasks;
-		  let tmp = tasks[tasks.length -1];
-          tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
-          tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
-          tmp.activity = {
-			  state: list[i].additionalInfo.status,
-			  name: tmp.additionalInfo.name
-		  };
-          tmp.client = list[i];
-          console.log('tem2', tmp);
-          clients.push(tmp);
+
         }
      // }
       console.log('cleints list', clients);
