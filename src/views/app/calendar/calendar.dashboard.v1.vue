@@ -301,6 +301,8 @@ export default {
         reminder: '',
         completed: ''
       },
+      isChipModal: false,
+      selected_task: {},
       calendarList,
       view,
       taskView,
@@ -555,27 +557,28 @@ export default {
     onClickChip(task) {
       // const taskSelected = task;
       console.log('tarea', task);
+      this.selected_task = task;
 
       this.setFormData(task);
+      this.isChipModal = true;
       this.isEditModal = true;
-
       this.setShowNewTaskModal(true);
     },
     setFormData(taskSelected) {
       this.newTaskForm = {
-        category: new Number(taskSelected.additionalInfo.category),
-        name: taskSelected.additionalInfo.name,
-        address: taskSelected.additionalInfo.address,
+        category: new Number(taskSelected.additionalInfo.category) || null,
+        name: taskSelected.additionalInfo.name || '',
+        address: taskSelected.additionalInfo.address || '',
         lat: taskSelected.additionalInfo.lat,
         lng: taskSelected.additionalInfo.lng,
-        vendor_id: taskSelected.customerId.id,
-        notes: taskSelected.additionalInfo.notes,
-        client_id: taskSelected.additionalInfo.client_data.id,
-        start_date: taskSelected.additionalInfo.start_date,
-        start_time: taskSelected.additionalInfo.start_time,
-        duration: taskSelected.additionalInfo.duration,
-        reminder: taskSelected.additionalInfo.reminder,
-        completed: taskSelected.additionalInfo.completed
+        vendor_id: taskSelected.customerId.id || '',
+        notes: taskSelected.additionalInfo.notes|| '',
+        client_id: taskSelected.additionalInfo.client_data.id || '',
+        start_date: taskSelected.additionalInfo.start_date || '',
+        start_time: taskSelected.additionalInfo.start_time || '',
+        duration: taskSelected.additionalInfo.duration || '',
+        reminder: taskSelected.additionalInfo.reminder || '',
+        completed: taskSelected.additionalInfo.completed || null
       };
     },
     onBeforeUpdateSchedule(e) {
@@ -617,21 +620,8 @@ export default {
       console.log('On click onClickSchedule', e);
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
-      this.newTaskForm = {
-        category: new Number(taskSelected.additionalInfo.category),
-        name: taskSelected.additionalInfo.name,
-        address: taskSelected.additionalInfo.address,
-        lat: 0,
-        lng: 0,
-        vendor_id: taskSelected.customerId.id,
-        notes: taskSelected.additionalInfo.notes,
-        client_id: taskSelected.additionalInfo.category,
-        start_date: taskSelected.additionalInfo.start_date,
-        start_time: taskSelected.additionalInfo.start_time,
-        duration: taskSelected.additionalInfo.duration,
-        reminder: taskSelected.additionalInfo.reminder,
-        completed: taskSelected.additionalInfo.completed
-      };
+      this.selected_task = taskSelected;
+      this.setFormData(taskSelected);
       this.setShowNewTaskModal(true);
     },
     // eslint-disable-next-line no-unused-vars
@@ -692,20 +682,26 @@ export default {
         task_id: task_id,
         data: this.newTaskForm
       };
+      const changeStatusPayload = {
+        task_id: task_id,
+        completed: this.newTaskForm.completed
+      };
       this.$store.dispatch('UPDATE_TASK', payload)
-        .then(response => {
-          this.$store.dispatch('GET_TASKS_LIST');
-        });
+              .then(response => {
+
+                this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+                        .then(response2 => {
+                          this.$store.dispatch('GET_TASKS_LIST');
+
+                        })
+              });
     },
     createOrUpdate() {
       console.log('is edit', this.isEditModal);
 
       if (this.isEditModal) {
-        console.log('In edit task');
-        const schedule_id = this.scheduleSelected.id;
-        const task_id = this.TASKS_LIST[schedule_id].id.id;
-        this.editTask(task_id);
-        this.resetModal();
+          this.editTask(this.selected_task.id.id);
+          this.resetModal();
       } else {
         console.log('IN save task');
         this.saveTask();
@@ -731,7 +727,7 @@ export default {
       return value1 - value2
     },
     getTopTasks() {
-      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
+      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
       console.log('newArray--------------', newArray);
       //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
       const final = newArray.sort(this.sortTop);
