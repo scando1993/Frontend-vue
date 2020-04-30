@@ -130,7 +130,7 @@
                 label="Fecha"
               >
 
-                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date"
+                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date || getNow()"
                                    class="mb-2"></b-form-datepicker>
               </b-form-group>
               <b-form-group
@@ -632,6 +632,10 @@ export default {
         reminder: '',
         completed: ''
       };
+    },
+    getNow() {
+      const a = new Date();
+      return a.getFullYear() + "-" + a.getDate() + " " + a.getDay();
     },
     hideModal() {
       this.setShowNewTaskModal(false);
