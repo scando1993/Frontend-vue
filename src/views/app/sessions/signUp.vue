@@ -43,7 +43,7 @@
             <div class="p-4">
               <h1 class="mb-3 text-18">Sign Up</h1>
               <b-form @submit.prevent="submit">
-                <b-form-group label="Your Name">
+                <b-form-group label="Your First Name">
                   <b-form-input
                     class="form-control form-control-rounded"
                     label="Name"
@@ -61,6 +61,24 @@
                   >
                 </b-form-group>
 
+                <b-form-group label="Your Last Name">
+                  <b-form-input
+                          class="form-control form-control-rounded"
+                          label="Name"
+                          v-model.trim="$v.LName.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                          show
+                          variant="danger"
+                          class="error col mt-1"
+                          v-if="!$v.LName.minLength"
+                  >Name must have at least
+                    {{ $v.LName.$params.minLength.min }} letters.</b-alert
+                  >
+                </b-form-group>
+
                 <b-form-group label="Email">
                   <b-form-input
                     class="form-control form-control-rounded"
@@ -69,6 +87,24 @@
                     v-model="email"
                   >
                   </b-form-input>
+                </b-form-group>
+
+                <b-form-group label="Username">
+                  <b-form-input
+                          class="form-control form-control-rounded"
+                          label="Name"
+                          v-model.trim="$v.UserName.$model"
+                  >
+                  </b-form-input>
+
+                  <b-alert
+                          show
+                          variant="danger"
+                          class="error col mt-1"
+                          v-if="!$v.UserName.minLength"
+                  >Name must have at least
+                    {{ $v.UserName.$params.minLength.min }} letters.</b-alert
+                  >
                 </b-form-group>
 
                 <b-form-group label="Password">
@@ -148,6 +184,9 @@ export default {
     return {
       fName: '',
       email: '',
+      LName: '',
+      UserName: '',
+
       bgImage: require('@/assets/images/photo-wide-3.jpg'),
       logo: require('@/assets/images/logo.png'),
       signInImage: require('@/assets/images/photo-long-2.jpg'),
@@ -162,10 +201,18 @@ export default {
       required,
       minLength: minLength(4)
     },
+    LName: {
+      required,
+      minLength: minLength(4)
+    },
+    UserName: {
+      required,
+      minLength: minLength(4)
+    },
 
     password: {
       required,
-      minLength: minLength(5)
+      minLength: minLength(6)
     },
     repeatPassword: {
       sameAsPassword: sameAs('password')
@@ -199,7 +246,7 @@ export default {
       if (this.$v.$invalid) {
         this.submitStatus = 'ERROR';
       } else {
-        this.signUserUp({ email: this.email, password: this.password });
+        this.signUserUp({ email: this.email, password: this.password, firstName: this.fName, lastName: this.LName, username: this.UserName   });
         this.submitStatus = 'PENDING';
         setTimeout(() => {
           this.submitStatus = 'OK';
