@@ -7,7 +7,7 @@
                           :client="task.client"
                           v-bind:key="indexTask"
                           v-if="task.client.additionalInfo.social_reason !== '_private_'"
-                          :lock="Math.random() >= 0.5"
+
       />
       <span v-bind:key="'_span_' + indexTask" class="mx-auto" v-if="task.client.additionalInfo.social_reason !== '_private_'"/>
     </template>
@@ -96,6 +96,12 @@ export default {
             client: list[i],
             company_name: 'N/A'
           };
+          if(list[i].vendor) {
+            tmp.vendor = list[i].vendor.additionalInfo.firstName;
+          }
+          else {
+            tmp.vendor = 'N/A';
+          }
           clients.push(tmp);
           continue
         }
