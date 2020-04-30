@@ -1,15 +1,17 @@
 <template>
-    <div class="client-modal">
+    <b-modal id="new_task_form" hide-footer  centered hide-header size="lg">
+        <div class="client-modal">
         <div class="card-header p-1" style="background: #00b3ee"></div>
         <div class="client-modal-header">
             <div class="d-flex flex-row justify-content-between">
-                <button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
-                <p class="client-modal-heading">Nueva Tarea</p>
+                    <button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
+                    <p class="client-modal-heading">Nueva Tarea</p>
                 <div></div>
             </div>
 
         </div>
-        <div>
+            <form ref="formNewTask" @submit.stop.prevent @submit="createTask" @reset="hideForm">
+            <div>
             <b-row>
                 <b-col md="7">
                     <b-form-group
@@ -78,13 +80,15 @@
                 </b-col>
             </b-row>
         </div>
-        <div class="mt-5 d-flex justify-content-around">
-            <div>
-                <button class="btn client-modal-btn" @click="hideForm()">Cancelar</button>
-                <button class="btn client-modal-btn" @click="createTask()">Crear Tarea</button>
+            <div class="mt-5 d-flex justify-content-around">
+                <div>
+                    <button class="btn client-modal-btn" type="reset" >Cancelar</button>
+                    <button class="btn client-modal-btn" type="submit" >Crear Tarea</button>
+                </div>
             </div>
-        </div>
+            </form>
     </div>
+    </b-modal>
 </template>
 
 <script>
@@ -136,8 +140,10 @@ import {mapGetters} from 'vuex';
                 return name;
             },
             hideForm() {
-                console.log('en hide fomr');
-                this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
+                // console.log('en hide fomr');
+                // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
+                this.$bvModal.hide("new_task_form");
+
             },
             getVendorName() {
                 if(this.CLIENT_SELECTED.vendor) {
@@ -156,6 +162,9 @@ import {mapGetters} from 'vuex';
                         this.$store.dispatch('GET_TASKS_LIST');
                     });
                 this.hideForm();
+            },
+            hideNewTaskForm() {
+                this.$bvModal.hide("new_task_form");
             }
 
         }
