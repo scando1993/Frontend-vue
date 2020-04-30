@@ -14,7 +14,7 @@
       </div>
 
       <div class="row" style="height: 100%">
-        <b-col lg="9" xl="9" md="12" sm="12">
+        <b-col lg="8" xl="8" md="12" sm="12">
           <div class="card d-flex flex-row mb-1">
             <div class="card-body p-1">
               <calendar class="w-100"
@@ -55,17 +55,16 @@
             </div>
           </div>
         </b-col>
-        <b-col lg="3" xl="3" md="12" sm="12" class="d-flex flex-column pl-0">
+        <b-col lg="4" xl="4" md="12" sm="12" class="d-flex flex-column pl-0">
           <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-1" style="flex-basis: 50%;">
             <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
               <p class="text-center mb-0 card-task-header-text">Expiradas</p>
             </div>
             <div class="card-body p-2">
-              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content">
-                <div id="scrollable_content"
-                     v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
+              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
+                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
                   <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
-                </div>
+                </template>
               </vue-perfect-scrollbar>
             </div>
           </div>
@@ -74,11 +73,10 @@
               <p class="text-center mb-0 card-task-header-text">Pendientes</p>
             </div>
             <div class="card-body p-2">
-              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
-                <div id="scrollable_content_2"
-                     v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
+              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
+                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
                   <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
-                </div>
+                </template>
               </vue-perfect-scrollbar>
             </div>
           </div>
@@ -214,6 +212,8 @@ import { taskCategories, vendors, clients, routines } from './data/formData';
 import CalendarTaskView from './calendar.tasks.view';
 import CalendarTaskWidget from './calendar.task.widget';
 import CalendarProgressBar from './calendar.progressBar';
+import CalendarInnerTaskWidget from './calendar.inner.task.widget';
+import Vue from 'vue';
 
 export default {
   metaInfo: {
@@ -231,7 +231,6 @@ export default {
     LTileLayer,
     CalendarTaskWidget
   },
-
   computed: {
     ...mapGetters([
       'getSelectedMapView',
@@ -317,6 +316,8 @@ export default {
       useCreationPopup,
       useDetailPopup,
     };
+  },
+  created() {
   },
   mounted() {
     const vendor_params = {
@@ -433,36 +434,38 @@ export default {
       const id = schedule.id;
       const taskSelected = this.TASKS_LIST.find(x => {return x.additionalInfo.name === schedule.title; });
       console.log('taskTemplate', taskSelected);
-      let html = [ '<div class="d-flex flex-row flex-nowrap" style="height: 100%">' ];
       let start = this.$moment(schedule.start.toUTCString());
-      let calendar = calendarList.find(({ name }) => name === taskSelected.additionalInfo.status);
 
-      console.log('schedule Tui', schedule);
-      console.log('schedule Plani', taskSelected);
+      if ( taskSelected === null || taskSelected === undefined ){
+        return '';
+      }
 
-      if ( !isAllDay ) {
-        // html.push('<span style="background:' + schedule.borderColor + '">' + start.format('HH:mm') + '</span> ');
-        html.push(`<span class="align-self-strech" style="background:${calendar.color}; color: #fff;">`
-          + start.format('HH:mm') + '</span> ');
-      }
-      if ( schedule.isPrivate ) {
-        html.push('<span class="bx bxs-lock-alt font-size-small align-middle"></span>');
-        html.push(' Private');
-      } else {
-        // if ( schedule.isReadOnly ) {
-        //   html.push('<span class="bx bx-block font-size-small align-middle"></span>');
-        // } else if ( schedule.recurrenceRule ) {
-        //   html.push('<span class="bx bx-repeat font-size-small align-middle"></span>');
-        // } else if ( schedule.attendees.length ) {
-        //   html.push('<span class="bx bxs-user font-size-small align-middle"></span>');
-        // } else if ( schedule.location ) {
-        //   html.push('<span class="bx bxs-map font-size-small align-middle"></span>');
-        // }
-        // html.push(' ' + schedule.title);
-        html.push(`<span class="align-self-stretch" style="background:${calendar.bgColor}; flex-basis: 100%;">` + schedule.title + '</span> ');
-      }
-      html.push('' + '</div>');
-      return html.join(' ');
+      let ComponentClass = Vue.extend(CalendarInnerTaskWidget);
+      let instance = new ComponentClass({
+        propsData: { task: taskSelected, startDate: start.format('HH:mm') }
+      });
+      instance.$mount();
+      let tmpNode = document.createElement( 'div' );
+      tmpNode.appendChild( instance.$el.cloneNode( true ) );
+      let str = tmpNode.innerHTML;
+      tmpNode = null; // prevent memory leaks in IE
+      return str;
+      // let calendar = calendarList.find(({ name }) => name === taskSelected.additionalInfo.status);
+      //
+      // console.log('schedule Tui', schedule);
+      // console.log('schedule Plani', taskSelected);
+      //
+      // if ( !isAllDay ) {
+      //   // html.push('<span style="background:' + schedule.borderColor + '">' + start.format('HH:mm') + '</span> ');
+      //   html.push(`<span class="align-self-strech" style="background:${calendar.color}; color: #fff;">`
+      //     + start.format('HH:mm') + '</span> ');
+      // }
+      // html.push(`<span class="align-self-stretch" style="background:${calendar.bgColor}; flex-basis: 100%; color: #000;">` + schedule.title + '</span> ');
+      // html.push(`<div class="avatar mr-2" style="'background': ${taskSelected.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1'};` +
+      //     `'color': ${taskSelected.additionalInfo.status === 'expired' ? '#e1e4e1': '#FFFFFF'};">`+
+      //     `<div class="avatar-content">${!taskSelected.additionalInfo.client_data ? 'N/A' : taskSelected.additionalInfo.client_data.additionalInfo.name.slice(0,2)}</div></div>`);
+      // html.push('' + '</div>');
+      // return html.join(' ');
     },
 
     // map functions
@@ -739,6 +742,12 @@ export default {
     overflow-y: scroll;
   }
 
+  .card-tasks-scrollable{
+    width: auto;
+    height: 100%;
+    position: relative;
+    overflow-x: scroll;
+  }
   .card-task-header-text {
     color: #4399B6;
     font-size: 1.5em;
@@ -749,4 +758,37 @@ export default {
     @extend card-header !optional;
     background: #FFFFFF;
   }
+
+  .tui-full-calendar-time-schedule-content{
+    border-left-style: none;
+    padding: 0;
+    border-left-width: 0;
+  }
+
+  .task .avatar {
+    background-color: #e1e4e1;
+    display: flex;
+    width: 2.857em;
+    height: 2.857em;
+    margin: 2px 0;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    color: #FFFFFF;
+    //transform: translate(-8px);
+  }
+
+  .task .avatar .avatar-content {
+    top: 0;
+    font-size: 1.5em;
+    text-transform: uppercase;
+  }
+
+  .task .task-body .avatar img {
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+  }
+
 </style>
