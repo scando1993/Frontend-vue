@@ -21,7 +21,7 @@ export default {
       const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
-      const response = await axios.get(process.env.VUE_APP_API + '/Task/getAll?limit=1000&addClient=true', config);
+      const response = await axios.get(process.env.VUE_APP_API + '/Task/getAll?limit=1000&addClient=true&addVendor=true', config);
       if (!response.data.error) {
         console.log('tasks list', response.data.data.data);
         commit('SET_TASK_LIST', response.data.data.data);
