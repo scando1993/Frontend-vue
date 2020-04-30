@@ -79,35 +79,31 @@ export default {
     },
 
     orderClientByVendors(list) {
+
       let clients = [];
       for ( let i = 0; i < list.length; i++ ) {
-        const client = list[i];
-        if(client.additionalInfo.social_reason === '_private_'){
-          continue
-        }
-        if ( list[i].tasks.length === 0 ) {
-          let tmp = {
-            activity: {
-              state: 'Without contact',
-              name: 'N/A'
-            },
-            last_activity: 'N/A',
-            vendor: 'N/A',
-            client: list[i],
-            company_name: 'N/A'
-          };
-          if(list[i].vendor) {
-            tmp.vendor = list[i].vendor.additionalInfo.firstName;
+        try {
+          const client = list[i];
+          if (client.additionalInfo.social_reason === '_private_') {
+            continue
           }
-          else {
-            tmp.vendor = 'N/A';
+          if (list[i].tasks.length === 0) {
+            let tmp = {
+              activity: {
+                state: 'Without contact',
+                name: 'N/A'
+              },
+              last_activity: 'N/A',
+              vendor: 'N/A',
+              client: list[i],
+              company_name: 'N/A'
+            };
+            clients.push(tmp);
+            continue
           }
-          clients.push(tmp);
-          continue
-        }
-        //for (let j = 0; j < list[i].tasks.length; j++) {
-        const tasks = list[i].tasks;
-        let tmp = tasks[tasks.length -1];
+          //for (let j = 0; j < list[i].tasks.length; j++) {
+          const tasks = list[i].tasks;
+          let tmp = tasks[tasks.length - 1];
           tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
           tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
           tmp.activity = {
@@ -119,7 +115,10 @@ export default {
           console.log('tem2', tmp);
           //tmp['vendor'] = list[i].memberName;
           clients.push(tmp);
+        } catch (e) {
+
         }
+      }
       // }
       console.log('clients list', clients);
 
