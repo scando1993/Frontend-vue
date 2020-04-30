@@ -578,7 +578,7 @@ export default {
         start_time: taskSelected.additionalInfo.start_time || '',
         duration: taskSelected.additionalInfo.duration || '',
         reminder: taskSelected.additionalInfo.reminder || '',
-        completed: taskSelected.additionalInfo.completed || null
+        completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
       };
     },
     onBeforeUpdateSchedule(e) {
@@ -589,21 +589,7 @@ export default {
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
       console.log('update task', taskSelected);
-      this.newTaskForm = {
-        category: new Number(taskSelected.additionalInfo.category),
-        name: taskSelected.additionalInfo.name,
-        address: taskSelected.additionalInfo.address,
-        lat: taskSelected.additionalInfo.lat,
-        lng: taskSelected.additionalInfo.lng,
-        vendor_id: taskSelected.customerId.id,
-        notes: taskSelected.additionalInfo.notes,
-        client_id: taskSelected.additionalInfo.client_data.id,
-        start_date: taskSelected.additionalInfo.start_date,
-        start_time: taskSelected.additionalInfo.start_time,
-        duration: taskSelected.additionalInfo.duration,
-        reminder: taskSelected.additionalInfo.reminder,
-        completed: taskSelected.additionalInfo.completed
-      };
+      this.setFormData(taskSelected);
       this.editTask(taskSelected.id.id);
       this.$refs.tuiCalendar.invoke('updateSchedule', e.schedule.id, e.schedule.calendarId, e.schedule);
     },

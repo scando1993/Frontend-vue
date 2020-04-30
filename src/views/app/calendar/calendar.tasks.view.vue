@@ -248,7 +248,7 @@ export default {
 				start_time: taskSelected.additionalInfo.start_time || '',
 				duration: taskSelected.additionalInfo.duration || '',
 				reminder: taskSelected.additionalInfo.reminder || '',
-				completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? null :  taskSelected.additionalInfo.completed
+				completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
 			};
 		},
 		
