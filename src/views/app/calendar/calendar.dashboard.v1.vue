@@ -655,22 +655,19 @@ export default {
     resetModal() {
       this.hideModal();
     },
-    deteteTask(schedule) {
-      console.log('in delete x2', schedule);
+    deteteTask(task_id) {
 
-      const task = this.TASKS_LIST[schedule.id];
-      const task_id = task.id.id;
       this.$store.dispatch('DELETE_TASK', task_id)
         .then(x => {
           this.$store.dispatch('GET_TASKS_LIST');
         });
 
-      this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
+      // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
     },
     deleteOrCancel() {
       if ( this.isEditModal ) { // delete is avaliable
         console.log('in delete');
-        this.deteteTask(this.scheduleSelected);
+        this.deteteTask(this.selected_task.id.id);
         this.resetModal();
       } else {
         this.resetModal();
