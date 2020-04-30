@@ -11,7 +11,7 @@
          :style="{  'background': task.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1',
                     'color' : task.additionalInfo.status === 'expired' ? '#e1e4e1':'#FFFFFF'}">
       <div class="avatar-content">
-        {{!task.additionalInfo.client_data ? 'N/A' : task.additionalInfo.client_data.additionalInfo.name.slice(0,2)}}
+        {{!task.additionalInfo.vendor_data ? 'N/A' : task.additionalInfo.vendor_data.additionalInfo.firstName.slice(0,1) +  task.additionalInfo.vendor_data.additionalInfo.lastName.slice(0,1)}}
       </div>
     </div>
   </div>
