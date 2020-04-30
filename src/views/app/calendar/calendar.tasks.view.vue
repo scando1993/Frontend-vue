@@ -163,6 +163,7 @@ export default {
 			vendorOptions: vendors,
 			clientOptions: clients,
 			routineOptions: routines,
+			selected_task: null,
 
 			newTaskForm: {
 				category: '',
@@ -229,28 +230,28 @@ export default {
 
 			this.setFormData(task);
 			this.isEditModal = true;
+			this.selected_task = task;
 
 			this.setShowNewTaskModal(true);
 		},
 		setFormData(taskSelected) {
 			this.newTaskForm = {
-				category: new Number(taskSelected.additionalInfo.category),
-				name: taskSelected.additionalInfo.name,
-				address: taskSelected.additionalInfo.address,
+				category: new Number(taskSelected.additionalInfo.category) || null,
+				name: taskSelected.additionalInfo.name || '',
+				address: taskSelected.additionalInfo.address || '',
 				lat: taskSelected.additionalInfo.lat,
 				lng: taskSelected.additionalInfo.lng,
-				vendor_id: taskSelected.customerId.id,
-				notes: taskSelected.additionalInfo.notes,
-				client_id: taskSelected.additionalInfo.client_data.id,
-				start_date: taskSelected.additionalInfo.start_date,
-				start_time: taskSelected.additionalInfo.start_time,
-				duration: taskSelected.additionalInfo.duration,
-				reminder: taskSelected.additionalInfo.reminder,
-				completed: taskSelected.additionalInfo.completed
+				vendor_id: taskSelected.customerId.id || '',
+				notes: taskSelected.additionalInfo.notes|| '',
+				client_id: taskSelected.additionalInfo.client_data.id || '',
+				start_date: taskSelected.additionalInfo.start_date || '',
+				start_time: taskSelected.additionalInfo.start_time || '',
+				duration: taskSelected.additionalInfo.duration || '',
+				reminder: taskSelected.additionalInfo.reminder || '',
+				completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
 			};
 		},
-
-
+		
 		clearFormData() {
 			this.newTaskForm = {
 				category: '',
@@ -276,22 +277,17 @@ export default {
 		resetModal() {
 			this.hideModal();
 		},
-		deteteTask(schedule) {
-			console.log('in delete x2', schedule);
-
-			const task = this.TASKS_LIST[schedule.id];
-			const task_id = task.id.id;
+		deteteTask(task_id) {
 			this.$store.dispatch('DELETE_TASK', task_id)
 					.then(x => {
 						this.$store.dispatch('GET_TASKS_LIST');
 					});
 
-			this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
 		},
 		deleteOrCancel() {
 			if ( this.isEditModal ) { // delete is avaliable
 				console.log('in delete');
-				this.deteteTask(this.scheduleSelected);
+				this.deteteTask(this.selected_task.id.id);
 				this.resetModal();
 			} else {
 				this.resetModal();
@@ -303,19 +299,24 @@ export default {
 				task_id: task_id,
 				data: this.newTaskForm
 			};
+			const changeStatusPayload = {
+				task_id: task_id,
+				completed: this.newTaskForm.completed
+			};
 			this.$store.dispatch('UPDATE_TASK', payload)
 					.then(response => {
-						this.$store.dispatch('GET_TASKS_LIST');
+
+						this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+								.then(response2 => {
+									this.$store.dispatch('GET_TASKS_LIST');
+
+								})
 					});
 		},
 		createOrUpdate() {
 			console.log('is edit', this.isEditModal);
-
 			if ( this.isEditModal ) {
-				console.log('In edit task');
-				const schedule_id = this.scheduleSelected.id;
-				const task_id = this.TASKS_LIST[schedule_id].id.id;
-				this.editTask(task_id);
+				this.editTask(this.selected_task.id.id);
 				this.resetModal();
 			} else {
 				console.log('IN save task');
@@ -345,7 +346,8 @@ export default {
 			// const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
 			/// console.log('newArray--------------', newArray);
 			const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
-			const final = a.sort(this.sortTop);
+			const b = a.filter( x=> x.additionalInfo.start_date && x.additionalInfo.start_time);
+			const final = b.sort(this.sortTop);
 			console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
 			return final;
 
