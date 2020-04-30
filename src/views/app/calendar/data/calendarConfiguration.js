@@ -94,12 +94,18 @@ export var theme = {
   'week.daygridLeft.width': '50px',
   'week.timegridLeft.width': '50px',
 
-  'common.border': '1px solid #e5e5e5',
+  'common.border': '0px none #e5e5e5',
   'common.backgroundColor': 'white',
   'common.holiday.color': '#000',
   'common.saturday.color': '#000',
   'common.dayname.color': '#000',
   'common.today.color': '#000',
+
+  'week.timegrid.paddingRight': '8px',
+  'week.timegrid.borderRight': '0px solid #e5e5e5',
+  'week.timegridSchedule.borderRadius': '2px',
+  'week.timegridSchedule.paddingLeft': '2px',
+
 };
 export var week = {
   narrowWeekend: false,
