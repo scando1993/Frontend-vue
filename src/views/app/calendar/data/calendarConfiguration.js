@@ -1,35 +1,64 @@
-export var calendarList = [
+const moment = require('moment');
+
+export const calendarList = [
   {
     id: '0',
-    name: 'Expirada',
-    bgColor: 'black',
-    color: 'white'
+    name: 'expired',
+    bgColor: '#e8e6e7',
+    color: '#2b2b2b',
+    borderColor: '#2b2b2b'
   },
   {
     id: '1',
-    name: 'Ahora',
-    bgColor: 'darkred',
-    color: 'white'
+    name: 'now',
+    bgColor: '#eab5a9',
+    color: '#d45454',
+    borderColor: '#d45454'
   },
   {
     id: '2',
-    name: 'Pronto',
-    bgColor: '#a24608',
-    color: 'white'
+    name: 'early',
+    bgColor: '#fae9b8',
+    color: '#f5ce54',
+    borderColor: '#f5ce54'
   },
   {
     id: '3',
-    name: 'Temprano',
-    bgColor: 'lawngreen',
-    color: 'white'
+    name: 'soon',
+    bgColor: '#e7edc0',
+    color: '#c7db5f',
+    borderColor: '#C7D963'
   },
   {
     id: '4',
-    name: 'Pendiente',
-    bgColor: 'darkgrey',
-    color: 'white'
+    name: 'pending',
+    bgColor: '#FFFFFF',
+    color: '#d2d4d8',
+    borderColor: '#d2d4d8'
   }
 ];
+export const calendarTasksColors = {
+  'expired': {
+    bgColor: '#e8e6e7',
+    color: '#2b2b2b'
+  },
+  'now': {
+    bgColor: '#eab5a9',
+    color: '#d45454'
+  },
+  'early': {
+    bgColor: '#fae9b8',
+    color: '#f5ce54'
+  },
+  'soon': {
+    bgColor: '#e7edc0',
+    color: '#c7db5f'
+  },
+  'pending': {
+    color: '#d2d4d8',
+    bgColor: '#FFFFFF'
+  },
+};
 export var scheduleList = [
   {
     id: '0',
@@ -57,17 +86,32 @@ export var view = 'month';
 export var taskView = false;
 export var scheduleView = ['time'];
 export var theme = {
-  'month.dayname.height': '30px',
-  'month.dayname.borderLeft': '1px solid #ff0000',
+  'month.dayname.height': '20px',
+  'month.dayname.fontSize': '1rem',
+  'month.dayname.borderLeft': '1px solid #000000',
   'month.dayname.textAlign': 'center',
-  'week.today.color': '#333',
-  'week.daygridLeft.width': '100px',
-  'week.timegridLeft.width': '100px'
+  'week.today.color': '#000',
+  'week.daygridLeft.width': '50px',
+  'week.timegridLeft.width': '50px',
+
+  'common.border': '0px none #e5e5e5',
+  'common.backgroundColor': 'white',
+  'common.holiday.color': '#000',
+  'common.saturday.color': '#000',
+  'common.dayname.color': '#000',
+  'common.today.color': '#000',
+
+  'week.timegrid.paddingRight': '8px',
+  'week.timegrid.borderRight': '0px solid #e5e5e5',
+  'week.timegridSchedule.borderRadius': '2px',
+  'week.timegridSchedule.paddingLeft': '2px',
+
 };
 export var week = {
-  narrowWeekend: true,
+  narrowWeekend: false,
   showTimezoneCollapseButton: true,
-  timezonesCollapsed: false
+  timezonesCollapsed: false,
+  startDayOfWeek: 1
 };
 export var month = {
   visibleWeeksCount: 6,
@@ -80,6 +124,36 @@ export var timezones = [{
 }, ];
 export var disableDblClick = true;
 export var isReadOnly = false;
+// Create Event according to their Template
+function getTimeTemplate(schedule, isAllDay) {
+  console.log(schedule);
+  var html = ['<div class="d-flex flex-row flex-wrap">'];
+  var start = moment(schedule.start.toUTCString());
+  var calendar = calendarList[schedule.calendarId];
+
+  if (!isAllDay) {
+    // html.push('<span style="background:' + schedule.borderColor + '">' + start.format('HH:mm') + '</span> ');
+    html.push('<span>' + start.format('HH:mm') + '</span> ');
+  }
+  if (schedule.isPrivate) {
+    html.push('<span class="bx bxs-lock-alt font-size-small align-middle"></span>');
+    html.push(' Private');
+  } else {
+    if (schedule.isReadOnly) {
+      html.push('<span class="bx bx-block font-size-small align-middle"></span>');
+    } else if (schedule.recurrenceRule) {
+      html.push('<span class="bx bx-repeat font-size-small align-middle"></span>');
+    } else if (schedule.attendees.length) {
+      html.push('<span class="bx bxs-user font-size-small align-middle"></span>');
+    } else if (schedule.location) {
+      html.push('<span class="bx bxs-map font-size-small align-middle"></span>');
+    }
+    html.push(' ' + schedule.title);
+  }
+  html.push('' + '</div>');
+  return html.join(' ');
+}
+
 export var template = {
   milestone: function(schedule) {
     return `<span style="color:red;">${schedule.title}</span>`;
@@ -87,7 +161,10 @@ export var template = {
   milestoneTitle: function() {
     return 'MILESTONE';
   },
+  time: function (schedule) {
+    return getTimeTemplate(schedule, false);  	
+  }
 };
-export var useCreationPopup = true;
-export var useDetailPopup = true;
+export var useCreationPopup = false;
+export var useDetailPopup = false;
 

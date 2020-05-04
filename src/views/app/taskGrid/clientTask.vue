@@ -1,42 +1,56 @@
 <template>
-	<div class="card">
-		<div class="card-content">
-			<div class="row no-gutters">
-				<div class="col-1">
-					{{task_date}}
-				</div>
-				<div class="col-9">
-					{{task_name}}
-				</div>
-				<div class="col-2">
-					<button class="btn client-task-btn">Ver</button>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="card no-gutters">
+    <div class="card-content">
+      <div class="d-flex flex-row no-gutters">
+        <p class="m-2 client-task-date">{{formatDate(task.last_activity)}}</p>
+        <div style="border: 1px solid #D2D4D6;"/>
+        <p class="m-2 flex-grow-1">{{task.activity.name}}</p>
+        <button class="btn client-task-btn m-2">Ver</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'clientTask',
-	data: () => {
-    return {
-      task_name: '',
-	    task_date: '',
-	    task_id: 0
-    };
-	}
+  name: 'clientTaskWidget',
+  props: {
+    task: {
+      type: Object,
+      required: true
+    }
+  },
+  data: () => {
+    return {};
+  },
+  computed: {},
+  methods: {
+    formatDate: function (dateToFormat) {
+      try {
+        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(dateToFormat);
+        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(dateToFormat);
+        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(dateToFormat);
+        return `${ mo }/${ da }/${ ye }`;
+      } catch ( e ) {
+        return 'N/A';
+      }
+    }
+  }
+
 };
 </script>
 
 <style scoped lang="scss">
-	.client-task-btn {
-		background-color: #00b3ee;
-		color: white;
-		border-radius: 3px;
-		font-size: 0.85rem;
-		padding: 0 0.5rem;
-		border: 0;
-		align-self: center;
-	}
+  .client-task-btn {
+    background-color: #4399B6;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    padding: 0 1.5rem;
+    border: 0;
+    align-self: center;
+  }
+
+  .client-task-date {
+  }
 </style>

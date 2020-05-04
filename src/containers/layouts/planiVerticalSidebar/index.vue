@@ -6,6 +6,7 @@
                  :class="{  'vertical-sidebar': getPlaniVerticalSidebar.isVerticalSidebar,
                             compact: getPlaniVerticalSidebar.isVerticalCompact }">
                 <planiVerticalTopbar />
+                <div id="notifications-popup" ></div>
                 <transition name="page" mode="out-in">
                     <router-view class="view-content"/>
                 </transition>

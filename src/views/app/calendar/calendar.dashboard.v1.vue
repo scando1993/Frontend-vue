@@ -1,329 +1,201 @@
 <template>
-    <div>
-        <calendar-nav-bar/>
-        <calendar_task_view v-if="showTaskView"/>
-        <div v-else class="main-content">
+  <div class="box">
+    <calendar-nav-bar/>
+    <calendar-task-view v-if="showTaskView" class="view-content"/>
+    <div v-else class="view-content">
 
-
-            <div class="wrapper">
-                <div class="no-card-shadow container " id="card-drag-area-1" v-dragula bag="first-bag">
-                    <div class="task chip mr-1"
-                         v-bind:class="{nowChip: task.additionalInfo.status === 'now', soonChip: task.additionalInfo.status === 'soon', earlyChip: task.additionalInfo.status === 'early'}"
-                         v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon')"
-                    >
-                        <div class="task-body">
-
-                            <span class="task-text ml-4">
-                                <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                                <br>
-                                {{task.additionalInfo.name}}
-                                <br>
-                                Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                            </span>
-                            <!--<div class="avatar ml-auto">
-                                <div class="avatar-content">
-                                    LD
-                                </div>
-                            </div>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <b-row>
-                <b-col lg="9" xl="9" md="8" sm="11">
-                    <b-card>
-                        <div class="d-flex">
-                            <calendar style="height: 800px;"
-                                      class="w-100"
-                                      ref="tuiCalendar"
-                                      :calendars="calendarList"
-                                      :schedules="TASKS_LIST.map( x => x.additionalInfo.tui_data)"
-                                      :view="view"
-                                      :taskView="taskView"
-                                      :scheduleView="scheduleView"
-                                      :theme="theme"
-                                      :week="week"
-                                      :month="month"
-                                      :timezones="timezones"
-                                      :disableDblClick="disableDblClick"
-                                      :isReadOnly="isReadOnly"
-                                      :template="template"
-                                      :useCreationPopup="useCreationPopup"
-                                      :useDetailPopup="useDetailPopup"
-                                      @afterRenderSchedule="onAfterRenderSchedule"
-                                      @beforeCreateSchedule="onBeforeCreateSchedule"
-                                      @beforeDeleteSchedule="onBeforeDeleteSchedule"
-                                      @beforeUpdateSchedule="onBeforeUpdateSchedule"
-                                      @clickDayname="onClickDayname"
-                                      @clickSchedule="onClickSchedule"
-                                      @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
-                            />
-                            <l-map
-                                    v-show="showMap"
-                                    style="height: 800px; width: 100%"
-                                    :zoom="mapConfigurations.zoom"
-                                    :center="mapConfigurations.center"
-                                    @update:zoom="zoomUpdated"
-                                    @update:center="centerUpdated"
-                                    @update:bounds="boundsUpdated"
-                            >
-                                <l-tile-layer :url="mapConfigurations.url"/>
-                            </l-map>
-                        </div>
-                        <div>
-
-                        </div>
-                    </b-card>
-                </b-col>
-                <b-col lg="2" xl="2" md="3" sm="11">
-                    <b-row class="d-flex flex-column">
-                        <b-card class="box-shadow-1 card flex-fill">
-                            <b-card-header class="align-items-center d-flex">
-                                <h4 class="card-title flex-grow-1">
-                                    Expiradas
-                                </h4>
-                                <b-dropdown
-                                        id="dropdown-2"
-                                        left
-                                        class="m-md-2  ml-auto"
-                                        toggle-class="text-decoration-none"
-                                        no-caret
-                                        variant="button"
-                                >
-                                    <template slot="button-content">
-                                        <i class="i-Bell text-muted header-icon"/>
-                                        <span>New order received</span>
-                                    </template>
-                                    <div class="dropdown-item d-flex">
-                                        <div class="notification-icon">
-                                            <i class="i-Speach-Bubble-6 text-primary mr-1"/>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-item d-flex">
-                                        <div class="notification-icon">
-                                            <i class="i-Receipt-3 text-success mr-1"/>
-                                        </div>
-                                        <div class="notification-details flex-grow-1">
-                                            <p class="m-0 d-flex align-items-center">
-                                                <span>New order received</span>
-                                                <!-- <span class="badge badge-pill badge-success ml-1 mr-1">new</span> -->
-                                                <span class="flex-grow-1"/>
-                                                <span class="text-small text-muted ml-auto">2 hours ago</span>
-                                            </p>
-                                            <p class="text-small text-muted m-0">1 Headphone, 3 iPhone x</p>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-item d-flex">
-                                        <div class="notification-icon">
-                                            <i class="i-Empty-Box text-danger mr-1"/>
-                                        </div>
-                                        <div class="notification-details flex-grow-1">
-                                            <p class="m-0 d-flex align-items-center">
-                                                <span>Product out of stock</span>
-                                                <!-- <span class="badge badge-pill badge-danger ml-1 mr-1">3</span> -->
-                                                <span class="flex-grow-1"/>
-                                                <span class="text-small text-muted ml-auto"
-                                                >10 hours ago</span
-                                                >
-                                            </p>
-                                            <p class="text-small text-muted m-0">
-                                                Headphone E67, R98, XL90, Q77
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-item d-flex">
-                                        <div class="notification-icon">
-                                            <i class="i-Data-Power text-success mr-1"/>
-                                        </div>
-                                        <div class="notification-details flex-grow-1">
-                                            <p class="m-0 d-flex align-items-center">
-                                                <span>Server Up!</span>
-                                                <!-- <span class="badge badge-pill badge-success ml-1 mr-1">3</span> -->
-                                                <span class="flex-grow-1"/>
-                                                <span class="text-small text-muted ml-auto"
-                                                >14 hours ago</span
-                                                >
-                                            </p>
-                                            <p class="text-small text-muted m-0">
-                                                Server rebooted successfully
-                                            </p>
-                                        </div>
-                                    </div>
-                                </b-dropdown>
-                            </b-card-header>
-                            <b-card-body >
-
-                                <div class="card-body wrapper" >
-                                    <ul id="card-drag-area-2" class="list-group list-group-flush container" v-dragula bag="first-bag">
-
-
-                                        <div class="task chip mr-1 expiredChip" v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-                                            <div class="task-body">
-                                                <span class="task-text ml-4">
-                                                    <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                                                    <br>
-                                                    {{task.additionalInfo.name}}
-                                                    <br>
-                                                    Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                                                </span>
-                                                <!--<div class="avatar ml-auto">
-                                                    <div class="avatar-content">
-                                                        LD
-                                                    </div>
-                                                </div>-->
-                                            </div>
-                                        </div>
-                                    </ul>
-                                </div>
-
-                            </b-card-body>
-                        </b-card>
-                    </b-row>
-                    <b-row class="d-flex flex-column">
-                        <b-card class="box-shadow-1 card flex-fill">
-                            <b-card-header class="align-items-center d-flex">
-                                <h4 class="card-title flex-grow-1">
-                                    Pendientes
-                                </h4>
-                            </b-card-header>
-                            <b-card-body>
-                                <div class="card-body wrapper">
-                                    <ul id="card-drag-area-2 container" class="list-group list-group-flush" v-dragula  bag="first-bag">
-                                        <div class="task chip mr-1 pendingChip"  v-for="(task, indexTask) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-                                            <div class="task-body">
-                                                <span class="task-text ml-4">
-                                                    <b>{{!task.additionalInfo.client_data ? 'N/A' :task.additionalInfo.client_data.additionalInfo.social_reason }}</b>
-                                                    <br>
-                                                    {{task.additionalInfo.name}}
-                                                    <br>
-                                                    Último contacto: {{task.additionalInfo.start_date || 'N/A'}}
-                                                </span>
-
-                                                <!--<div class="avatar ml-auto">
-                                                    <div class="avatar-content">
-                                                        LD
-                                                    </div>
-                                                </div>-->
-                                            </div>
-                                        </div>
-                                    </ul>
-                                </div>
-
-                            </b-card-body>
-                        </b-card>
-                    </b-row>
-                </b-col>
-            </b-row>
-
-
-
-
-            <b-modal id="newTask_modal" :title="getModalTitle" centered size="lg" @hidden="resetModal">
-                <div>
-                    <b-row>
-                        <b-col md="7">
-                            <b-form-group
-                                    label="Categoria de tarea"
-                            >
-                                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
-                            </b-form-group>
-
-                            <b-form-group
-                                    label="Actividad"
-                            >
-                                <b-form-input type="text" v-model="newTaskForm.name" />
-                            </b-form-group>
-                            <b-form-group
-                                    label="Ubicación"
-                            >
-                                <b-form-input type="text" v-model="newTaskForm.address" />
-                            </b-form-group>
-                            <b-form-group
-                                    label="Asignar vendedr"
-                            >
-                                <b-form-select :change="getVendorClients()" v-model="newTaskForm.vendor_id" :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
-                            </b-form-group>
-                            <b-form-group
-                                    label="Notas"
-                            >
-                                <b-form-textarea v-model="newTaskForm.notes"/>
-                            </b-form-group>
-
-                        </b-col>
-                        <b-col md="5">
-                            <b-form-group
-                                    label="Cliente"
-                            >
-                                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"  :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
-                            </b-form-group>
-                            <b-form-group
-                                    label="Fecha"
-                            >
-
-                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date" class="mb-2"></b-form-datepicker>
-                            </b-form-group>
-                            <b-form-group
-                                    label="Hora"
-                            >
-                                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
-                            </b-form-group>
-                            <b-form-group
-                                    label="Recordatorio"
-                            >
-                                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
-
-                            </b-form-group>
-                            <b-form-group
-                                    label="Duracion"
-                            >
-                                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
-
-
-                                <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
-
-                            </b-form-group>
-                            <b-form-group
-                                    label="Rutina"
-                            >
-                                <b-form-select v-model="newTaskForm.routine" :options="routineOptions"/>
-                            </b-form-group>
-                        </b-col>
-                    </b-row>
-                </div>
-                <template  v-slot:modal-footer="{ ok, cancel, hide }">
-                    <div class="d-flex justify-content-around" >
-                        <b-button size="sm" variant="danger" @click="deleteOrCancel()">
-                            {{isEditModal ? "Eliminar" : "Cancelar"}}
-                        </b-button>
-                        <b-button size="sm" variant="success" @click="createOrUpdate()">
-                            {{isEditModal ? "Editar" : "Crear tarea"}}
-                        </b-button>
-                    </div>
-
-
-
-                </template>
-            </b-modal>
+      <div class="wrapper">
+        <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
+          <template
+            v-for="(task, taskIndex) in getTopTasks()">
+            <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
+          </template>
         </div>
+      </div>
 
+      <div class="row" style="height: 100%">
+        <b-col lg="8" xl="8" md="12" sm="12">
+          <div class="card d-flex flex-row mb-1">
+            <div class="card-body p-1">
+              <calendar class="w-100"
+                        ref="tuiCalendar"
+                        :calendars="calendarList"
+                        :schedules="scheduleList"
+                        :view="view"
+                        :taskView="taskView"
+                        :scheduleView="scheduleView"
+                        :theme="theme"
+                        :week="week"
+                        :month="month"
+                        :timezones="timezones"
+                        :disableDblClick="disableDblClick"
+                        :isReadOnly="isReadOnly"
+                        :template="template"
+                        :useCreationPopup="useCreationPopup"
+                        :useDetailPopup="useDetailPopup"
+                        @afterRenderSchedule="onAfterRenderSchedule"
+                        @beforeCreateSchedule="onBeforeCreateSchedule"
+                        @beforeDeleteSchedule="onBeforeDeleteSchedule"
+                        @beforeUpdateSchedule="onBeforeUpdateSchedule"
+                        @clickDayname="onClickDayname"
+                        @clickSchedule="onClickSchedule"
+                        @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
+              />
+              <l-map
+                v-show="showMap"
+                style="height: 800px; width: 100%"
+                :zoom="mapConfigurations.zoom"
+                :center="mapConfigurations.center"
+                @update:zoom="zoomUpdated"
+                @update:center="centerUpdated"
+                @update:bounds="boundsUpdated"
+              >
+                <l-tile-layer :url="mapConfigurations.url"/>
+              </l-map>
+            </div>
+          </div>
+        </b-col>
+        <b-col lg="4" xl="4" md="12" sm="12" class="d-flex flex-column pl-0">
+          <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-1" style="flex-basis: 50%;">
+            <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
+              <p class="text-center mb-0 card-task-header-text">Expiradas</p>
+            </div>
+            <div class="card-body p-2">
+              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
+                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
+                </template>
+              </vue-perfect-scrollbar>
+            </div>
+          </div>
+          <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-0" style="flex-basis: 50%;">
+            <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
+              <p class="text-center mb-0 card-task-header-text">Pendientes</p>
+            </div>
+            <div class="card-body p-2">
+              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
+                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                </template>
+              </vue-perfect-scrollbar>
+            </div>
+          </div>
+        </b-col>
+      </div>
 
+      <b-modal id="newTask_modal" :title="getModalTitle" centered size="lg" @hidden="resetModal">
+        <div>
+          <b-row>
+            <b-col md="7">
+              <b-form-group
+                label="Categoria de tarea"
+              >
+                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
+              </b-form-group>
+
+              <b-form-group
+                label="Actividad"
+              >
+                <b-form-input type="text" v-model="newTaskForm.name"/>
+              </b-form-group>
+              <b-form-group
+                label="Ubicación"
+              >
+                <b-form-input type="text" v-model="newTaskForm.address"/>
+              </b-form-group>
+              <b-form-group
+                label="Asignar vendedor"
+              >
+                <b-form-select :change="getVendorClients()" v-model="newTaskForm.vendor_id"
+                               :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
+              </b-form-group>
+              <b-form-group
+                label="Notas"
+              >
+                <b-form-textarea style="height: 100px;"v-model="newTaskForm.notes"/>
+              </b-form-group>
+
+            </b-col>
+            <b-col md="5">
+              <b-form-group
+                required
+                label="Cliente"
+              >
+                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"
+                               :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+              </b-form-group>
+              <b-form-group
+                label="Fecha"
+              >
+
+                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date || getNow()"
+                                   class="mb-2"></b-form-datepicker>
+              </b-form-group>
+              <b-form-group
+                label="Hora"
+              >
+                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
+              </b-form-group>
+              <b-form-group
+                label="Recordatorio"
+              >
+                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+
+              </b-form-group>
+              <b-form-group
+                label="Duracion"
+              >
+                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+
+                <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
+
+              </b-form-group>
+              <!--
+              <b-form-group
+                label="Rutina"
+              >
+                <b-form-select v-model="newTaskForm.routine" :options="routineOptions"/>
+              </b-form-group>-->
+              <b-form-group v-if="isEditModal"
+                            label="Tarea completada"
+              >
+                <div class="d-flex d-inline  justify-content-center">
+                  <b-form-checkbox v-model="newTaskForm.completed"/>
+                  <div class="text-21 align-items-center justify-content-center" >
+                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+                  </div>
+                </div>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </div>
+        <template v-slot:modal-footer="{ ok, cancel, hide }">
+          <div class="d-flex justify-content-around">
+            <b-button size="sm" variant="danger" @click="deleteOrCancel()">
+              {{isEditModal ? 'Eliminar' : 'Cancelar'}}
+            </b-button>
+            <b-button size="sm" variant="success" @click="createOrUpdate()">
+              {{isEditModal ? 'Editar' : 'Crear tarea'}}
+            </b-button>
+          </div>
+        </template>
+      </b-modal>
     </div>
+    <calendar-progress-bar/>
+  </div>
 </template>
 
 <script>
 import { Calendar } from '@toast-ui/vue-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
 import VueTimepicker from 'vue2-timepicker';
-
-
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import CalendarNavBar from './calendarNavbar/calendarNavBar';
 import { mapGetters, mapActions } from 'vuex';
 import { LMap, LTileLayer } from 'vue2-leaflet';
-import  { calendarList,
-  scheduleList,
+import {
+  calendarList,
   view,
   taskView,
   scheduleView,
@@ -333,11 +205,15 @@ import  { calendarList,
   timezones,
   disableDblClick,
   isReadOnly,
-  template,
   useCreationPopup,
-  useDetailPopup } from './data/calendarConfiguration';
+  useDetailPopup
+} from './data/calendarConfiguration';
 import { taskCategories, vendors, clients, routines } from './data/formData';
-import Calendar_task_view from './calendar.tasks.view';
+import CalendarTaskView from './calendar.tasks.view';
+import CalendarTaskWidget from './calendar.task.widget';
+import CalendarProgressBar from './calendar.progressBar';
+import CalendarInnerTaskWidget from './calendar.inner.task.widget';
+import Vue from 'vue';
 
 export default {
   metaInfo: {
@@ -346,17 +222,24 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
+    CalendarProgressBar,
     VueTimepicker,
-    // eslint-disable-next-line vue/no-unused-components
-    Calendar_task_view,
+    CalendarTaskView,
     CalendarNavBar,
-    Calendar,
     'calendar': Calendar,
     LMap,
     LTileLayer,
+    CalendarTaskWidget
   },
   computed: {
-    ...mapGetters(['getSelectedMapView', 'getSelectedComponentView', 'getShowNewTaskModal', 'getSearchText', 'VENDOR_LIST', 'CLIENTS_LIST', 'TASKS_LIST']),
+    ...mapGetters([
+      'getSelectedMapView',
+      'getSelectedComponentView',
+      'getShowNewTaskModal',
+      'getSearchText',
+      'VENDOR_LIST', 'CLIENTS_LIST',
+      'TASKS_LIST'
+    ]),
     showMap() {
       return this.getSelectedComponentView === 'Map';
     },
@@ -365,9 +248,26 @@ export default {
     },
     getModalTitle() {
       return this.isEditModal ? 'Editar o eliminar tarea' : 'Agregar nueva tarea';
+    },
+    scheduleList() {
+      return this.TASKS_LIST.map(x => {return x.additionalInfo.tui_data;});
+      let scheduleList = this.TASKS_LIST.map(x => {
+        let schedule = x.additionalInfo;
+        let calendarId = calendarList.find(x => x.name === schedule.status).id;
+        return {
+          id: schedule.tui_data.id,
+          calendarId: calendarId,
+          title: schedule.name,
+          category: taskCategories[schedule.category],
+          location: `${ schedule.lat }, ${ schedule.lng }`,
+          dueDateClass: '',
+          start: schedule.start,
+          end: schedule.end
+        };
+      });
+      console.log(scheduleList);
+      return scheduleList;
     }
-
-
   },
   data() {
     return {
@@ -382,7 +282,7 @@ export default {
         currentZoom: 11.5,
         url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
         zoom: 6,
-        center: [ -1.224882, -78.601685],
+        center: [ -1.224882, -78.601685 ],
         bounds: null,
       },
       newTaskForm: {
@@ -398,11 +298,11 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: ''
+        completed: ''
       },
-      tuiCalendar: '',
+      isChipModal: false,
+      selected_task: {},
       calendarList,
-      scheduleList,
       view,
       taskView,
       scheduleView,
@@ -412,49 +312,99 @@ export default {
       timezones,
       disableDblClick,
       isReadOnly,
-      template,
+      template: this.calendarTemplate(),
       useCreationPopup,
-      useDetailPopup
-
+      useDetailPopup,
     };
   },
+  created() {
+  },
   mounted() {
-      const vendor_params = {
-          limit: 1000
-      }
+    const vendor_params = {
+      limit: 1000
+    };
     this.$store.dispatch('GET_VENDOR_LIST', vendor_params);
     this.$store.dispatch('GET_TASKS_LIST');
-    this.setTuiCalendarRef();
-    // this.view = this. this.getSelectedMapView();
-    // eslint-disable-next-line no-unused-vars
+    // this.setTuiCalendarRef();
+
+    this.setRangeText();
+
+    console.log(this.$refs);
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'setSelectedMapView') {
+      if ( mutation.type === 'setSelectedMapView' ) {
         setTimeout(() => {
-          this.setTuiCalendarRef();
-          // var options = this.tuiCalendar.invoke("getOptions");
-          this.tuiCalendar.invoke('changeView', this.getSelectedMapView);
-        }, 0 );
-      }
-      else if(mutation.type === 'setShowNewTaskModal') {
-        if(mutation.payload){
+          this.changeView();
+        }, 0);
+      } else if ( mutation.type === 'setShowNewTaskModal' ) {
+        if ( mutation.payload ) {
           this.$bvModal.show('newTask_modal');
-        }
-        else {
+        } else {
           this.$bvModal.hide('newTask_modal');
         }
+      } else if ( mutation.type === 'toggleNextCalendar' ) {
+        setTimeout(() => {
+          this.changeViewNext();
+        }, 0);
+      } else if ( mutation.type === 'togglePrevCalendar' ) {
+        setTimeout(() => {
+          this.changeViewPrev();
+        }, 0);
       }
     });
   },
   methods: {
-    ...mapActions(['GET_VENDOR_LIST', 'GET_CLIENTS_LIST', 'setShowNewTaskModal']),
+    ...mapActions([
+      'GET_VENDOR_LIST',
+      'GET_CLIENTS_LIST',
+      'setShowNewTaskModal',
+      'togglePrevCalendar',
+      'toggleNextCalendar'
+    ]),
     getVendorClients() {
-      console.log('IN getVendors clients', this.newTaskForm.client_id);
-      console.log('sss', this.newTaskForm);
+      // console.log('IN getVendors clients', this.newTaskForm.client_id);
+      // console.log('sss', this.newTaskForm);
       const vendor_id = this.newTaskForm.vendor_id;
       const payload = { vendor_id: vendor_id, limit: 10000, textSearch: null };
       this.$store.dispatch('GET_VENDOR_CLIENTS', payload);
     },
+    // Viewport, date and change functions
+    changeView() {
+      this.$refs.tuiCalendar.invoke('changeView', this.getSelectedMapView);
+      this.setRangeText();
+    },
+    changeViewNext() {
+      this.$refs.tuiCalendar.invoke('next');
+      this.setRangeText();
+    },
+    changeViewPrev() {
+      this.$refs.tuiCalendar.invoke('prev');
+      this.setRangeText();
+    },
+    setRangeText() {
+      let options = this.$refs.tuiCalendar.invoke('getOptions');
+      let viewName = this.$refs.tuiCalendar.invoke('getViewName');
+      this.$store.dispatch('toggleRangeText', this.setRenderRangeText(viewName, options));
+    },
+    setRenderRangeText: function (viewName, options) {
+      let html = [];
+      let dateRangeStart = this.$refs.tuiCalendar.invoke('getDateRangeStart');
+      let dateRangeEnd = this.$refs.tuiCalendar.invoke('getDateRangeEnd');
+      let date = this.$refs.tuiCalendar.invoke('getDate');
+      if ( viewName === 'day' ) {
+        html.push(this.$moment(date.getTime()).format('DD MMMM'));
+      } else if ( viewName === 'month' &&
+        (!options.month.visibleWeeksCount || options.month.visibleWeeksCount > 4) ) {
+        html.push(this.$moment(date.getTime()).format('MMMM'));
+      } else {
+        html.push(this.$moment(dateRangeStart.getTime()).format('DD MMMM'));
+        html.push('-');
+        html.push(this.$moment(dateRangeEnd.getTime()).format('DD MMMM'));
+      }
+      return html.join('');
+    },
+
     saveTask() {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       console.log('form', this.newTaskForm);
       this.$store.dispatch('POST_TASK', this.newTaskForm)
         .then(result => {
@@ -464,14 +414,68 @@ export default {
       this.hideModal();
     },
 
+    // Calendar template functions
+    calendarTemplate() {
+      let self = this;
+      return {
+        milestone: function (schedule) {
+          return `<span style="color:red;">${ schedule.title }</span>`;
+        },
+        milestoneTitle: function () {
+          return 'MILESTONE';
+        },
+        time: function (schedule) {
+          return self.getTimeTemplate(schedule, false);
+        }
+      };
+    },
+    // Create Event according to their Template
+    getTimeTemplate(schedule, isAllDay) {
+      const id = schedule.id;
+      const taskSelected = this.TASKS_LIST.find(x => {return x.additionalInfo.name === schedule.title; });
+      console.log('taskTemplate', taskSelected);
+      let start = this.$moment(schedule.start.toUTCString());
+
+      if ( taskSelected === null || taskSelected === undefined ){
+        return '';
+      }
+
+      let ComponentClass = Vue.extend(CalendarInnerTaskWidget);
+      let instance = new ComponentClass({
+        propsData: { task: taskSelected, startDate: start.format('HH:mm') }
+      });
+      instance.$mount();
+      let tmpNode = document.createElement( 'div' );
+      tmpNode.appendChild( instance.$el.cloneNode( true ) );
+      let str = tmpNode.innerHTML;
+      tmpNode = null; // prevent memory leaks in IE
+      return str;
+      // let calendar = calendarList.find(({ name }) => name === taskSelected.additionalInfo.status);
+      //
+      // console.log('schedule Tui', schedule);
+      // console.log('schedule Plani', taskSelected);
+      //
+      // if ( !isAllDay ) {
+      //   // html.push('<span style="background:' + schedule.borderColor + '">' + start.format('HH:mm') + '</span> ');
+      //   html.push(`<span class="align-self-strech" style="background:${calendar.color}; color: #fff;">`
+      //     + start.format('HH:mm') + '</span> ');
+      // }
+      // html.push(`<span class="align-self-stretch" style="background:${calendar.bgColor}; flex-basis: 100%; color: #000;">` + schedule.title + '</span> ');
+      // html.push(`<div class="avatar mr-2" style="'background': ${taskSelected.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1'};` +
+      //     `'color': ${taskSelected.additionalInfo.status === 'expired' ? '#e1e4e1': '#FFFFFF'};">`+
+      //     `<div class="avatar-content">${!taskSelected.additionalInfo.client_data ? 'N/A' : taskSelected.additionalInfo.client_data.additionalInfo.name.slice(0,2)}</div></div>`);
+      // html.push('' + '</div>');
+      // return html.join(' ');
+    },
+
     // map functions
-    zoomUpdated (zoom) {
+    zoomUpdated(zoom) {
       this.mapConfigurations.zoom = zoom;
     },
-    centerUpdated (center) {
+    centerUpdated(center) {
       this.mapConfigurations.center = center;
     },
-    boundsUpdated (bounds) {
+    boundsUpdated(bounds) {
       this.mapConfigurations.bounds = bounds;
     },
     //
@@ -479,18 +483,22 @@ export default {
       this.tuiCalendar = this.$refs.tuiCalendar;
     },
     findCalendar(id) {
-      var found;
+      let found = null;
       console.log(id);
-      console.log(this.CalendarList);
+      console.log(this.calendarList);
+      if ( id === undefined )
+        return this.calendarList[0];
+
       this.calendarList.forEach(function (calendar) {
-        if (calendar.id === id) {
+        if ( calendar.id === id ) {
           found = calendar;
         }
       });
 
-      return found || this.CalendarList[0];
+      return found !== null ? found : this.calendarList[0];
     },
     saveNewSchedule(scheduleData) {
+      console.log(scheduleData);
       var calendar = scheduleData.calendar || this.findCalendar(scheduleData.calendarId);
       var schedule = {
         id: String(this.scheduleList.length + 1),
@@ -505,19 +513,19 @@ export default {
         dragBgColor: calendar.bgColor,
         borderColor: calendar.borderColor,
         location: scheduleData.location,
-        raw: {
-          class: scheduleData.raw['class']
-        },
+        // raw: {
+        //   class: scheduleData.raw['class'] || ''
+        // },
         state: scheduleData.state
       };
-      if (calendar) {
+      if ( calendar ) {
         schedule.calendarId = calendar.id;
         schedule.color = calendar.color;
         schedule.bgColor = calendar.bgColor;
         schedule.borderColor = calendar.borderColor;
       }
 
-      this.tuiCalendar.invoke('createSchedules',[schedule]);
+      this.$refs.tuiCalendar.invoke('createSchedules', [ schedule ]);
 
       this.refreshScheduleVisibility();
     },
@@ -526,10 +534,10 @@ export default {
       var calendarElements = Array.prototype.slice.call(document.querySelectorAll('#calendarList input'));
 
       this.calendarList.forEach((calendar) => {
-        this.tuiCalendar.invoke('toggleSchedules', [calendar.id, !calendar.checked, false]);
+        this.tuiCalendar.invoke('toggleSchedules', [ calendar.id, !calendar.checked, false ]);
       });
 
-      this.tuiCalendar.invoke('render', true);
+      this.$refs.tuiCalendar.invoke('render', true);
       calendarElements.forEach(function (input) {
         var span = input.nextElementSibling;
         span.style.backgroundColor = input.checked ? span.style.borderColor : 'transparent';
@@ -537,7 +545,6 @@ export default {
     },
     onAfterRenderSchedule(e) {
       // implement your code
-      console.log('AfterRender', e);
     },
     onBeforeCreateSchedule(e) {
       // implement your code
@@ -550,18 +557,44 @@ export default {
       console.log('beforeDeleteSchedule', e);
       this.deleteTask(e.schedule);
     },
+    onClickChip(task) {
+      // const taskSelected = task;
+      console.log('tarea', task);
+      this.selected_task = task;
+
+      this.setFormData(task);
+      this.isChipModal = true;
+      this.isEditModal = true;
+      this.setShowNewTaskModal(true);
+    },
+    setFormData(taskSelected) {
+      this.newTaskForm = {
+        category: new Number(taskSelected.additionalInfo.category) || null,
+        name: taskSelected.additionalInfo.name || '',
+        address: taskSelected.additionalInfo.address || '',
+        lat: taskSelected.additionalInfo.lat,
+        lng: taskSelected.additionalInfo.lng,
+        vendor_id: taskSelected.customerId.id || '',
+        notes: taskSelected.additionalInfo.notes|| '',
+        client_id: taskSelected.additionalInfo.client_data.id || '',
+        start_date: taskSelected.additionalInfo.start_date || '',
+        start_time: taskSelected.additionalInfo.start_time || '',
+        duration: taskSelected.additionalInfo.duration || '',
+        reminder: taskSelected.additionalInfo.reminder || '',
+        completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
+      };
+    },
     onBeforeUpdateSchedule(e) {
       // implement your code
       console.log('Update', e);
       e.schedule.start = e.start;
       e.schedule.end = e.end;
-      if(e.changes.title)
-        e.schedule.title = e.changes.title;
-      if(e.changes.location)
-        e.schedule.location = e.changes.location;
-      if(e.changes.state)
-        e.schedule.state = e.changes.state;
-      this.tuiCalendar.invoke('updateSchedule', e.schedule.id, e.schedule.calendarId, e.schedule);
+      const id = e.schedule.id;
+      const taskSelected = this.TASKS_LIST[id];
+      console.log('update task', taskSelected);
+      this.setFormData(taskSelected);
+      this.editTask(taskSelected.id.id);
+      this.$refs.tuiCalendar.invoke('updateSchedule', e.schedule.id, e.schedule.calendarId, e.schedule);
     },
     // eslint-disable-next-line no-unused-vars
     onClickDayname(e) {
@@ -576,25 +609,9 @@ export default {
       console.log('On click onClickSchedule', e);
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
-      this.newTaskForm = {
-        category: taskSelected.additionalInfo.category,
-        name: taskSelected.additionalInfo.name,
-        address: taskSelected.additionalInfo.address,
-        lat: taskSelected.additionalInfo.category,
-        lng: taskSelected.additionalInfo.category,
-        vendor_id: taskSelected.customerId.id,
-        notes: taskSelected.additionalInfo.notes,
-        client_id: taskSelected.additionalInfo.category,
-        start_date: taskSelected.additionalInfo.start_date,
-        start_time: taskSelected.additionalInfo.start_time,
-        duration: taskSelected.additionalInfo.duration,
-        reminder: taskSelected.additionalInfo.reminder,
-        routine: taskSelected.additionalInfo.routine
-      };
+      this.selected_task = taskSelected;
+      this.setFormData(taskSelected);
       this.setShowNewTaskModal(true);
-
-      console.log(e);
-      // implement your code
     },
     // eslint-disable-next-line no-unused-vars
     onClickTimezonesCollapseBtn(e) {
@@ -616,8 +633,12 @@ export default {
         start_time: '',
         duration: '',
         reminder: '',
-        routine: ''
+        completed: ''
       };
+    },
+    getNow() {
+      const a = new Date();
+      return a.getFullYear() + "-" + a.getDate() + " " + a.getDay();
     },
     hideModal() {
       this.setShowNewTaskModal(false);
@@ -627,133 +648,147 @@ export default {
     resetModal() {
       this.hideModal();
     },
-    deteteTask(schedule) {
-      console.log('in delete x2' , schedule);
+    deteteTask(task_id) {
 
-      const task = this.TASKS_LIST[schedule.id];
-      const task_id = task.id.id;
       this.$store.dispatch('DELETE_TASK', task_id)
         .then(x => {
           this.$store.dispatch('GET_TASKS_LIST');
         });
 
-      this.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
+      // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
     },
     deleteOrCancel() {
-      if(this.isEditModal) { // delete is avaliable
+      if ( this.isEditModal ) { // delete is avaliable
         console.log('in delete');
-        this.deteteTask(this.scheduleSelected);
+        this.deteteTask(this.selected_task.id.id);
         this.resetModal();
-      }
-      else {
+      } else {
         this.resetModal();
       }
     },
     editTask(task_id) {
+      this.newTaskForm.category = Number(this.newTaskForm.category);
       const payload = {
         task_id: task_id,
         data: this.newTaskForm
       };
+      const changeStatusPayload = {
+        task_id: task_id,
+        completed: this.newTaskForm.completed
+      };
       this.$store.dispatch('UPDATE_TASK', payload)
-        .then(response => {
-          this.$store.dispatch('GET_TASKS_LIST');
-        });
+              .then(response => {
+
+                this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+                        .then(response2 => {
+                          this.$store.dispatch('GET_TASKS_LIST');
+
+                        })
+              });
     },
     createOrUpdate() {
       console.log('is edit', this.isEditModal);
 
-      if(this.isEditModal) {
-        console.log('In edit task');
-        const schedule_id = this.scheduleSelected.id;
-        const task_id = this.TASKS_LIST[schedule_id].id.id;
-        this.editTask(task_id);
-        this.resetModal();
-      }
-      else {
+      if (this.isEditModal) {
+          this.editTask(this.selected_task.id.id);
+          this.resetModal();
+      } else {
         console.log('IN save task');
         this.saveTask();
       }
+    },
+    categoryCoder(x) {
+      var value = 0;
+      if(x === 'now')
+        value = 1;
+      else if(x==="soon")
+        value = 2
+      else if (x==="early")
+        value = 3
+      else if(x==="expired")
+        value = 4;
+      else
+        value = 5
+      return value
+    },
+    sortTop(a, b ) {
+      var value1 = this.categoryCoder(a.additionalInfo.status);
+      var value2 = this.categoryCoder(b.additionalInfo.status);
+      return value1 - value2
+    },
+    getTopTasks() {
+      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
+      console.log('newArray--------------', newArray);
+      //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
+      const final = newArray.sort(this.sortTop);
+      console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
+      return final;
+
     }
+
 
   },
 };
 </script>
 
-<style scoped>
-    @import '~vue2-timepicker/dist/VueTimepicker.css';
-    .expiredChip {
-        position:relative;
-    }
-    .expiredChip:after {
-        content:'\A';
-        position:absolute;
-        background:black;
-        border-radius: 0.8rem;
-        border-bottom-right-radius: 0rem;
-        border-top-right-radius: 0rem;
-        top:0; bottom:0;
-        left:0;
-        width:10%;
-    }
+<style scoped lang="scss">
+  @import 'src/assets/styles/vendor/bootstrap/bootstrap';
 
-    .pendingChip {
-        position:relative;
-    }
-    .pendingChip:after {
-        content:'\A';
-        position:absolute;
-        background:grey;
-        border-radius: 0.8rem;
-        border-bottom-right-radius: 0rem;
-        border-top-right-radius: 0rem;
-        top:0; bottom:0;
-        left:0;
-        width:10%;
-    }
+  .card-scrollable {
+    width: 100%;
+    height: 245px;
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
 
-    .soonChip {
-        position:relative;
-    }
-    .soonChip:after {
-        content:'\A';
-        position:absolute;
-        background:yellow;
-        border-radius: 0.8rem;
-        border-bottom-right-radius: 0rem;
-        border-top-right-radius: 0rem;
-        top:0; bottom:0;
-        left:0;
-        width:10%;
-    }
+  .card-tasks-scrollable{
+    width: auto;
+    height: 100%;
+    position: relative;
+    overflow-x: scroll;
+  }
+  .card-task-header-text {
+    color: #4399B6;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
 
-    .earlyChip {
-        position:relative;
-    }
-    .earlyChip:after {
-        content:'\A';
-        position:absolute;
-        background: greenyellow;
-        border-radius: 0.8rem;
-        border-bottom-right-radius: 0rem;
-        border-top-right-radius: 0rem;
-        top:0; bottom:0;
-        left:0;
-        width:10%;
-    }
+  .card-task-header {
+    @extend card-header !optional;
+    background: #FFFFFF;
+  }
 
-    .nowChip {
-        position:relative;
-    }
-    .nowChip:after {
-        content:'\A';
-        position:absolute;
-        background: darkred;
-        border-radius: 0.8rem;
-        border-bottom-right-radius: 0rem;
-        border-top-right-radius: 0rem;
-        top:0; bottom:0;
-        left:0;
-        width:10%;
-    }
+  .tui-full-calendar-time-schedule-content{
+    border-left-style: none;
+    padding: 0;
+    border-left-width: 0;
+  }
+
+  .task .avatar {
+    background-color: #e1e4e1;
+    display: flex;
+    width: 2.857em;
+    height: 2.857em;
+    margin: 2px 0;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    color: #FFFFFF;
+    //transform: translate(-8px);
+  }
+
+  .task .avatar .avatar-content {
+    top: 0;
+    font-size: 1.5em;
+    text-transform: uppercase;
+  }
+
+  .task .task-body .avatar img {
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+  }
 
 </style>

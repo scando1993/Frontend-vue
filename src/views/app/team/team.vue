@@ -1,11 +1,18 @@
 <template>
-	<div>
-		<team-navbar v-if="loggedInUser.admin"/>
-		<div v-b-modal.m-new-admin id="list_header" class="d-flex justify-content-end btn">
-			<i class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
-			</i>
-			<p class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo integrante</p>
-		</div>
+    <div>
+        <team-navbar v-if="loggedInUser.admin"/>
+        <div  id="list_header" class="d-flex justify-content-end btn">
+            <div v-b-modal.m-new-admin>
+                <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
+                </i>
+                <p  class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo integrante</p>
+            </div>
+            <div  @click="onAdminClick()">
+                <i  class="d-inline i-Add mx-1" style="font-size: 20px; color: #00b3ee">
+                </i>
+                <p  class="m-0 d-inline text-18 font-weight-bold">Agregar nuevo admin</p>
+            </div>
+        </div>
 
 		<vue-perfect-scrollbar>
 			<div id="list_body" class="scrollable">
@@ -25,43 +32,39 @@
 						</div>
 
 
-						<div class="col-md-6 ">
-							<h3 class="d-inline">Miembro</h3>
-							<b-dropdown size="lg" variant="link" toggle-class="text-decoration-none" no-caret>
-								<template slot="button-content">
-									<i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
-								</template>
-								<b-dropdown-item @click="changeToCalendar">Ver calendario</b-dropdown-item>
-								<b-dropdown-item @click="changeToClients">Ver cliente</b-dropdown-item>
-								<b-dropdown-item @click="changeToReports">Ver reportes</b-dropdown-item>
-								<b-dropdown-item class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
-							</b-dropdown>
-						</div>
-					</b-row>
-					<!--                <div class="mt-3 mb-30 border-top"></div>-->
-				</div>
-			</div>
-		</vue-perfect-scrollbar>
-		<div id="footer-body" class="mt-5 d-flex justify-content-end">
-			<button class="btn planniButton" v-b-modal.m-confirm-leave>Abandonar Equipo</button>
-		</div>
-		<b-modal id="m-confirm-delete" centered title="Confirmar">
-			<div class="d-flex justify-content-center text-24">
-				<p style="text-align: center">
-					¿Estas seguro que deseas eliminar a este miembro del equipo?
-				</p>
-			</div>
-			<template class="d-flex justify-content-center" v-slot:modal-footer="{ ok, cancel }">
-				<div>
-					<b-button variant="info " size="sm" style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;"
-					          @click="cancelDeleteMember()">No
-					</b-button>
-					<b-button variant="info " size="sm" style=" padding-left: 60px;padding-right: 60px" @click="deleteMember()">
-						Si
-					</b-button>
-				</div>
-			</template>
-		</b-modal>
+                    <div class="col-md-6 ">
+                        <h3 class="d-inline">{{getMemberType(item)}}</h3>
+                        <b-dropdown v-if="showDropDown(item)" size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                            <template slot="button-content" >
+                                <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
+                            </template>
+                            <b-dropdown-item @click="changeToCalendar">Ver calendario</b-dropdown-item>
+                            <b-dropdown-item @click="changeToClients">Ver cliente</b-dropdown-item>
+                            <b-dropdown-item @click="changeToReports">Ver reportes</b-dropdown-item>
+                            <b-dropdown-item class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
+                        </b-dropdown>
+                    </div>
+                </b-row>
+<!--                <div class="mt-3 mb-30 border-top"></div>-->
+            </div>
+        </div>
+        </vue-perfect-scrollbar>
+        <div id="footer-body" class="mt-5 d-flex justify-content-end">
+            <button class="btn planniButton" v-b-modal.m-confirm-leave>Abandonar Equipo</button>
+        </div>
+        <b-modal id="m-confirm-delete" centered title="Confirmar">
+            <div class="d-flex justify-content-center text-24">
+                <p style="text-align: center">
+                    ¿Estas seguro que deseas eliminar a este miembro del equipo?
+                </p>
+            </div>
+            <template class="d-flex justify-content-center" v-slot:modal-footer="{ ok, cancel }">
+                <div >
+                    <b-button  variant = "info " size="sm" style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;"  @click="cancelDeleteMember()">No</b-button>
+                    <b-button variant = "info " size="sm" style=" padding-left: 60px;padding-right: 60px" @click="deleteMember()">Si</b-button>
+                </div>
+            </template>
+        </b-modal>
 
 		<b-modal id="m-confirm-leave" centered title="Confirmar">
 			<div class="d-flex justify-content-center text-24">
@@ -80,37 +83,34 @@
 			</template>
 		</b-modal>
 
-		<b-modal id="m-new-admin" centered title="Confirmar" hide-footer>
-			<div class="d-flex justify-content-center ">
-				<p style="text-align: center" class="text-24">
-					Elige nuevo admin
-				</p>
-			</div>
-			<div>
-				<form ref="formNewAdmin" @submit.stop.prevent @submit="addNewMember" @reset="hideNewMemberModal">
-					<b-form-group
-						label-for="email-input"
-						invalid-feedback="Email no valido"
-					>
-						<b-form-input
-							id="email-input"
-							placeholder="ejemplo@email.com"
-							type="email"
-							v-model="newMemberForm.email"
-							required
-						/>
-					</b-form-group>
-					<div class="d-flex justify-content-between mt-5">
-						<b-button variant="info " type="reset" size="sm"
-						          style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;">No
-						</b-button>
-						<b-button variant="info " type="submit" size="sm" style=" padding-left: 60px;padding-right: 60px">Si
-						</b-button>
-					</div>
-				</form>
-			</div>
-		</b-modal>
-	</div>
+        <b-modal id="m-new-admin" centered title="Confirmar" @hide="hideNewMemberModal" hide-footer>
+            <div class="d-flex justify-content-center ">
+                <p style="text-align: center" class="text-24">
+                    {{getTitle}}
+                </p>
+            </div>
+            <div>
+                <form ref="formNewAdmin" @submit.stop.prevent @submit="addNewMember" @reset="hideNewMemberModal">
+                    <b-form-group
+                            label-for="email-input"
+                            invalid-feedback="Email no valido"
+                    >
+                        <b-form-input
+                                id="email-input"
+                                placeholder="ejemplo@email.com"
+                                type="email"
+                                v-model="newMemberForm.email"
+                                required
+                        />
+                    </b-form-group>
+                    <div class="d-flex justify-content-between mt-5">
+                        <b-button  variant = "info " type="reset" size="sm" style=" margin-right: 190px;padding-left: 60px;padding-right: 60px;">No</b-button>
+                        <b-button variant = "info " type="submit" size="sm" style=" padding-left: 60px;padding-right: 60px">Si</b-button>
+                    </div>
+                </form>
+            </div>
+        </b-modal>
+    </div>
 </template>
 
 <script>
@@ -126,6 +126,8 @@ export default {
       boxOne: '',
       nameState: null,
       teamData: teamDummyData,
+        modal_title: "Añade un nuevo miembro",
+        isAdminModal: false,
       newMemberForm: {
         name: 'New Member',
         lastname: '',
@@ -140,7 +142,13 @@ export default {
   },
   computed: {
     ...mapGetters(['loggedInUser']),
-    ...mapGetters(['TEAM'])
+    ...mapGetters(['TEAM']),
+      getTitle: function () {
+          if(this.isAdminModal) {
+              return "Añade nuevo administrador"
+          }
+          return "Añade nuevo miembro"
+      }
   },
   methods: {
     changeToCalendar() {
@@ -180,27 +188,71 @@ export default {
       this.$bvModal.hide('m-confirm-delete');
     },
     addNewMember() {
-      //this.teamData.push(Object.assign({}, this.newMemberForm));
-      this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
-          .then(response => {
-              this.$store.dispatch('GET_TEAM');
-          })
-          .catch(error =>{
+        if(this.isAdminModal){
+            this.newAdmin()
+        }
+        else {
+            //this.teamData.push(Object.assign({}, this.newMemberForm));
+            this.$store.dispatch('INVITE_MEMBER', this.newMemberForm.email)
+                .then(response => {
+                    this.$store.dispatch('GET_TEAM');
+                })
+                .catch(error =>{
 
-          });
-        this.hideNewMemberModal();
+                });
+            this.hideNewMemberModal();
+        }
+
     },
     showNewMemberModal () {
       this.$modal.show('m-new-admin');
     },
     hideNewMemberModal () {
+        console.log("en hide")
+        this.isAdminModal = false;
       this.newMemberForm.email = '';
       this.$bvModal.hide('m-new-admin');
     },
     getImageForUser (value){
       let images = require.context('@/assets/images/faces/', false, /\.jpg$/);
+      if(value > 5) {
+          value = 5
+      }
       return images('./' + value + '.jpg');
-    }
+    },
+      getMemberType(member) {
+        const type = member.additionalInfo.type;
+        var display = 'Member';
+        switch (type) {
+            case 'Team Admin':
+                display = 'Administrador';
+                break;
+            case 'Vendor':
+                display = 'Member';
+                break;
+        }
+        return display;
+      },
+      showDropDown(member) {
+          const condition1 = this.getMemberType(member) !== 'Administrador';
+          const condition2 = this.loggedInUser.admin;
+          return condition1 && condition2;
+      },
+      onAdminClick() {
+          this.isAdminModal = true;
+          this.$bvModal.show('m-new-admin');
+
+      },
+      newAdmin() {
+          this.$store.dispatch('INVITE_ADMIN', this.newMemberForm.email)
+              .then(response => {
+                  this.$store.dispatch('GET_TEAM');
+              })
+              .catch(error =>{
+
+              });
+          this.hideNewMemberModal();
+      }
   }
 };
 

@@ -1,8 +1,9 @@
 export const taskCategories = {
-  '0': 'Reunion',
-  '1': 'Oficina',
-  '2': 'Venta',
-  '3': 'Contabidad'
+  0: 'Llamada',
+  1: 'Reunion',
+  2: 'Mail',
+  3: 'Informe',
+  4: 'Otro'
 };
 export const vendors = {
   '0': 'Laura Rivas',
@@ -17,8 +18,8 @@ export const clients = {
 };
 
 export const routines = {
-  '0': 'Fin de semana',
-  '1': 'Entre semana',
-  '2': 'Viaje',
-  '3': 'Feriado'
+  0: 'Sin repeticion',
+  1: 'Cada dia',
+  2: 'Cada semana',
+  3: 'Cada mes',
 };

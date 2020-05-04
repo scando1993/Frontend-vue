@@ -131,6 +131,20 @@ export default {
     signUserUp({ commit }, data) {
       commit('setLoading', true);
       commit('clearError');
+        const url = process.env.VUE_APP_API + '/Account/register';
+
+        axios.post(url, data)
+            .then(function (response) {
+                response = response.data;
+                commit('setLoading', false);
+
+            })
+            .catch(error => {
+                commit('setLoading', false);
+                commit('setError', error);
+            })
+
+      /*
       firebase
         .auth()
         .createUserWithEmailAndPassword(data.email, data.password)
@@ -150,6 +164,7 @@ export default {
           localStorage.removeItem('userInfo');
           console.log(error);
         });
+      */
     },
     signOut({ commit }) {
       // localStorage.removeItem('userInfo');
@@ -166,6 +181,36 @@ export default {
             console.log(_error);
           }
         );
-    }
+      localStorage.clear();
+        commit('setLogout');
+
+
+    },
+      refreshToken: ({ commit }) => {
+          return new Promise((resolve, reject) => {
+              const config = {
+                  headers: {
+                      'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                      'Content-Type': 'application/json'
+                  },
+              };
+              const body = {
+                  refreshToken: localStorage.getItem('refreshToken')
+              }
+              axios
+                  .post(process.env.VUE_APP_API + '/Account/refreshToken', body, config)
+                  .then(({data, status}) => {
+                      console.log(data, status);
+                      const { token, refreshToken } = data.data;
+                      localStorage.setItem('refreshToken', refreshToken);
+                      localStorage.setItem('token', token);
+                      // commit('ADD_CLIENT', data);
+                      resolve({data, status});
+                  })
+                  .catch(error => {
+                      reject(error);
+                  });
+          });
+      }
   }
 };

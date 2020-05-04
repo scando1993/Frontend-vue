@@ -3,14 +3,15 @@ const state = {
     showClientForm: false,
     isNewClientForm: false,
     formTitle: '',
-    client_id: '',
+    client: '',
     searchFilter: '',
     groupBy: '',
     clients_filters: {
       active: true,
       inactive: true,
       not_contact: true
-    }
+    },
+    showHistoryForm: false
   }
 };
 
@@ -18,12 +19,13 @@ const getters = {
   getShowClientForm: state => state.clients.showClientForm,
   getNewClientForm: state => state.clients.isNewClientForm,
   getFormTitle: state => state.clients.formTitle,
-  getFormClientId: state => state.clients.client_id,
+  getFormClientId: state => state.clients.client,
   getSearchText: state => state.clients.searchFilter,
   getActiveClients: state => state.clients.clients_filters.active,
   getInactiveClients: state => state.clients.clients_filters.inactive,
   getNotContactClients: state => state.clients.clients_filters.not_contact,
-  getGroupByFilter: state => state.clients.groupBy
+  getGroupByFilter: state => state.clients.groupBy,
+  getShowHistoryForm: state => state.clients.showHistoryForm
 };
 
 const mutations = {
@@ -31,7 +33,7 @@ const mutations = {
     state.clients.formTitle = payload;
   },
   setFormClientId: (state, payload) => {
-    state.clients.client_id = payload;
+    state.clients.client = payload;
   },
   setShowClientForm: state => {
     state.clients.showClientForm = true;
@@ -59,6 +61,12 @@ const mutations = {
   },
   setGroupByFilter: (state, payload) => {
     state.clients.groupBy = payload;
+  },
+  setShowHistoryForm: (state) => {
+    state.clients.showHistoryForm = true;
+  },
+  unsetShowHistoryForm: (state) => {
+    state.clients.showHistoryForm = false;
   }
 };
 const actions = {
@@ -100,10 +108,15 @@ const actions = {
   },
   currentGroupByFilter( { commit }, data ){
     commit('setGroupByFilter', data);
+  },
+  showClientHistoryForm({ commit }){
+    commit('unsetShowHistoryForm');
+    commit('setShowHistoryForm');
+  },
+  hideClientTaskHistory({ commit }){
+    commit('unsetShowHistoryForm');
   }
 };
-
-
 
 export default {
   state,

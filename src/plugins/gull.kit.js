@@ -11,17 +11,33 @@ import VueGoodTablePlugin from 'vue-good-table';
 // import VueSlider from "vue-slider-component";
 import Meta from 'vue-meta';
 import FlagIcon from 'vue-flag-icon';
-
 import '@/assets/styles/sass/theme.scss';
 import '@/plugins/echarts';
 import '@/plugins/apexChart.js';
 import '@/plugins/sweetalert2.js';
 import '@/plugins/tour.js';
 
+import vBlur from 'v-blur';
+import { ValidationProvider, extend, ValidationObserver } from 'vee-validate';
+import { required } from 'vee-validate/dist/rules';
+
+const moment = require('moment');
+import VueMoment from 'vue-moment';
+
+require('moment/locale/es');
+moment.locale('es');
+
 // locale.use(lang);
 export default {
   install(Vue) {
     Vue.use(BootstrapVue);
+    Vue.use(VueMoment, { moment });
+    Vue.use(vBlur);
+
+    Vue.component('ValidationProvider', ValidationProvider);
+    Vue.component('ValidationObserver', ValidationObserver);
+    extend('required', required);
+
     Vue.component(
       'large-sidebar',
       // The `import` function returns a Promise.
