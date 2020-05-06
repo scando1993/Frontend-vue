@@ -63,7 +63,7 @@
                                 <b-form-select
                                         required
                                         placeholder="Select a vendor first" v-model="newTaskForm.client_id"
-                                               :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+                                               :options="clientsFiltered.map(function (x) { return {value: x.id.id, text: x.additionalInfo.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Fecha"
@@ -156,7 +156,7 @@
             }
         },
         computed: {
-            ...mapGetters(['TASK_SELECTED', 'VENDOR_LIST', 'CLIENTS_LIST']),
+            ...mapGetters(['TASK_SELECTED', 'VENDOR_LIST', 'CLIENTS_LIST', 'loggedInUser']),
             timeStateEnable: function () {
                 if (this.newTaskForm.start_date) {
                     return true
@@ -168,6 +168,22 @@
                     return true
                 }
                 return false
+            },
+            clientsFiltered: function () {
+                if(!this.newTaskForm.vendor_id) {
+                    return []
+                }
+                if(this.loggedInUser.admin) {
+                    return this.CLIENTS_LIST.filter(x => x.additionalInfo.social_reason !== '_private_')
+                }
+                else {
+                    return this.CLIENTS_LIST.map( function (x) {
+                        if(x.additionalInfo.social_reason === '_private_') {
+                            x.additionalInfo.name = '(YO)';
+                        }
+                        return x;
+                    })
+                }
             }
 
         },
