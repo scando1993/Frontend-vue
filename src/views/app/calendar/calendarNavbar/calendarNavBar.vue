@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <a class="d-flex flex-row" @click="showNewTaskModal()">
+      <a class="d-flex flex-row" style="cursor: pointer;" @click="showNewTaskModal()">
         <i class="i-Add mr-1 btn-add-plani align-self-center"/>
         <span class="text-adjust align-self-center">Nueva Tarea</span>
       </a>
@@ -196,7 +196,9 @@ export default {
       }
     },
     showNewTaskModal() {
-      this.setShowNewTaskModal(true);
+      //this.setShowNewTaskModal(true);
+      console.log("aqui en el boton");
+      this.$bvModal.show('new_task_form_1');
     },
     changePrevCalendar(){
       console.log('Prev calendar clicked');
