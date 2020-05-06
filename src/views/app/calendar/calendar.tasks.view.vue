@@ -147,7 +147,12 @@ export default {
 			'getShowNewTaskModal',
 			'getSearchTaskText',
 			'VENDOR_LIST', 'CLIENTS_LIST',
-			'TASKS_LIST'
+			'TASKS_LIST',
+			'getExpiredTasks',
+			'getNowTasks',
+			'getSoonTasks',
+			'getEarlyTasks',
+			'getPendingTasks'
 		]),
 
 		getModalTitle() {
