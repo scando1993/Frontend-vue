@@ -103,7 +103,7 @@ export default {
         if(tasks.length === 0) {
           const empty = {
             vendor: vendor.additionalInfo.firstName,
-            last_activity: 'N/A',
+            last_activity: this.getLastActivityDate(client),
             client: client,
             activity: {
               state: 'Without contact',
@@ -122,7 +122,7 @@ export default {
           name: task.additionalInfo.name
         };
         task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
-        task['last_activity'] = task.additionalInfo.tui_data ?  new Date(task.additionalInfo.tui_data.start) : 'N/A';
+        task['last_activity'] = this.getLastActivityDate(client);
         task['client'] = client;
         console.log('task', task);
         new_tasks.push(task);
@@ -171,6 +171,9 @@ export default {
       }).filter(vendor => {
         return vendor.clients.length !== 0;
       });
+    },
+    getLastActivityDate(client) {
+      return client.additionalInfo.last_activity ? new Date(client.additionalInfo.last_activity) : 'N/A';
     },
   }
 };
