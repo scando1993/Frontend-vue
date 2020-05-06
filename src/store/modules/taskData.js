@@ -2,13 +2,18 @@ const axios = require('axios');
 export default {
   state: {
     tasks_list: [],
-    tasks_progress: {}
+    tasks_progress: {},
+    task_selected: {},
   },
   getters: {
+    TASK_SELECTED: state => state.task_selected,
     TASKS_LIST: state => state.tasks_list,
     TASKS_PROGRESS: state => state.tasks_progress
   },
   mutations: {
+    SET_TASK_SELECTED(state, payload) {
+      state.task_selected = payload;
+    },
     SET_TASK_LIST(state, payload) {
       state.tasks_list = payload;
     },
@@ -17,6 +22,9 @@ export default {
     }
   },
   actions: {
+    SET_TASK_SELECTED_ACTION: ({commit}, payload) => {
+      commit('SET_TASK_SELECTED', payload);
+    },
     GET_TASKS_LIST: async ({ commit }) => {
       const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
