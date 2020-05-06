@@ -69,7 +69,10 @@
                                     label="Fecha"
                             >
                                 <b-form-datepicker
-                                        id="example-datepicker" v-model="newTaskForm.start_date"
+                                        :min="new Date()"
+                                        today-variant="primary"
+                                        id="example-datepicker"
+                                        v-model="newTaskForm.start_date"
                                                    class="mb-2"></b-form-datepicker>
                             </b-form-group>
                             <b-form-group
@@ -91,6 +94,7 @@
                                     label="Duracion"
                             >
                                 <b-form-timepicker
+                                        form="formNewTask"
                                         :required="!durationStateEnable"
                                         :disabled="!durationStateEnable"
                                          v-model="newTaskForm.duration"/>
@@ -147,6 +151,7 @@
                 },
                 taskCategories,
                 taskOptions: taskCategories,
+                initial_date: new Date()
 
             }
         },
