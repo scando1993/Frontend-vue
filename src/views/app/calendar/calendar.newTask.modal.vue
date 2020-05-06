@@ -17,63 +17,83 @@
                             <b-form-group
                                     label="Categoria de tarea"
                             >
-                                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
+                                <b-form-select required
+                                               placeholder="Escoja una categoria"
+                                               v-model="newTaskForm.category" :options="taskOptions"/>
                             </b-form-group>
 
                             <b-form-group
                                     label="Actividad"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.name"/>
+                                <b-form-input
+                                        required
+                                        placeholder="Escriba el nombre de la actividad"
+                                        type="text" v-model="newTaskForm.name"/>
                             </b-form-group>
                             <b-form-group
                                     label="Ubicación"
                             >
-                                <b-form-input type="text" v-model="newTaskForm.address"/>
+                                <b-form-input
+                                        placeholder="Ubicación de la actividad"
+                                        type="text" v-model="newTaskForm.address"/>
                             </b-form-group>
                             <b-form-group
                                     label="Asignar vendedor"
                             >
-                                <b-form-select v-model="newTaskForm.vendor_id"
+                                <b-form-select
+                                        required
+                                        placeholder="Seleccione a un vendedor"
+                                        v-model="newTaskForm.vendor_id"
                                                :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Notas"
                             >
-                                <b-form-textarea v-model="newTaskForm.notes"/>
+                                <b-form-textarea
+                                        placeholder="..."
+                                        v-model="newTaskForm.notes"/>
                             </b-form-group>
 
 
                         </b-col>
                         <b-col md="5">
                             <b-form-group
-                                    required
                                     label="Cliente"
                             >
-                                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"
+                                <b-form-select
+                                        required
+                                        placeholder="Select a vendor first" v-model="newTaskForm.client_id"
                                                :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
                             </b-form-group>
                             <b-form-group
                                     label="Fecha"
                             >
-
-                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date"
+                                <b-form-datepicker
+                                        id="example-datepicker" v-model="newTaskForm.start_date"
                                                    class="mb-2"></b-form-datepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Hora"
                             >
-                                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
+                                <b-form-timepicker
+                                        :disabled="!timeStateEnable"
+                                        v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
                             </b-form-group>
                             <b-form-group
                                     label="Recordatorio"
                             >
-                                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+                                <b-form-timepicker
+                                        :disabled="!durationStateEnable"
+                                        v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
 
                             </b-form-group>
                             <b-form-group
                                     label="Duracion"
                             >
-                                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+                                <b-form-timepicker
+                                        :required="!durationStateEnable"
+                                        :disabled="!durationStateEnable"
+                                         v-model="newTaskForm.duration"/>
 
                                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
@@ -132,6 +152,18 @@
         },
         computed: {
             ...mapGetters(['TASK_SELECTED', 'VENDOR_LIST', 'CLIENTS_LIST']),
+            timeStateEnable: function () {
+                if (this.newTaskForm.start_date) {
+                    return true
+                }
+                return false
+            },
+            durationStateEnable: function () {
+                if (this.newTaskForm.start_time) {
+                    return true
+                }
+                return false
+            }
 
         },
         mounted: {
