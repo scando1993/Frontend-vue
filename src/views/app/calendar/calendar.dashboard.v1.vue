@@ -128,7 +128,7 @@
                 label="Fecha"
               >
 
-                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date || getNow()"
+                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date"
                                    class="mb-2"></b-form-datepicker>
               </b-form-group>
               <b-form-group
