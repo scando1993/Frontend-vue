@@ -4,8 +4,8 @@
 			<b-col sm="12" md="12" lg="4" xl="4" class="mx-auto">
 				<h3 class="text-center">Expiradas</h3>
 				<b-card body-class="mx-1">
-					<template v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'expired')">
-						<calendar-task-widget style=" cursor: pointer;" v-on:chip_click="onClickChip"  :task="task" :key="taskIndex" class="mx-auto"/>
+					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'expired')">
+						<calendar-task-widget v-on:chip_click="onClickChip"  :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
@@ -20,8 +20,8 @@
 			<b-col sm="12" md="12" lg="4" xl="4">
 				<h3 class="text-center">Pendientes</h3>
 				<b-card body-class="mx-1">
-					<template v-for="(task, taskIndex) in TASKS_LIST.filter(x=> x.additionalInfo.status === 'pending')">
-						<calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
+					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'pending')">
+						<calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
@@ -51,10 +51,19 @@ export default {
 			'getSelectedMapView',
 			'getSelectedComponentView',
 			'getShowNewTaskModal',
-			'getSearchText',
-			'TASKS_LIST'
+			'getSearchTaskText',
+			'VENDOR_LIST', 'CLIENTS_LIST',
+			'TASKS_LIST',
+			'getExpiredTasks',
+			'getNowTasks',
+			'getSoonTasks',
+			'getEarlyTasks',
+			'getPendingTasks'
 		]),
 
+		tasksFiltered: function () {
+			return this.filterTASKSearch(this.TASKS_LIST);
+		}
 
 	},
 	data() {
@@ -103,14 +112,51 @@ export default {
 		getTopTasks() {
 			// const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
 			/// console.log('newArray--------------', newArray);
-			const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
+			const a = this.tasksFiltered.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
 			const b = a.filter( x=> x.additionalInfo.start_date && x.additionalInfo.start_time);
 			const final = b.sort(this.sortTop);
 			console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
 			return final;
 
 		},
+		filterTASKSearch (list) {
+			return list.filter(task => {
+				let expired = this.getExpiredTasks;
+				let now = this.getNowTasks;
+				let soon = this.getSoonTasks;
+				let early = this.getEarlyTasks;
+				let pending = this.getPendingTasks;
 
+				switch (task.additionalInfo.status) {
+					case 'expired':{
+						if (!expired) {
+							return false;
+						}
+					}break;
+					case 'now': {
+						if (!now){
+							return false;
+						}
+					}break;
+					case 'soon': {
+						if (!soon){
+							return false;
+						}
+					}break;
+					case 'early': {
+						if (!early){
+							return false;
+						}
+					}break;
+					case 'pending': {
+						if (!pending){
+							return false;
+						}
+					}break;
+				}
+				return this.TASKS_LIST.find(x => x.id.id === task.id.id).additionalInfo.name.toLowerCase().match(this.getSearchTaskText.toLowerCase());
+			});
+		},
 		toggleIsEditModal() {
 			console.log("cambiando isEditModal");
 			this.isEditModal = false;

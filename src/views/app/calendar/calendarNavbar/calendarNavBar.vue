@@ -50,16 +50,16 @@
         </div>
         <div class="calendar-navbar-options-items">
           <label class="d-flex flex-row mb-0 task-option-list">
-            <input type="checkbox" v-model="soon" class="tui-full-calendar-checkbox-square">
-            <span :style="{'border-color': '#F9CD56', 'background-color': soon ? '#F9CD56' : 'transparent'}"
+            <input type="checkbox" v-model="early" class="tui-full-calendar-checkbox-square">
+            <span :style="{'border-color': '#F9CD56', 'background-color': early ? '#F9CD56' : 'transparent'}"
                   class="task-option-list"/>
             <span class="task-option-list">Pronto</span>
           </label>
         </div>
         <div class="calendar-navbar-options-items">
           <label class="d-flex flex-row mb-0 task-option-list">
-            <input type="checkbox" v-model="early" class="tui-full-calendar-checkbox-square">
-            <span :style="{'border-color': '#C7D963', 'background-color': early ? '#C7D963' : 'transparent'}"
+            <input type="checkbox" v-model="soon" class="tui-full-calendar-checkbox-square">
+            <span :style="{'border-color': '#C7D963', 'background-color': soon ? '#C7D963' : 'transparent'}"
                   class="task-option-list"/>
             <span class="task-option-list">Temprano</span>
           </label>
@@ -155,10 +155,10 @@ export default {
     },
     search: {
       get(){
-        return this.getSearchText();
+        return this.getSearchTaskText();
       },
       set(value){
-        this.setSearchText(value);
+        this.setSearchTaskText(value);
       }
     },
   },
@@ -169,13 +169,13 @@ export default {
       'getSoonTasks',
       'getEarlyTasks',
       'getPendingTasks',
-      'getSearchText'
+      'getSearchTaskText'
     ]),
     ...mapActions([
       'setSelectedComponentView',
       'setSelectedMapView',
       'setShowNewTaskModal',
-      'setSearchText',
+      'setSearchTaskText',
       'toggleExpiredTasks',
       'toggleNowTasks',
       'toggleSoonTasks',

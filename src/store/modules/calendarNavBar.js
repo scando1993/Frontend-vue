@@ -18,7 +18,7 @@ const state = {
 const getters = {
   getSelectedMapView: state => state.calendar.selectedMapView,
   getShowNewTaskModal: state => state.calendar.showNewTaskModal,
-  getSearchText: state => state.calendar.searchText,
+  getSearchTaskText: state => state.calendar.searchText,
   getSelectedComponentView: state => state.calendar.selectedComponentView,
   getRangeText: state => state.calendar.rangeText,
   getExpiredTasks: state => state.calendar.expired,
@@ -37,7 +37,7 @@ const mutations = {
   setSelectedMapView: (state, data) => {
     state.calendar.selectedMapView = data;
   },
-  setSearchText: (state, data) => {
+  setSearchTaskText: (state, data) => {
     state.calendar.searchText = data;
   },
   setShowNewTaskModal: (state, data) => {
@@ -73,8 +73,8 @@ const actions = {
   setSelectedMapView({ commit }, data) {
     commit('setSelectedMapView', data);
   },
-  setSearchText({ commit }, data) {
-    commit('setSearchText', data);
+  setSearchTaskText({ commit }, data) {
+    commit('setSearchTaskText', data);
   },
   setShowNewTaskModal({ commit }, data) {
     console.log('POR AQUI', data);

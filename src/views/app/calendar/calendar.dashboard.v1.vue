@@ -62,8 +62,8 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
-                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
-                  <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired')">
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
             </div>
@@ -74,8 +74,8 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
-                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending')">
+                  <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
             </div>
@@ -142,8 +142,14 @@ export default {
       'getSelectedMapView',
       'getSelectedComponentView',
       'getShowNewTaskModal',
-      'getSearchText',
-      'TASKS_LIST'
+      'getSearchTaskText',
+      'VENDOR_LIST', 'CLIENTS_LIST',
+      'TASKS_LIST',
+            'getExpiredTasks',
+            'getNowTasks',
+            'getSoonTasks',
+            'getEarlyTasks',
+            'getPendingTasks'
     ]),
     showMap() {
       return this.getSelectedComponentView === 'Map';
@@ -152,7 +158,7 @@ export default {
       return this.getSelectedComponentView === 'Tasks';
     },
     scheduleList() {
-      return this.TASKS_LIST.map(x => {return x.additionalInfo.tui_data;});
+      return this.tasksFiltered.map(x => {return x.additionalInfo.tui_data;});
       let scheduleList = this.TASKS_LIST.map(x => {
         let schedule = x.additionalInfo;
         let calendarId = calendarList.find(x => x.name === schedule.status).id;
@@ -169,7 +175,12 @@ export default {
       });
       console.log(scheduleList);
       return scheduleList;
+    },
+    tasksFiltered: function () {
+      return this.filterTASKSearch(this.TASKS_LIST);
     }
+
+
   },
   data() {
     return {
@@ -481,7 +492,7 @@ export default {
       return value1 - value2
     },
     getTopTasks() {
-      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
+      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
       console.log('newArray--------------', newArray);
       //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
       const final = newArray.sort(this.sortTop);
@@ -489,6 +500,45 @@ export default {
       return final;
 
     },
+    filterTASKSearch (list) {
+      return list.filter(task => {
+        let expired = this.getExpiredTasks;
+        let now = this.getNowTasks;
+        let soon = this.getSoonTasks;
+        let early = this.getEarlyTasks;
+        let pending = this.getPendingTasks;
+
+        switch (task.additionalInfo.status) {
+          case 'expired':{
+            if (!expired) {
+              return false;
+            }
+          }break;
+          case 'now': {
+            if (!now){
+              return false;
+            }
+          }break;
+          case 'soon': {
+            if (!soon){
+              return false;
+            }
+          }break;
+          case 'early': {
+            if (!early){
+              return false;
+            }
+          }break;
+          case 'pending': {
+            if (!pending){
+              return false;
+            }
+          }break;
+        }
+        return this.TASKS_LIST.find(x => x.id.id === task.id.id).additionalInfo.name.toLowerCase().match(this.getSearchTaskText.toLowerCase());
+      });
+    },
+
     toggleIsEditModal() {
       console.log("cambiando isEditModal");
       this.isEditModal = false;
