@@ -1,13 +1,325 @@
 <template>
-    $END$
+    <b-modal id="new_task_form_1" @hide="hideNewTaskForm" hide-footer  centered hide-header size="lg">
+        <div class="client-modal">
+            <div class="card-header p-1" style="background: #00b3ee"></div>
+            <div class="client-modal-header">
+                <div class="d-flex flex-row justify-content-between">
+                    <button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
+                    <p class="client-modal-heading">Nueva Tarea</p>
+                    <div></div>
+                </div>
+
+            </div>
+            <form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideForm">
+                <div>
+                    <b-row>
+                        <b-col md="7">
+                            <b-form-group
+                                    label="Categoria de tarea"
+                            >
+                                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
+                            </b-form-group>
+
+                            <b-form-group
+                                    label="Actividad"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.name"/>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Ubicación"
+                            >
+                                <b-form-input type="text" v-model="newTaskForm.address"/>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Asignar vendedor"
+                            >
+                                <b-form-select v-model="newTaskForm.vendor_id"
+                                               :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Notas"
+                            >
+                                <b-form-textarea v-model="newTaskForm.notes"/>
+                            </b-form-group>
+
+
+                        </b-col>
+                        <b-col md="5">
+                            <b-form-group
+                                    required
+                                    label="Cliente"
+                            >
+                                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"
+                                               :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Fecha"
+                            >
+
+                                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date"
+                                                   class="mb-2"></b-form-datepicker>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Hora"
+                            >
+                                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
+                            </b-form-group>
+                            <b-form-group
+                                    label="Recordatorio"
+                            >
+                                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+
+                            </b-form-group>
+                            <b-form-group
+                                    label="Duracion"
+                            >
+                                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+
+                                <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
+
+                            </b-form-group>
+
+                        </b-col>
+                    </b-row>
+                </div>
+                <div class="mt-5 d-flex justify-content-around">
+                    <div v-if="!isEditModal">
+                        <button class="btn client-modal-btn" type="reset" >Cancelar</button>
+                        <button class="btn client-modal-btn" type="submit" >Crear Tarea</button>
+                    </div>
+                    <div v-else>
+                        <button class="btn client-modal-btn" @click="deteteTask">Eliminar</button>
+                        <button class="btn client-modal-btn" type="submit" >Editar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </b-modal>
 </template>
 
 <script>
+    import {taskCategories} from './data/formData';
+    import {mapGetters} from 'vuex';
     export default {
-        name: "calendar.newTask.modal"
+        name: "calendar_newTask_modal",
+        props: {
+          isEditModal: {
+              type: Object,
+              required: true
+          }
+        },
+        data() {
+            return {
+                newTaskForm: {
+                    category: '',
+                    name: '',
+                    address: '',
+                    lat: 0,
+                    lng: 0,
+                    vendor_id: '',
+                    notes: '',
+                    client_id: '',
+                    start_date: '',
+                    start_time: '',
+                    duration: '',
+                    reminder: '',
+                    completed: ''
+                },
+                taskCategories,
+                taskOptions: taskCategories,
+
+            }
+        },
+        computed: {
+            ...mapGetters(['TASK_SELECTED', 'VENDOR_LIST', 'CLIENTS_LIST']),
+
+        },
+        mounted: {
+
+        },
+        methods: {
+            getVendorClients() {
+                // console.log('IN getVendors clients', this.newTaskForm.client_id);
+                // console.log('sss', this.newTaskForm);
+                const vendor_id = this.newTaskForm.vendor_id;
+                const payload = { vendor_id: vendor_id, limit: 10000, textSearch: null };
+                this.$store.dispatch('GET_VENDOR_CLIENTS', payload);
+            },
+            hideForm() {
+                // console.log('en hide fomr');
+                // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
+                this.$bvModal.hide("new_task_form_1");
+                this.clearFormData();
+
+            },
+            createTask() {
+                this.newTaskForm.category = new Number(this.newTaskForm.category);
+                // this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
+                // this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
+                console.log('form', this.newTaskForm);
+                this.$store.dispatch('POST_TASK', this.newTaskForm)
+                    .then(result => {
+                        console.log(result);
+                        this.$store.dispatch('GET_TASKS_LIST');
+                    });
+            },
+            hideNewTaskForm() {
+                this.$bvModal.hide("new_task_form_1");
+                this.clearFormData();
+                this.$emit('close2', true);
+            },
+            getConditionalSubmit() {
+                if(this.isEditModal) {
+                    this.editTask();
+                }
+                else
+                    this.createTask();
+                this.hideForm();
+            },
+            clearFormData() {
+                this.newTaskForm = {
+                    category: '',
+                    name: '',
+                    address: '',
+                    lat: 0,
+                    lng: 0,
+                    vendor_id: '',
+                    notes: '',
+                    client_id: '',
+                    start_date: '',
+                    start_time: '',
+                    duration: '',
+                    reminder: '',
+                    completed: ''
+                };
+            },
+            setFormData(taskSelected) {
+                this.newTaskForm = {
+                    category: (taskSelected.additionalInfo.category).toString(),
+                    name: taskSelected.additionalInfo.name || '',
+                    address: taskSelected.additionalInfo.address || '',
+                    lat: taskSelected.additionalInfo.lat,
+                    lng: taskSelected.additionalInfo.lng,
+                    vendor_id: taskSelected.customerId.id || '',
+                    notes: taskSelected.additionalInfo.notes|| '',
+                    client_id: taskSelected.additionalInfo.client_data.id.id || '',
+                    start_date: taskSelected.additionalInfo.start_date || '',
+                    start_time: taskSelected.additionalInfo.start_time || '',
+                    duration: taskSelected.additionalInfo.duration || '',
+                    reminder: taskSelected.additionalInfo.reminder || '',
+                    completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
+                };
+            },
+            editTask() {
+                const task_id = this.TASK_SELECTED.id.id;
+                this.newTaskForm.category = Number(this.newTaskForm.category);
+                const payload = {
+                    task_id: task_id,
+                    data: this.newTaskForm
+                };
+                const changeStatusPayload = {
+                    task_id: task_id,
+                    completed: this.newTaskForm.completed
+                };
+                this.$store.dispatch('UPDATE_TASK', payload)
+                    .then(response => {
+
+                        this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+                            .then(response2 => {
+                                this.$store.dispatch('GET_TASKS_LIST');
+
+                            })
+                    });
+            },
+            deteteTask() {
+                const task_id = this.TASK_SELECTED.id.id;
+                this.$store.dispatch('DELETE_TASK', task_id)
+                    .then(x => {
+                        this.$store.dispatch('GET_TASKS_LIST');
+                    });
+                this.hideForm();
+
+                // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
+            },
+
+        },
+        watch: {
+            'newTaskForm.vendor_id': function (oldVal, newVal) {
+                if(this.newTaskForm.vendor_id)
+                    this.getVendorClients();
+            },
+            'TASK_SELECTED': function (oldVal, newVal) {
+                this.setFormData(this.TASK_SELECTED);
+                this.getVendorClients();
+            }
+        }
     }
 </script>
 
 <style scoped>
+    .headerClass {
+        background: #00b3ee
+    }
+
+    .client-modal-contact {
+        border-radius: 3px;
+        border: 1px solid gray;
+        padding: 0.5rem;
+    }
+
+    .client-modal-btn {
+        background-color: #00b3ee;
+        color: white;
+        border-radius: 3px;
+        font-size: 1rem;
+        padding: 0 0.5rem;
+        border: 0;
+        align-self: center;
+    }
+
+    .client-modal-btn-pressed {
+        background-color: gray;
+        color: white;
+        border-radius: 3px;
+        font-size: 1rem;
+        padding: 0 0.5rem;
+        border: 0;
+        align-self: center;
+    }
+
+    .client-modal-close-btn {
+        background: none;
+        color: #00b3ee;
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .client-modal {
+        @extend .card;
+        border-radius: 6px;
+    }
+
+    .client-modal-header {
+        @extend .card-header;
+        padding: 0.15rem 1rem;
+    }
+
+    .client-modal-btn-history {
+        background-color: #00b3ee;
+        color: white;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        padding: 0 0.5rem;
+        border: 0;
+        align-self: center;
+    }
+
+    .client-modal-heading {
+        align-self: center;
+        flex-grow: 1;
+        margin: 0;
+        font-size: 1.3rem;
+        text-align: center;
+    }
 
 </style>
