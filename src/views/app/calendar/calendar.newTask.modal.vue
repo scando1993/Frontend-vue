@@ -160,7 +160,7 @@
                 this.$store.dispatch('POST_TASK', this.newTaskForm)
                     .then(result => {
                         console.log(result);
-                        this.$store.dispatch('GET_TASKS_LIST');
+                        this.fetchTaskData();
                     });
             },
             hideNewTaskForm() {
@@ -226,8 +226,7 @@
 
                         this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
                             .then(response2 => {
-                                this.$store.dispatch('GET_TASKS_LIST');
-
+                                this.fetchTaskData();
                             })
                     });
             },
@@ -235,12 +234,18 @@
                 const task_id = this.TASK_SELECTED.id.id;
                 this.$store.dispatch('DELETE_TASK', task_id)
                     .then(x => {
-                        this.$store.dispatch('GET_TASKS_LIST');
+                        this.fetchTaskData();
                     });
                 this.hideForm();
 
                 // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
             },
+            fetchTaskData() {
+                this.$store.dispatch('GET_TASKS_LIST');
+                this.$store.dispatch('GET_TASKS_PROGRESS');
+
+
+            }
 
         },
         watch: {
