@@ -61,6 +61,9 @@ export default {
 			'getPendingTasks'
 		]),
 
+		tasksFiltered: function () {
+			return this.filterTASKSearch(this.TASKS_LIST);
+		}
 
 	},
 	data() {
@@ -123,12 +126,6 @@ export default {
 				let soon = this.getSoonTasks;
 				let early = this.getEarlyTasks;
 				let pending = this.getPendingTasks;
-		},
-
-		toggleIsEditModal() {
-			console.log("cambiando isEditModal");
-			this.isEditModal = false;
-		}
 
 				switch (task.additionalInfo.status) {
 					case 'expired':{
@@ -160,6 +157,10 @@ export default {
 				return this.TASKS_LIST.find(x => x.id.id === task.id.id).additionalInfo.name.toLowerCase().match(this.getSearchTaskText.toLowerCase());
 			});
 		},
+		toggleIsEditModal() {
+			console.log("cambiando isEditModal");
+			this.isEditModal = false;
+		}
 
 
 	},
