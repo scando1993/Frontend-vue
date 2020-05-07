@@ -83,7 +83,7 @@
         </b-col>
       </div>
     </div>
-    <calendar_newTask_modal :initialDate="initialModalDate" :initialEndDate="initialModalEndDate" :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
+    <calendar_newTask_modal :initialDate="initialModalDate" :initialEndDate="initialModalEndDate" :isEditModal="isEditModal" v-on:close2="restartModal"/>
 
     <calendar-progress-bar/>
   </div>
@@ -560,7 +560,7 @@ export default {
       });
     },
 
-    toggleIsEditModal() {
+    restartModal() {
       console.log("cambiando isEditModal");
       this.isEditModal = false;
       this.initialModalDate = null;
