@@ -83,7 +83,7 @@
         </b-col>
       </div>
     </div>
-    <calendar_newTask_modal :initialDate="initialModalDate" :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
+    <calendar_newTask_modal :initialDate="initialModalDate" :initialEndDate="initialModalEndDate" :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
 
     <calendar-progress-bar/>
   </div>
@@ -119,6 +119,7 @@ import CalendarTaskWidget from './calendar.task.widget';
 import CalendarProgressBar from './calendar.progressBar';
 import CalendarInnerTaskWidget from './calendar.inner.task.widget';
 import Vue from 'vue';
+import {set, getHours, getMinutes, getSeconds} from 'date-fns';
 
 export default {
   metaInfo: {
@@ -186,6 +187,7 @@ export default {
     return {
       scheduleSelected: null,
       initialModalDate: null,
+      initialModalEndDate: null,
       isEditModal: false,
       timeNow: (new Date()).toString(),
       taskOptions: taskCategories,
@@ -429,7 +431,23 @@ export default {
       // implement your code
       console.log('BeforeCreate', e);
       this.initialModalDate = new Date(e.start);
+      if(this.getSelectedMapView === 'month') {
+        console.log("en el if---------------------");
+        const now = new Date();
+        this.initialModalDate = set(this.initialModalDate,
+                {
+                  hours: getHours(now),
+                  minutes: getMinutes(now),
+                  seconds: getSeconds(now)
+                }
+        )
+      }
+      else {
+        console.log("en el else---------------------", this.getSelectedMapView);
+        this.initialModalEndDate = new Date(e.end);
+      }
       this.showNewTaskModal();
+      this.refreshScheduleVisibility();
       // this.saveNewSchedule(e);
     },
     onBeforeDeleteSchedule(e) {
@@ -546,6 +564,7 @@ export default {
       console.log("cambiando isEditModal");
       this.isEditModal = false;
       this.initialModalDate = null;
+      this.initialModalEndDate = null;
     },
     showNewTaskModal() {
       //this.setShowNewTaskModal(true);
