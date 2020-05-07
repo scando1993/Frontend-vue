@@ -124,13 +124,18 @@
 <script>
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
+    import {format} from 'date-fns';
     export default {
         name: "calendar_newTask_modal",
         props: {
           isEditModal: {
               type: Object,
               required: true
-          }
+          },
+            initialDate: {
+              type: Object,
+                required: false
+            }
         },
         data() {
             return {
@@ -309,6 +314,19 @@
             'TASK_SELECTED': function (oldVal, newVal) {
                 this.setFormData(this.TASK_SELECTED);
                 this.getVendorClients();
+            },
+            'initialDate': function(oldVal, newVal) {
+                if(this.initialDate) {
+
+                    // formatting date
+                    const startDate_formated = format(this.initialDate, 'yyyy-MM-dd');
+                    const startTime_formated = format(new Date(), 'hh:mm:ss');
+
+                    this.newTaskForm.start_date = startDate_formated;
+                    this.newTaskForm.start_time = startTime_formated;
+
+
+                }
             }
         }
     }

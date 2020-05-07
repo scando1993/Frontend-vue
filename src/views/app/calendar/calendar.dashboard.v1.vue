@@ -83,7 +83,7 @@
         </b-col>
       </div>
     </div>
-    <calendar_newTask_modal :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
+    <calendar_newTask_modal :initialDate="initialModalDate" :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
 
     <calendar-progress-bar/>
   </div>
@@ -185,6 +185,7 @@ export default {
   data() {
     return {
       scheduleSelected: null,
+      initialModalDate: null,
       isEditModal: false,
       timeNow: (new Date()).toString(),
       taskOptions: taskCategories,
@@ -427,7 +428,9 @@ export default {
     onBeforeCreateSchedule(e) {
       // implement your code
       console.log('BeforeCreate', e);
-      this.saveNewSchedule(e);
+      this.initialModalDate = new Date(e.start);
+      this.showNewTaskModal();
+      // this.saveNewSchedule(e);
     },
     onBeforeDeleteSchedule(e) {
       // implement your code
@@ -542,7 +545,13 @@ export default {
     toggleIsEditModal() {
       console.log("cambiando isEditModal");
       this.isEditModal = false;
-    }
+      this.initialModalDate = null;
+    },
+    showNewTaskModal() {
+      //this.setShowNewTaskModal(true);
+      console.log("aqui en el boton");
+      this.$bvModal.show('new_task_form_1');
+    },
 
 
   },
