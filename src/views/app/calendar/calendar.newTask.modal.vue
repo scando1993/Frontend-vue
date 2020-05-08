@@ -60,9 +60,12 @@
                         <b-col md="5">
                             <b-form-group
                                     label="Cliente"
+                                    :invalid-feedback="clientSeletection_invalidFeedback"
+                                    :state="clientSelection_state"
                             >
                                 <model-select
                                         required
+                                        :isError="clientSelection_state"
                                         placeholder="Busca y selecciona a un cliente"
                                         v-model="newTaskForm.client_id"
                                                :options="clientsFiltered.map(function (x) { return {value: x.id.id, text: x.additionalInfo.name}})"/>
@@ -210,6 +213,15 @@
                     return '';
                 }
                 return this.CLIENT_VENDOR.additionalInfo.firstName + ' ' + this.CLIENT_VENDOR.additionalInfo.lastName
+            },
+            clientSelection_state: function () {
+                return this.newTaskForm.client_id === '';
+            },
+            clientSeletection_invalidFeedback: function () {
+                if(this.newTaskForm.client_id ) {
+                    return ''
+                }
+                return 'Por favor selecciona a un cliente'
             }
 
         },
@@ -253,7 +265,15 @@
                 this.clearFormData();
                 this.$emit('close2', true);
             },
-            getConditionalSubmit() {
+            getConditionalSubmit(e) {
+                if(!this.newTaskForm.client_id) {
+                    e.preventDefault();
+                    return false
+                }
+                else {
+                    this.hideNewTaskForm();
+                }
+
                 if(this.isEditModal) {
                     this.editTask();
                 }
@@ -331,6 +351,15 @@
                 this.$store.dispatch('GET_TASKS_PROGRESS');
 
 
+            },
+            basicPrevent(e) {
+                if(!this.newTaskForm.client_id) {
+                    e.preventDefault();
+                    return false
+                }
+                else {
+                    this.hideNewTaskForm();
+                }
             }
 
         },
