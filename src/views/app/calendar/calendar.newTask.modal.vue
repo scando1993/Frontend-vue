@@ -209,7 +209,7 @@
                 if(!this.CLIENT_VENDOR) {
                     return '';
                 }
-                return this.CLIENT_VENDOR.additionalInfo.firstName + ' ' + this.CLIENT_VENDOR.additionalInfo.firstName
+                return this.CLIENT_VENDOR.additionalInfo.firstName + ' ' + this.CLIENT_VENDOR.additionalInfo.lastName
             }
 
         },
