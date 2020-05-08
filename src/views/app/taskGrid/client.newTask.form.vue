@@ -30,11 +30,7 @@
                     >
                         <b-form-input type="text" v-model="newTaskForm.address"/>
                     </b-form-group>
-                    <b-form-group
-                            label="Asignar vendedor"
-                    >
-                        <b-form-input readonly v-model="vendorName"/>
-                    </b-form-group>
+
                     <b-form-group
                             label="Notas"
                     >
@@ -44,12 +40,7 @@
 
                 </b-col>
                 <b-col md="5">
-                    <b-form-group
-                            required
-                            label="Cliente"
-                    >
-                        <b-form-input readonly v-model="CLIENT_SELECTED.additionalInfo.name"/>
-                    </b-form-group>
+                    
                     <b-form-group
                             label="Fecha"
                     >
