@@ -134,14 +134,22 @@
 <script>
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
-    import {format} from 'date-fns';
+    import {format, differenceInHours, differenceInMinutes} from 'date-fns';
     export default {
         name: "calendar_newTask_modal",
         props: {
           isEditModal: {
-              type: Object,
+              type: Boolean,
               required: true
-          }
+          },
+            initialDate: {
+              type: Date,
+                required: false
+            },
+            initialEndDate: {
+              type: Date,
+                required: false
+            }
         },
         data() {
             return {
@@ -339,6 +347,25 @@
                 this.setFormData(this.TASK_SELECTED);
                 this.getVendorClients();
             },
+            'initialDate': function(oldVal, newVal) {
+                if(this.initialDate) {
+
+                    // formatting date
+                    const startDate_formated = format(this.initialDate, 'yyyy-MM-dd');
+                    const startTime_formated = format(this.initialDate, 'HH:mm:ss');
+
+                    this.newTaskForm.start_date = startDate_formated;
+                    this.newTaskForm.start_time = startTime_formated
+                }
+                if(this.initialEndDate) {
+                    const differenceInMinutes1 = differenceInMinutes(this.initialEndDate, this.initialDate);
+                    const differencesInHours1 = differenceInHours(this.initialEndDate, this.initialDate);
+                    console.log('differences hours', differencesInHours1 );
+                    console.log('differences minutes', differenceInMinutes1 );
+                    this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
+
+                }
+            }
         }
     }
 </script>
