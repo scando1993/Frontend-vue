@@ -19,6 +19,8 @@ import FunctionalCalendar from 'vue-functional-calendar';
 import { Icon }  from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import VueTimepicker from 'vue2-timepicker';
+import 'vue-search-select/dist/VueSearchSelect.css'
+
 import axios from 'axios';
 import { Promise } from "es6-promise";
 
