@@ -5,7 +5,7 @@
             <div class="client-modal-header">
                 <div class="d-flex flex-row justify-content-between">
                     <button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
-                    <p class="client-modal-heading">Nueva Tarea</p>
+                    <p class="client-modal-heading">{{getModalTitle}}</p>
                     <div></div>
                 </div>
 
@@ -102,6 +102,16 @@
                                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
                             </b-form-group>
+                            <b-form-group v-if="isEditModal"
+                                          label="Tarea completada"
+                            >
+                                <div class="d-flex d-inline  justify-content-center">
+                                    <b-form-checkbox v-model="newTaskForm.completed"/>
+                                    <div class="text-21 align-items-center justify-content-center" >
+                                        {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+                                    </div>
+                                </div>
+                            </b-form-group>
 
                         </b-col>
                     </b-row>
@@ -193,11 +203,29 @@
                         return x;
                     })
                 }
+            },
+            getModalTitle: function () {
+                return this.isEditModal ? 'Editar Tarea' : 'Nueva Tarea'
             }
 
         },
         mounted: {
 
+        },
+        updated: function () {
+            /*
+            this.$nextTick(function () {
+                if(!this.isEditModal) {
+                    console.log("en el watch de isEdit");
+                    const now = new Date();
+                    const date_fomated = format(now, 'yyyy-MM-dd');
+                    const hour_formated = format(now, 'hh:mm:ss');
+                    this.newTaskForm.start_date = date_fomated;
+                    this.newTaskForm.start_time = hour_formated;
+
+                }
+            })
+            */
         },
         methods: {
             getVendorClients() {
