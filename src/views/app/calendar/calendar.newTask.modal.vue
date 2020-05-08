@@ -336,8 +336,14 @@
         },
         watch: {
             'newTaskForm.client_id': function (oldVal, newVal) {
-                if(this.newTaskForm.client_id)
+                if(this.newTaskForm.client_id){
                     this.getClientVendor();
+                    const client = this.CLIENTS_LIST.find( x =>  x.id.id === this.newTaskForm.client_id);
+                    this.newTaskForm.address = client.additionalInfo.address || '';
+                    this.newTaskForm.lat = client.additionalInfo.lat || 0;
+                    this.newTaskForm.lng = client.additionalInfo.lng || 0;
+
+                }
             },
             'TASK_SELECTED': function (oldVal, newVal) {
                 this.setFormData(this.TASK_SELECTED);
