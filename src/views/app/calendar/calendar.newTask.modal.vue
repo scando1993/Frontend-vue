@@ -187,12 +187,14 @@
                 return false
             },
             clientsFiltered: function () {
+                // filter no active clients
+                const onlyActiveClients = this.CLIENTS_LIST.filter( x => x.additionalInfo.activated);
 
                 if(this.loggedInUser.admin) {
-                    return this.CLIENTS_LIST.filter(x => x.additionalInfo.social_reason !== '_private_')
+                    return onlyActiveClients.filter(x => x.additionalInfo.social_reason !== '_private_')
                 }
                 else {
-                    return this.CLIENTS_LIST.map( function (x) {
+                    return onlyActiveClients.map( function (x) {
                         if(x.additionalInfo.social_reason === '_private_') {
                             x.additionalInfo.name = '(YO)';
                         }
