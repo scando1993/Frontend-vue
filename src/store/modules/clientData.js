@@ -211,6 +211,8 @@ export default {
         commit('SET_CLIENT_VENDOR', response.data.data);
       } else {
         console.log(response);
+        commit('SET_CLIENT_VENDOR', null);
+
       }
     },
 
