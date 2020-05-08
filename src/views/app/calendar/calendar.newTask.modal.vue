@@ -341,7 +341,7 @@
             },
             'TASK_SELECTED': function (oldVal, newVal) {
                 this.setFormData(this.TASK_SELECTED);
-                this.getVendorClients();
+                // this.getVendorClients();
             },
             'CLIENT_VENDOR': function (oldVal, newVal) {
                 this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
