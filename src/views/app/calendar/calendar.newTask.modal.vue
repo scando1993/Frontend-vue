@@ -134,6 +134,7 @@
 <script>
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
+    import {format} from 'date-fns';
     export default {
         name: "calendar_newTask_modal",
         props: {
@@ -202,6 +203,21 @@
         },
         mounted: {
 
+        },
+        updated: function () {
+            /*
+            this.$nextTick(function () {
+                if(!this.isEditModal) {
+                    console.log("en el watch de isEdit");
+                    const now = new Date();
+                    const date_fomated = format(now, 'yyyy-MM-dd');
+                    const hour_formated = format(now, 'hh:mm:ss');
+                    this.newTaskForm.start_date = date_fomated;
+                    this.newTaskForm.start_time = hour_formated;
+
+                }
+            })
+            */
         },
         methods: {
             getVendorClients() {
@@ -322,7 +338,7 @@
             'TASK_SELECTED': function (oldVal, newVal) {
                 this.setFormData(this.TASK_SELECTED);
                 this.getVendorClients();
-            }
+            },
         }
     }
 </script>
