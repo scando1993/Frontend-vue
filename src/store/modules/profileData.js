@@ -78,7 +78,6 @@ export default {
             });
       });
     },
-    },
     toggleEditProfile: ({ commit }) => {
       commit('toggleEditProfile');
     }
