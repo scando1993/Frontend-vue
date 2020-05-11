@@ -379,6 +379,8 @@
                 this.$store.dispatch('GET_TASKS_PROGRESS');
             },
             formatReminder(hours, minutes, seconds) {
+                if (hours === 0 && minutes === 0 && seconds === 0)
+                    return '';
                 return hours.toString() + ":" +  minutes.toString() + ":"  + seconds.toString();
             },
             getReminderPost() {
@@ -388,18 +390,21 @@
                 var hours = 0 ;
                 var seconds = 0;
 
-                if(reminder_selection === this.reminder_options[0].value) {
-                    minutes = reminder_value;
+                if(reminder_value) {
+                    if(reminder_selection === this.reminder_options[0].value) {
+                        minutes = reminder_value;
+                    }
+                    else if(reminder_selection === this.reminder_options[1].value) {
+                        hours = reminder_value;
+                    }
+                    else if(reminder_selection === this.reminder_options[2].value) {
+                        hours = reminder_value * 24;
+                    }
+                    else if(reminder_selection === this.reminder_options[3].value) {
+                        hours = reminder_value * 24 * 7;
+                    }
                 }
-                else if(reminder_selection === this.reminder_options[1].value) {
-                    hours = reminder_value;
-                }
-                else if(reminder_selection === this.reminder_options[2].value) {
-                    hours = reminder_value * 24;
-                }
-                else if(reminder_selection === this.reminder_options[3].value) {
-                    hours = reminder_value * 24 * 7;
-                }
+
                 return this.formatReminder(hours, minutes, seconds);
 
             },
