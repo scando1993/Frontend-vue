@@ -219,10 +219,10 @@ export default {
   created() {
   },
   mounted() {
-    const vendor_params = {
+    const client_params = {
       limit: 1000
     };
-    this.$store.dispatch('GET_VENDOR_LIST', vendor_params);
+    this.$store.dispatch('GET_CLIENTS_LIST', client_params);
 
     this.$store.dispatch('GET_TASKS_LIST');
     // this.setTuiCalendarRef();

@@ -10,7 +10,7 @@
                 </div>
 
             </div>
-            <form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideForm">
+            <b-form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideForm">
                 <div>
                     <b-row>
                         <b-col md="7">
@@ -38,13 +38,14 @@
                                         type="text" v-model="newTaskForm.address"/>
                             </b-form-group>
                             <b-form-group
-                                    label="Asignar vendedor"
+                                    label="Vendedor Asignado"
                             >
-                                <b-form-select
-                                        required
-                                        placeholder="Seleccione a un vendedor"
-                                        v-model="newTaskForm.vendor_id"
-                                               :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
+                                <b-form-input
+                                        disabled="true"
+                                        placeholder="Este cliente no tiene vendedor asignado"
+                                        type="text"
+                                        :value="getVendorName"
+                                />
                             </b-form-group>
                             <b-form-group
                                     label="Notas"
@@ -59,10 +60,14 @@
                         <b-col md="5">
                             <b-form-group
                                     label="Cliente"
+                                    :invalid-feedback="clientSeletection_invalidFeedback"
+                                    :state="clientSelection_state"
                             >
-                                <b-form-select
+                                <model-select
                                         required
-                                        placeholder="Select a vendor first" v-model="newTaskForm.client_id"
+                                        :isError="clientSelection_state"
+                                        placeholder="Busca y selecciona a un cliente"
+                                        v-model="newTaskForm.client_id"
                                                :options="clientsFiltered.map(function (x) { return {value: x.id.id, text: x.additionalInfo.name}})"/>
                             </b-form-group>
                             <b-form-group
@@ -126,7 +131,7 @@
                         <button class="btn client-modal-btn" type="submit" >Editar</button>
                     </div>
                 </div>
-            </form>
+            </b-form>
         </div>
     </b-modal>
 </template>
@@ -134,6 +139,7 @@
 <script>
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
+    import { ModelSelect } from 'vue-search-select'
     import {format, differenceInHours, differenceInMinutes} from 'date-fns';
     export default {
         name: "calendar_newTask_modal",
@@ -150,6 +156,9 @@
               type: Date,
                 required: false
             }
+        },
+        components: {
+            ModelSelect
         },
         data() {
             return {
@@ -175,7 +184,7 @@
             }
         },
         computed: {
-            ...mapGetters(['TASK_SELECTED', 'VENDOR_LIST', 'CLIENTS_LIST', 'loggedInUser']),
+            ...mapGetters(['TASK_SELECTED', 'CLIENT_VENDOR', 'CLIENTS_LIST', 'loggedInUser']),
             timeStateEnable: function () {
                 if (this.newTaskForm.start_date) {
                     return true
@@ -189,14 +198,14 @@
                 return false
             },
             clientsFiltered: function () {
-                if(!this.newTaskForm.vendor_id) {
-                    return []
-                }
+                // filter no active clients
+                const onlyActiveClients = this.CLIENTS_LIST.filter( x => x.additionalInfo.activated);
+
                 if(this.loggedInUser.admin) {
-                    return this.CLIENTS_LIST.filter(x => x.additionalInfo.social_reason !== '_private_')
+                    return onlyActiveClients.filter(x => x.additionalInfo.social_reason !== '_private_')
                 }
                 else {
-                    return this.CLIENTS_LIST.map( function (x) {
+                    return onlyActiveClients.map( function (x) {
                         if(x.additionalInfo.social_reason === '_private_') {
                             x.additionalInfo.name = '(YO)';
                         }
@@ -206,6 +215,21 @@
             },
             getModalTitle: function () {
                 return this.isEditModal ? 'Editar Tarea' : 'Nueva Tarea'
+            },
+            getVendorName: function () {
+                if(!this.CLIENT_VENDOR) {
+                    return '';
+                }
+                return this.CLIENT_VENDOR.additionalInfo.firstName + ' ' + this.CLIENT_VENDOR.additionalInfo.lastName
+            },
+            clientSelection_state: function () {
+                return this.newTaskForm.client_id === '';
+            },
+            clientSeletection_invalidFeedback: function () {
+                if(this.newTaskForm.client_id ) {
+                    return ''
+                }
+                return 'Por favor selecciona a un cliente'
             }
 
         },
@@ -235,6 +259,12 @@
                 const payload = { vendor_id: vendor_id, limit: 10000, textSearch: null };
                 this.$store.dispatch('GET_VENDOR_CLIENTS', payload);
             },
+            getClientVendor() {
+                // console.log('IN getVendors clients', this.newTaskForm.client_id);
+                // console.log('sss', this.newTaskForm);
+                const client_id = this.newTaskForm.client_id;
+                this.$store.dispatch('GET_CLIENT_VENDOR', client_id);
+            },
             hideForm() {
                 // console.log('en hide fomr');
                 // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
@@ -258,7 +288,15 @@
                 this.clearFormData();
                 this.$emit('close2', true);
             },
-            getConditionalSubmit() {
+            getConditionalSubmit(e) {
+                if(!this.newTaskForm.client_id) {
+                    e.preventDefault();
+                    return false
+                }
+                else {
+                    this.hideNewTaskForm();
+                }
+
                 if(this.isEditModal) {
                     this.editTask();
                 }
@@ -282,6 +320,7 @@
                     reminder: '',
                     completed: ''
                 };
+                this.$store.dispatch('SET_CLIENT_VENDOR_ACTION', null);
             },
             setFormData(taskSelected) {
                 this.newTaskForm = {
@@ -335,17 +374,35 @@
                 this.$store.dispatch('GET_TASKS_PROGRESS');
 
 
+            },
+            basicPrevent(e) {
+                if(!this.newTaskForm.client_id) {
+                    e.preventDefault();
+                    return false
+                }
+                else {
+                    this.hideNewTaskForm();
+                }
             }
 
         },
         watch: {
-            'newTaskForm.vendor_id': function (oldVal, newVal) {
-                if(this.newTaskForm.vendor_id)
-                    this.getVendorClients();
+            'newTaskForm.client_id': function (oldVal, newVal) {
+                if(this.newTaskForm.client_id){
+                    this.getClientVendor();
+                    const client = this.CLIENTS_LIST.find( x =>  x.id.id === this.newTaskForm.client_id);
+                    this.newTaskForm.address = client.additionalInfo.address || '';
+                    this.newTaskForm.lat = client.additionalInfo.lat || 0;
+                    this.newTaskForm.lng = client.additionalInfo.lng || 0;
+
+                }
             },
             'TASK_SELECTED': function (oldVal, newVal) {
                 this.setFormData(this.TASK_SELECTED);
-                this.getVendorClients();
+                // this.getVendorClients();
+            },
+            'CLIENT_VENDOR': function (oldVal, newVal) {
+                this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
             },
             'initialDate': function(oldVal, newVal) {
                 if(this.initialDate) {
@@ -371,6 +428,7 @@
 </script>
 
 <style scoped>
+
     .headerClass {
         background: #00b3ee
     }

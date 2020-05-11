@@ -7,7 +7,8 @@ export default {
     client_history: [],
     clients_progress: {},
     client_selected: {},
-    show_new_task_client_form: false
+    show_new_task_client_form: false,
+    client_vendor: null
   },
   getters: {
     SHOW_NEW_TASK_CLEINT_FORM: state => state.show_new_task_client_form,
@@ -15,9 +16,13 @@ export default {
     CLIENTS_LIST: state => state.client_list,
     VENDOR_TASKS: state => state.vendor_task_list,
     CLIENT_HISTORY: state => state.client_history,
-    CLIENT_PROGRESS: state => state.clients_progress
+    CLIENT_PROGRESS: state => state.clients_progress,
+    CLIENT_VENDOR: state => state.client_vendor
   },
   mutations: {
+    SET_CLIENT_VENDOR(state, payload) {
+      state.client_vendor = payload
+    },
     SET_SHOW_NEW_TASK_CLIENT_FORM(state, payload) {
       state.show_new_task_client_form = payload;
     },
@@ -42,6 +47,9 @@ export default {
     }
   },
   actions: {
+    SET_CLIENT_VENDOR_ACTION: ({commit},data) => {
+      commit('SET_CLIENT_VENDOR', data);
+    },
     SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION: ({commit}, data) => {
       commit('SET_SHOW_NEW_TASK_CLIENT_FORM', data);
     },
@@ -189,6 +197,22 @@ export default {
         commit('SET_CLIENTS_PROGRESS', response.data.data);
       } else {
         console.log(response);
+      }
+    },
+    GET_CLIENT_VENDOR: async ({ commit }, client_id) => {
+      const headers = {
+        headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
+      };
+      var endpoint = '/Client/getVendor?client_id=' + client_id;
+
+      const response = await axios.get(process.env.VUE_APP_API + endpoint, headers);
+      if (!response.data.error) {
+        console.log('history get!!!!!!', response.data.data);
+        commit('SET_CLIENT_VENDOR', response.data.data);
+      } else {
+        console.log(response);
+        commit('SET_CLIENT_VENDOR', null);
+
       }
     },
 
