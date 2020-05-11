@@ -1,23 +1,21 @@
 <template>
-	<div>
-		<b-card>
-			<button class="btn profile-navbar-btn" v-on:click="logout">Cerrar sesion</button>
-			<button class="btn profile-navbar-btn" v-on:click="toggleEditProfile">Editar</button>
-		</b-card>
-	</div>
+  <b-card>
+    <button class="btn profile-navbar-btn" v-on:click="logout">Cerrar sesion</button>
+    <button class="btn profile-navbar-btn" v-on:click="toggleEditProfile">Editar</button>
+  </b-card>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'profileNavBar',
-	methods: {
+  methods: {
     ...mapActions(['toggleEditProfile', 'signOut']),
     logout: function (){
       this.signOut();
       this.$router.push('/app/sessions/signIn');
     },
-	}
+  }
 };
 </script>
 

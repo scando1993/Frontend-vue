@@ -60,12 +60,6 @@ export default {
             'Content-Type': 'application/json'
           },
         };
-        /*
-        data = {
-          "currentPassword": "",
-          "newPassword": ""
-         }
-         */
         axios
             .post(process.env.VUE_APP_API + '/Profile/changePassword', data, config)
             .then(({ data, status }) => {
