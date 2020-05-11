@@ -1,12 +1,12 @@
 const state = {
   planiVerticalSidebar: {
-    isVerticalSidebar: true,
-    isVerticalCompact: false,
+    isVerticalSidebar: false,
+    isVerticalCompact: true,
     isMobileCompact: true
   },
   planiVerticalCompact: {
-    isSidebarCompact: false,
-    isItemName: false
+    isSidebarCompact: true,
+    isItemName: true
   },
   showNotifications: false
 };

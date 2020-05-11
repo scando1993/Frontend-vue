@@ -2,14 +2,20 @@ const axios = require('axios');
 
 export default {
   state: {
-    profile: {}
+    profile: {
+    },
+    edit: false
   },
   getters: {
-    PROFILE: state => state.profile
+    PROFILE: state => state.profile,
+    getEditProfile: state => state.edit
   },
   mutations: {
-    SET_PROFILE(state, data) {
+    SET_PROFILE: (state, data) => {
       state.profile = data;
+    },
+    toggleEditProfile: (state) => {
+      state.edit = !state.edit;
     }
   },
   actions: {
@@ -54,12 +60,6 @@ export default {
             'Content-Type': 'application/json'
           },
         };
-        /*
-        data = {
-          "currentPassword": "",
-          "newPassword": ""
-         }
-         */
         axios
             .post(process.env.VUE_APP_API + '/Profile/changePassword', data, config)
             .then(({ data, status }) => {
@@ -72,5 +72,8 @@ export default {
             });
       });
     },
+    toggleEditProfile: ({ commit }) => {
+      commit('toggleEditProfile');
+    }
   }
 };

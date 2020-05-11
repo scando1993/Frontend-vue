@@ -1,13 +1,3 @@
-// const state = {
-//   themeMode: {
-//     dark: false,
-//     light: true,
-//     semi_dark: false,
-//     theme_color: "lite-purple",
-//     layout: "large-sidebar",
-//     rtl: false
-//   }
-// };
 const state = {
   themeMode: {
     dark: false,

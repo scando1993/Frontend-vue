@@ -1,17 +1,41 @@
 const axios = require('axios');
-export default {
-  state: {
-    team_list: []
+
+const state = {
+  team_list: [],
+  leave: true,
+  invite: true,
+  new_admin: true
+};
+const getters = {
+  TEAM: state => state.team_list,
+  getLeaveTeam: state => state.leave,
+  getInviteTeam: state => state.invite,
+  getNewAdminTeam: state => state.new_admin
+};
+const mutations = {
+  SET_TEAM(state, payload) {
+    state.team_list = payload;
   },
-  getters: {
-    TEAM: state => state.team_list
+  toggleLeaveTeam: (state) => {
+    state.leave = !state.leave;
   },
-  mutations: {
-    SET_TEAM(state, payload) {
-      state.team_list = payload;
-    }
+  toggleInviteTeam: (state) => {
+    state.invite = !state.invite;
   },
-  actions: {
+  toggleNewAdminTeam: (state) => {
+    state.new_admin = !state.new_admin;
+  },
+  setLeaveTeam: (state, payload) => {
+    state.leave = payload
+  },
+  setInviteTeam: (state, payload) => {
+    state.invite = payload
+  },
+  setNewAdminTeam: (state, payload) => {
+    state.new_admin = payload
+  }
+};
+const actions = {
     GET_TEAM: async ({ commit }) => {
       const headers = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
@@ -108,6 +132,28 @@ export default {
       });
     },
 
+  toggleLeaveTeam( { commit }, data ){
+    commit('toggleLeaveTeam', data);
   },
-
+  toggleInviteTeam( { commit }, data ){
+    commit('toggleInviteTeam', data);
+  },
+  toggleNewAdminTeam( { commit }, data ){
+    commit('toggleNewAdminTeam', data);
+  },
+  setLeaveTeam: ({ commit }, data) => {
+    commit('setLeaveTeam', data);
+  },
+  setInviteTeam: ({ commit }, data) => {
+    commit('setInviteTeam', data);
+  },
+  setNewAdminTeam: ({ commit }, data) => {
+    commit('setNewAdminTeam', data);
+  }
+};
+export default {
+  state,
+  getters,
+  actions,
+  mutations
 };

@@ -36,7 +36,7 @@
           <label class="d-flex flex-row mb-0 task-option-list">
             <input type="checkbox" v-model="expired" class="tui-full-calendar-checkbox-square">
             <span :style="{'border-color': '#292B2A', 'background-color': expired ? '#292B2A' : 'transparent'}"
-                  class="task-option-list"/>
+                  class="task-option-list"><i class="bx bx-check calendar-ticks" v-if="expired"/></span>
             <span class="task-option-list">Expirada</span>
           </label>
         </div>
@@ -44,7 +44,7 @@
           <label class="d-flex flex-row mb-0 task-option-list">
             <input type="checkbox" v-model="now" class="tui-full-calendar-checkbox-square">
             <span :style="{'border-color': '#D85557', 'background-color': now ? '#D85557' : 'transparent'}"
-                  class="task-option-list"/>
+                  class="task-option-list"><i class="bx bx-check calendar-ticks" v-if="now"/></span>
             <span class="task-option-list">Ahora</span>
           </label>
         </div>
@@ -52,7 +52,7 @@
           <label class="d-flex flex-row mb-0 task-option-list">
             <input type="checkbox" v-model="early" class="tui-full-calendar-checkbox-square">
             <span :style="{'border-color': '#F9CD56', 'background-color': early ? '#F9CD56' : 'transparent'}"
-                  class="task-option-list"/>
+                  class="task-option-list"><i class="bx bx-check calendar-ticks" v-if="early"/></span>
             <span class="task-option-list">Pronto</span>
           </label>
         </div>
@@ -60,7 +60,7 @@
           <label class="d-flex flex-row mb-0 task-option-list">
             <input type="checkbox" v-model="soon" class="tui-full-calendar-checkbox-square">
             <span :style="{'border-color': '#C7D963', 'background-color': soon ? '#C7D963' : 'transparent'}"
-                  class="task-option-list"/>
+                  class="task-option-list"><i class="bx bx-check calendar-ticks" v-if="soon"/></span>
             <span class="task-option-list">Temprano</span>
           </label>
         </div>
@@ -68,7 +68,7 @@
           <label class="d-flex flex-row mb-0 task-option-list">
             <input type="checkbox" v-model="pending" class="tui-full-calendar-checkbox-square">
             <span :style="{'border-color': '#D2D4D6', 'background-color': pending ? '#D2D4D6' : 'transparent'}"
-                  class="task-option-list"/>
+                  class="task-option-list"><i class="bx bx-check calendar-ticks" v-if="pending"/></span>
             <span class="task-option-list">Pendiente</span>
           </label>
         </div>
@@ -278,12 +278,17 @@ export default {
   input[type=checkbox].tui-full-calendar-checkbox-square + span {
     display: inline-block;
     cursor: pointer;
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     line-height: 14px;
     vertical-align: middle;
     margin-right: 4px;
     border: 2px solid;
     background: transparent;
+  }
+
+  .calendar-ticks{
+    font-size: 1.2em;
+    color: #FFFFFF;
   }
 </style>

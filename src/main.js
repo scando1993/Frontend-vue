@@ -1,12 +1,7 @@
-// import "babel-polyfill";
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-// import VueRouter from "vue-router";
 import GullKit from './plugins/gull.kit';
-// import "babel-polyfill";
-// import es6Promise from "es6-promise";
-// es6Promise.polyfill();
 import store from './store';
 import Breadcumb from './components/breadcumb';
 import firebase from 'firebase/app';
@@ -19,9 +14,10 @@ import FunctionalCalendar from 'vue-functional-calendar';
 import { Icon }  from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import VueTimepicker from 'vue2-timepicker';
-import axios from 'axios';
-import { Promise } from "es6-promise";
+import 'vue-search-select/dist/VueSearchSelect.css'
 
+import axios from 'axios';
+import { Promise } from 'es6-promise';
 
 Vue.use(FunctionalCalendar, {
   dayNames: ['L', 'M', 'Mi', 'J', 'V', 'S', 'D']
