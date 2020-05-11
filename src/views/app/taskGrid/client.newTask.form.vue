@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="new_task_form" hide-footer  centered hide-header size="lg">
+    <b-modal id="new_task_form" @hide="hideForm" hide-footer  centered hide-header size="lg">
         <div class="client-modal">
         <div class="card-header p-1" style="background: #00b3ee"></div>
         <div class="client-modal-header">
@@ -17,24 +17,20 @@
                     <b-form-group
                             label="Categoria de tarea"
                     >
-                        <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
+                        <b-form-select required v-model="newTaskForm.category" :options="taskOptions"/>
                     </b-form-group>
 
                     <b-form-group
                             label="Actividad"
                     >
-                        <b-form-input type="text" v-model="newTaskForm.name"/>
+                        <b-form-input required type="text" v-model="newTaskForm.name"/>
                     </b-form-group>
                     <b-form-group
                             label="Ubicación"
                     >
                         <b-form-input type="text" v-model="newTaskForm.address"/>
                     </b-form-group>
-                    <b-form-group
-                            label="Asignar vendedor"
-                    >
-                        <b-form-input readonly v-model="vendorName"/>
-                    </b-form-group>
+
                     <b-form-group
                             label="Notas"
                     >
@@ -44,34 +40,38 @@
 
                 </b-col>
                 <b-col md="5">
-                    <b-form-group
-                            required
-                            label="Cliente"
-                    >
-                        <b-form-input readonly v-model="CLIENT_SELECTED.additionalInfo.name"/>
-                    </b-form-group>
+
                     <b-form-group
                             label="Fecha"
                     >
 
-                        <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date"
+                        <b-form-datepicker
+                                :min="new Date()"
+                                id="example-datepicker" v-model="newTaskForm.start_date"
                                            class="mb-2"></b-form-datepicker>
                     </b-form-group>
                     <b-form-group
                             label="Hora"
                     >
-                        <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
+                        <b-form-timepicker
+                                :disabled="!timeStateEnable"
+                                v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
                     </b-form-group>
                     <b-form-group
                             label="Recordatorio"
                     >
-                        <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+                        <b-form-timepicker
+                                :disabled="!durationStateEnable"
+                                v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
 
                     </b-form-group>
                     <b-form-group
                             label="Duracion"
                     >
-                        <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+                        <b-form-timepicker
+                                :required="!durationStateEnable"
+                                :disabled="!durationStateEnable"
+                                id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
 
                         <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
@@ -125,7 +125,19 @@ import {mapGetters} from 'vuex';
                     return this.CLIENT_SELECTED.vendor.additionalInfo.firstName + ' ' + this.CLIENT_SELECTED.vendor.additionalInfo.lastName;
                 }
                 return 'N/A';
-            }
+            },
+            timeStateEnable: function () {
+                if (this.newTaskForm.start_date) {
+                    return true
+                }
+                return false
+            },
+            durationStateEnable: function () {
+                if (this.newTaskForm.start_time) {
+                    return true
+                }
+                return false
+            },
         },
         mounted: {
 
@@ -143,6 +155,7 @@ import {mapGetters} from 'vuex';
                 // console.log('en hide fomr');
                 // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', false);
                 this.$bvModal.hide("new_task_form");
+                this.clearFormData();
 
             },
             getVendorName() {
@@ -165,7 +178,24 @@ import {mapGetters} from 'vuex';
             },
             hideNewTaskForm() {
                 this.$bvModal.hide("new_task_form");
-            }
+            },
+            clearFormData() {
+                this.newTaskForm = {
+                    category: '',
+                    name: '',
+                    address: '',
+                    lat: 0,
+                    lng: 0,
+                    vendor_id: '',
+                    notes: '',
+                    client_id: '',
+                    start_date: '',
+                    start_time: '',
+                    duration: '',
+                    reminder: '',
+                    completed: ''
+                };
+            },
 
         }
     }

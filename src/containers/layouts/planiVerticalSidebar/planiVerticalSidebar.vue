@@ -119,13 +119,12 @@
 						<li class="Ul_li--hover">
 							<div>
 								<a class="has-arrow " href="#" :class="{ active: selectedParentMenu === 'profile' }">
-									<router-link tag="div" to="/app/profile">
-<!--										<i class="i-People-on-Cloud text-20 mr-2"/>-->
+									<router-link tag="div" to="/app/settings">
                     <img src="@/assets/images/svg/settings.svg" class="text-20 mr-2 icon-sidebar"/>
 										<span
 											class="text-15"
 											:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
-										>Perfil</span>
+										>Configuraciones</span>
 									</router-link>
 
 							</a>
@@ -133,17 +132,17 @@
 						</li>
 
 						<!-- Team menu> -->
-						<li v-if="loggedInUser.admin"  class="Ul_li--hover">
-							<a class="has-arrow " href="#" :class="{ active: selectedParentMenu ==='team' }">
-								<router-link tag="div" to="/app/team">
-									<i class="i-Handshake text-20 mr-2"/>
-									<span
-										class="text-15"
-										:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"
-									>Equipo</span>
-								</router-link>
-							</a>
-						</li>
+<!--						<li v-if="loggedInUser.admin"  class="Ul_li&#45;&#45;hover">-->
+<!--							<a class="has-arrow " href="#" :class="{ active: selectedParentMenu ==='team' }">-->
+<!--								<router-link tag="div" to="/app/team">-->
+<!--									<i class="i-Handshake text-20 mr-2"/>-->
+<!--									<span-->
+<!--										class="text-15"-->
+<!--										:class="{ 'vertical-item-name': getPlaniVerticalCompact.isItemName }"-->
+<!--									>Equipo</span>-->
+<!--								</router-link>-->
+<!--							</a>-->
+<!--						</li>-->
 
 						<!-- Sign-out menu> -->
 						<li class="Ul_li--hover">

@@ -140,14 +140,22 @@
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
     import { ModelSelect } from 'vue-search-select'
-
+    import {format, differenceInHours, differenceInMinutes} from 'date-fns';
     export default {
         name: "calendar_newTask_modal",
         props: {
           isEditModal: {
-              type: Object,
+              type: Boolean,
               required: true
-          }
+          },
+            initialDate: {
+              type: Date,
+                required: false
+            },
+            initialEndDate: {
+              type: Date,
+                required: false
+            }
         },
         components: {
             ModelSelect
@@ -227,6 +235,21 @@
         },
         mounted: {
 
+        },
+        updated: function () {
+            /*
+            this.$nextTick(function () {
+                if(!this.isEditModal) {
+                    console.log("en el watch de isEdit");
+                    const now = new Date();
+                    const date_fomated = format(now, 'yyyy-MM-dd');
+                    const hour_formated = format(now, 'hh:mm:ss');
+                    this.newTaskForm.start_date = date_fomated;
+                    this.newTaskForm.start_time = hour_formated;
+
+                }
+            })
+            */
         },
         methods: {
             getVendorClients() {
@@ -380,6 +403,25 @@
             },
             'CLIENT_VENDOR': function (oldVal, newVal) {
                 this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
+            }
+            'initialDate': function(oldVal, newVal) {
+                if(this.initialDate) {
+
+                    // formatting date
+                    const startDate_formated = format(this.initialDate, 'yyyy-MM-dd');
+                    const startTime_formated = format(this.initialDate, 'HH:mm:ss');
+
+                    this.newTaskForm.start_date = startDate_formated;
+                    this.newTaskForm.start_time = startTime_formated
+                }
+                if(this.initialEndDate) {
+                    const differenceInMinutes1 = differenceInMinutes(this.initialEndDate, this.initialDate);
+                    const differencesInHours1 = differenceInHours(this.initialEndDate, this.initialDate);
+                    console.log('differences hours', differencesInHours1 );
+                    console.log('differences minutes', differenceInMinutes1 );
+                    this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
+
+                }
             }
         }
     }

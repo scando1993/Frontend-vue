@@ -1,6 +1,6 @@
 const state = {
   calendar: {
-    selectedMapView: '',
+    selectedMapView: 'month',
     selectedComponentView: '',
     showNewTaskModal: false,
     searchText: '',
