@@ -10,7 +10,7 @@
                 </div>
 
             </div>
-            <b-form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideForm">
+            <b-form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideNewTaskForm">
                 <div>
                     <b-row>
                         <b-col md="7">
@@ -329,16 +329,14 @@
                     e.preventDefault();
                     return false
                 }
-                else {
-                    this.hideNewTaskForm();
-                }
 
                 if(this.isEditModal) {
                     this.editTask();
                 }
                 else
                     this.createTask();
-                this.hideForm();
+                this.hideNewTaskForm();
+
             },
             clearFormData() {
                 this.newTaskForm = {
