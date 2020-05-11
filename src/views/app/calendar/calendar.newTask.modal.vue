@@ -93,10 +93,10 @@
                                             trim="true"
                                             class="px-2"
                                             placeholder="Ingrese un valor"
-                                            v-model="newTaskForm.reminder_value" locale="en"></b-form-input>
+                                            v-model="reminder_value" locale="en"></b-form-input>
                                     <b-form-select
                                                    class="px-2"
-                                                   v-model="newTaskForm.reminder_option_selected"
+                                                   v-model="reminder_option_selected"
                                                    :disabled="!durationStateEnable"
                                                    placeholder="Escoja una categoria"
                                                     :options="reminder_options"/>
@@ -184,8 +184,7 @@
                     duration: '',
                     reminder: '',
                     completed: '',
-                    reminder_option_selected: 'minutes',
-                    reminder_value: ''
+                    reminder_form_selection: ''
                 },
                 taskCategories,
                 taskOptions: taskCategories,
@@ -196,7 +195,7 @@
                     {value: 'days', text: "días"},
                     {value: 'weeks', text: "semanas"}
                 ],
-                reminder_option_selected: '',
+                reminder_option_selected: 'minutes',
                 reminder_value: ''
 
             }
@@ -235,10 +234,10 @@
                 return this.isEditModal ? 'Editar Tarea' : 'Nueva Tarea'
             },
             getReminderDisplay: function () {
-                const option_selected = this.newTaskForm.reminder_option_selected;
-                if(!option_selected || !this.newTaskForm.reminder_value )
+                const option_selected = this.reminder_option_selected;
+                if(!option_selected || !this.reminder_value )
                     return '';
-                return this.newTaskForm.reminder_value + " " + this.reminder_options.find( x=> x.value === option_selected).text + " antes"
+                return this.reminder_value + " " + this.reminder_options.find( x=> x.value === option_selected).text + " antes"
             },
         },
         mounted: {
@@ -260,9 +259,7 @@
             */
         },
         methods: {
-            get_Reminder_form_selection: function () {
-                return this.reminder_value + ":" + this.reminder_option_selected;
-            },
+
             getVendorClients() {
                 // console.log('IN getVendors clients', this.newTaskForm.client_id);
                 // console.log('sss', this.newTaskForm);
@@ -280,6 +277,8 @@
             createTask() {
                 this.newTaskForm.category = new Number(this.newTaskForm.category);
                 this.newTaskForm.reminder = this.getReminderPost();
+                this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
+
                 // this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
                 // this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
                 console.log('form', this.newTaskForm);
@@ -317,9 +316,9 @@
                     duration: '',
                     reminder: '',
                     completed: '',
-                    reminder_option_selected: 'minutes',
-                    reminder_value: ''
                 };
+                this.reminder_option_selected = 'minutes';
+                this.reminder_value = '';
             },
             setFormData(taskSelected) {
                 this.newTaskForm = {
@@ -337,11 +336,17 @@
                     reminder: taskSelected.additionalInfo.reminder || '',
                     completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
                 };
+                const remiderArray = taskSelected.additionalInfo.reminder_form_selection.split(":");
+
+                this.reminder_option_selected = remiderArray[1];
+                this.reminder_value = remiderArray[0];
+
             },
             editTask() {
                 const task_id = this.TASK_SELECTED.id.id;
                 this.newTaskForm.category = Number(this.newTaskForm.category);
                 this.newTaskForm.reminder = this.getReminderPost();
+                this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
                 const payload = {
                     task_id: task_id,
                     data: this.newTaskForm
@@ -397,8 +402,10 @@
                 }
                 return this.formatReminder(hours, minutes, seconds);
 
-            }
-
+            },
+            get_Reminder_form_selection: function () {
+                return this.reminder_value + ":" + this.reminder_option_selected;
+            },
 
         },
         watch: {
