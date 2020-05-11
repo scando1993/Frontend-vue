@@ -403,7 +403,7 @@
             },
             'CLIENT_VENDOR': function (oldVal, newVal) {
                 this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
-            }
+            },
             'initialDate': function(oldVal, newVal) {
                 if(this.initialDate) {
 
