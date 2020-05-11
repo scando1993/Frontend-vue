@@ -8,7 +8,7 @@
         <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
           <template
             v-for="(task, taskIndex) in getTopTasks()">
-            <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
+            <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
           </template>
         </div>
       </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
-                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'expired')">
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired')">
                   <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
@@ -74,7 +74,7 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
-                <template v-for="(task, taskIndex) in TASKS_LIST.filter(x => x.additionalInfo.status === 'pending')">
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending')">
                   <calendar-task-widget v-on:chip_click="onClickChip" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
@@ -82,105 +82,9 @@
           </div>
         </b-col>
       </div>
-
-      <b-modal id="newTask_modal" :title="getModalTitle" centered size="lg" @hidden="resetModal">
-        <div>
-          <b-row>
-            <b-col md="7">
-              <b-form-group
-                label="Categoria de tarea"
-              >
-                <b-form-select v-model="newTaskForm.category" :options="taskOptions"/>
-              </b-form-group>
-
-              <b-form-group
-                label="Actividad"
-              >
-                <b-form-input type="text" v-model="newTaskForm.name"/>
-              </b-form-group>
-              <b-form-group
-                label="Ubicación"
-              >
-                <b-form-input type="text" v-model="newTaskForm.address"/>
-              </b-form-group>
-              <b-form-group
-                label="Asignar vendedor"
-              >
-                <b-form-select :change="getVendorClients()" v-model="newTaskForm.vendor_id"
-                               :options="VENDOR_LIST.map(function (x) { return {value: x.id.id, text: x.additionalInfo.firstName + ' ' + x.additionalInfo.lastName}})"/>
-              </b-form-group>
-              <b-form-group
-                label="Notas"
-              >
-                <b-form-textarea style="height: 100px;"v-model="newTaskForm.notes"/>
-              </b-form-group>
-
-            </b-col>
-            <b-col md="5">
-              <b-form-group
-                required
-                label="Cliente"
-              >
-                <b-form-select placeholder="Select a vendor first" v-model="newTaskForm.client_id"
-                               :options="CLIENTS_LIST.map(function (x) { return {value: x.id.id, text: x.name}})"/>
-              </b-form-group>
-              <b-form-group
-                label="Fecha"
-              >
-
-                <b-form-datepicker id="example-datepicker" v-model="newTaskForm.start_date || getNow()"
-                                   class="mb-2"></b-form-datepicker>
-              </b-form-group>
-              <b-form-group
-                label="Hora"
-              >
-                <b-form-timepicker v-model="newTaskForm.start_time" locale="en"></b-form-timepicker>
-              </b-form-group>
-              <b-form-group
-                label="Recordatorio"
-              >
-                <b-form-timepicker v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
-
-              </b-form-group>
-              <b-form-group
-                label="Duracion"
-              >
-                <b-form-timepicker id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
-
-                <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
-
-              </b-form-group>
-              <!--
-              <b-form-group
-                label="Rutina"
-              >
-                <b-form-select v-model="newTaskForm.routine" :options="routineOptions"/>
-              </b-form-group>-->
-              <b-form-group v-if="isEditModal"
-                            label="Tarea completada"
-              >
-                <div class="d-flex d-inline  justify-content-center">
-                  <b-form-checkbox v-model="newTaskForm.completed"/>
-                  <div class="text-21 align-items-center justify-content-center" >
-                    {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
-                  </div>
-                </div>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </div>
-        <template v-slot:modal-footer="{ ok, cancel, hide }">
-          <div class="d-flex justify-content-around">
-            <b-button size="sm" variant="danger" @click="deleteOrCancel()">
-              {{isEditModal ? 'Eliminar' : 'Cancelar'}}
-            </b-button>
-            <b-button size="sm" variant="success" @click="createOrUpdate()">
-              {{isEditModal ? 'Editar' : 'Crear tarea'}}
-            </b-button>
-          </div>
-        </template>
-      </b-modal>
     </div>
+    <calendar_newTask_modal :initialDate="initialModalDate" :initialEndDate="initialModalEndDate" :isEditModal="isEditModal" v-on:close2="restartModal"/>
+
     <calendar-progress-bar/>
   </div>
 </template>
@@ -194,6 +98,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import CalendarNavBar from './calendarNavbar/calendarNavBar';
 import { mapGetters, mapActions } from 'vuex';
 import { LMap, LTileLayer } from 'vue2-leaflet';
+import calendar_newTask_modal from './calendar.newTask.modal';
 import {
   calendarList,
   view,
@@ -214,6 +119,7 @@ import CalendarTaskWidget from './calendar.task.widget';
 import CalendarProgressBar from './calendar.progressBar';
 import CalendarInnerTaskWidget from './calendar.inner.task.widget';
 import Vue from 'vue';
+import {set, getHours, getMinutes, getSeconds} from 'date-fns';
 
 export default {
   metaInfo: {
@@ -222,6 +128,7 @@ export default {
   },
   name: 'calendar.dashboard.v1',
   components: {
+    calendar_newTask_modal,
     CalendarProgressBar,
     VueTimepicker,
     CalendarTaskView,
@@ -236,9 +143,14 @@ export default {
       'getSelectedMapView',
       'getSelectedComponentView',
       'getShowNewTaskModal',
-      'getSearchText',
+      'getSearchTaskText',
       'VENDOR_LIST', 'CLIENTS_LIST',
-      'TASKS_LIST'
+      'TASKS_LIST',
+            'getExpiredTasks',
+            'getNowTasks',
+            'getSoonTasks',
+            'getEarlyTasks',
+            'getPendingTasks'
     ]),
     showMap() {
       return this.getSelectedComponentView === 'Map';
@@ -246,11 +158,8 @@ export default {
     showTaskView() {
       return this.getSelectedComponentView === 'Tasks';
     },
-    getModalTitle() {
-      return this.isEditModal ? 'Editar o eliminar tarea' : 'Agregar nueva tarea';
-    },
     scheduleList() {
-      return this.TASKS_LIST.map(x => {return x.additionalInfo.tui_data;});
+      return this.tasksFiltered.map(x => {return x.additionalInfo.tui_data;});
       let scheduleList = this.TASKS_LIST.map(x => {
         let schedule = x.additionalInfo;
         let calendarId = calendarList.find(x => x.name === schedule.status).id;
@@ -267,11 +176,18 @@ export default {
       });
       console.log(scheduleList);
       return scheduleList;
+    },
+    tasksFiltered: function () {
+      return this.filterTASKSearch(this.TASKS_LIST);
     }
+
+
   },
   data() {
     return {
       scheduleSelected: null,
+      initialModalDate: null,
+      initialModalEndDate: null,
       isEditModal: false,
       timeNow: (new Date()).toString(),
       taskOptions: taskCategories,
@@ -285,23 +201,6 @@ export default {
         center: [ -1.224882, -78.601685 ],
         bounds: null,
       },
-      newTaskForm: {
-        category: '',
-        name: '',
-        address: '',
-        lat: 0,
-        lng: 0,
-        vendor_id: '',
-        notes: '',
-        client_id: '',
-        start_date: '',
-        start_time: '',
-        duration: '',
-        reminder: '',
-        completed: ''
-      },
-      isChipModal: false,
-      selected_task: {},
       calendarList,
       view,
       taskView,
@@ -324,6 +223,7 @@ export default {
       limit: 1000
     };
     this.$store.dispatch('GET_VENDOR_LIST', vendor_params);
+
     this.$store.dispatch('GET_TASKS_LIST');
     // this.setTuiCalendarRef();
 
@@ -354,19 +254,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'GET_VENDOR_LIST',
-      'GET_CLIENTS_LIST',
-      'setShowNewTaskModal',
       'togglePrevCalendar',
       'toggleNextCalendar'
     ]),
-    getVendorClients() {
-      // console.log('IN getVendors clients', this.newTaskForm.client_id);
-      // console.log('sss', this.newTaskForm);
-      const vendor_id = this.newTaskForm.vendor_id;
-      const payload = { vendor_id: vendor_id, limit: 10000, textSearch: null };
-      this.$store.dispatch('GET_VENDOR_CLIENTS', payload);
-    },
     // Viewport, date and change functions
     changeView() {
       this.$refs.tuiCalendar.invoke('changeView', this.getSelectedMapView);
@@ -403,16 +293,7 @@ export default {
       return html.join('');
     },
 
-    saveTask() {
-      this.newTaskForm.category = Number(this.newTaskForm.category);
-      console.log('form', this.newTaskForm);
-      this.$store.dispatch('POST_TASK', this.newTaskForm)
-        .then(result => {
-          console.log(result);
-          this.$store.dispatch('GET_TASKS_LIST');
-        });
-      this.hideModal();
-    },
+
 
     // Calendar template functions
     calendarTemplate() {
@@ -549,7 +430,25 @@ export default {
     onBeforeCreateSchedule(e) {
       // implement your code
       console.log('BeforeCreate', e);
-      this.saveNewSchedule(e);
+      this.initialModalDate = new Date(e.start);
+      if(this.getSelectedMapView === 'month') {
+        console.log("en el if---------------------");
+        const now = new Date();
+        this.initialModalDate = set(this.initialModalDate,
+                {
+                  hours: getHours(now),
+                  minutes: getMinutes(now),
+                  seconds: getSeconds(now)
+                }
+        )
+      }
+      else {
+        console.log("en el else---------------------", this.getSelectedMapView);
+        this.initialModalEndDate = new Date(e.end);
+      }
+      this.showNewTaskModal();
+      this.refreshScheduleVisibility();
+      // this.saveNewSchedule(e);
     },
     onBeforeDeleteSchedule(e) {
       // implement your code
@@ -558,31 +457,9 @@ export default {
       this.deleteTask(e.schedule);
     },
     onClickChip(task) {
-      // const taskSelected = task;
-      console.log('tarea', task);
-      this.selected_task = task;
-
-      this.setFormData(task);
-      this.isChipModal = true;
       this.isEditModal = true;
-      this.setShowNewTaskModal(true);
-    },
-    setFormData(taskSelected) {
-      this.newTaskForm = {
-        category: new Number(taskSelected.additionalInfo.category) || null,
-        name: taskSelected.additionalInfo.name || '',
-        address: taskSelected.additionalInfo.address || '',
-        lat: taskSelected.additionalInfo.lat,
-        lng: taskSelected.additionalInfo.lng,
-        vendor_id: taskSelected.customerId.id || '',
-        notes: taskSelected.additionalInfo.notes|| '',
-        client_id: taskSelected.additionalInfo.client_data.id || '',
-        start_date: taskSelected.additionalInfo.start_date || '',
-        start_time: taskSelected.additionalInfo.start_time || '',
-        duration: taskSelected.additionalInfo.duration || '',
-        reminder: taskSelected.additionalInfo.reminder || '',
-        completed: typeof taskSelected.additionalInfo.completed === 'undefined' ? false :  taskSelected.additionalInfo.completed
-      };
+      this.$store.dispatch('SET_TASK_SELECTED_ACTION', task);
+      this.$bvModal.show("new_task_form_1")
     },
     onBeforeUpdateSchedule(e) {
       // implement your code
@@ -591,9 +468,6 @@ export default {
       e.schedule.end = e.end;
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
-      console.log('update task', taskSelected);
-      this.setFormData(taskSelected);
-      this.editTask(taskSelected.id.id);
       this.$refs.tuiCalendar.invoke('updateSchedule', e.schedule.id, e.schedule.calendarId, e.schedule);
     },
     // eslint-disable-next-line no-unused-vars
@@ -605,97 +479,19 @@ export default {
     // eslint-disable-next-line no-unused-vars
     onClickSchedule(e) {
       this.scheduleSelected = e.schedule;
-      this.isEditModal = true;
       console.log('On click onClickSchedule', e);
       const id = e.schedule.id;
       const taskSelected = this.TASKS_LIST[id];
-      this.selected_task = taskSelected;
-      this.setFormData(taskSelected);
-      this.setShowNewTaskModal(true);
+      this.isEditModal = true;
+      this.$store.dispatch('SET_TASK_SELECTED_ACTION', taskSelected);
+      this.$bvModal.show("new_task_form_1")
+      // this.setShowNewTaskModal(true);
     },
     // eslint-disable-next-line no-unused-vars
     onClickTimezonesCollapseBtn(e) {
       console.log('On click onClickTimezonesCollapseBtn');
       console.log(e);
       // implement your code
-    },
-    clearFormData() {
-      this.newTaskForm = {
-        category: '',
-        name: '',
-        address: '',
-        lat: 0,
-        lng: 0,
-        vendor_id: '',
-        notes: '',
-        client_id: '',
-        start_date: '',
-        start_time: '',
-        duration: '',
-        reminder: '',
-        completed: ''
-      };
-    },
-    getNow() {
-      const a = new Date();
-      return a.getFullYear() + "-" + a.getDate() + " " + a.getDay();
-    },
-    hideModal() {
-      this.setShowNewTaskModal(false);
-      this.clearFormData();
-      this.isEditModal = false;
-    },
-    resetModal() {
-      this.hideModal();
-    },
-    deteteTask(task_id) {
-
-      this.$store.dispatch('DELETE_TASK', task_id)
-        .then(x => {
-          this.$store.dispatch('GET_TASKS_LIST');
-        });
-
-      // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
-    },
-    deleteOrCancel() {
-      if ( this.isEditModal ) { // delete is avaliable
-        console.log('in delete');
-        this.deteteTask(this.selected_task.id.id);
-        this.resetModal();
-      } else {
-        this.resetModal();
-      }
-    },
-    editTask(task_id) {
-      this.newTaskForm.category = Number(this.newTaskForm.category);
-      const payload = {
-        task_id: task_id,
-        data: this.newTaskForm
-      };
-      const changeStatusPayload = {
-        task_id: task_id,
-        completed: this.newTaskForm.completed
-      };
-      this.$store.dispatch('UPDATE_TASK', payload)
-              .then(response => {
-
-                this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
-                        .then(response2 => {
-                          this.$store.dispatch('GET_TASKS_LIST');
-
-                        })
-              });
-    },
-    createOrUpdate() {
-      console.log('is edit', this.isEditModal);
-
-      if (this.isEditModal) {
-          this.editTask(this.selected_task.id.id);
-          this.resetModal();
-      } else {
-        console.log('IN save task');
-        this.saveTask();
-      }
     },
     categoryCoder(x) {
       var value = 0;
@@ -717,14 +513,64 @@ export default {
       return value1 - value2
     },
     getTopTasks() {
-      const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
+      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
       console.log('newArray--------------', newArray);
       //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
       const final = newArray.sort(this.sortTop);
       console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
       return final;
 
-    }
+    },
+    filterTASKSearch (list) {
+      return list.filter(task => {
+        let expired = this.getExpiredTasks;
+        let now = this.getNowTasks;
+        let soon = this.getSoonTasks;
+        let early = this.getEarlyTasks;
+        let pending = this.getPendingTasks;
+
+        switch (task.additionalInfo.status) {
+          case 'expired':{
+            if (!expired) {
+              return false;
+            }
+          }break;
+          case 'now': {
+            if (!now){
+              return false;
+            }
+          }break;
+          case 'soon': {
+            if (!soon){
+              return false;
+            }
+          }break;
+          case 'early': {
+            if (!early){
+              return false;
+            }
+          }break;
+          case 'pending': {
+            if (!pending){
+              return false;
+            }
+          }break;
+        }
+        return this.TASKS_LIST.find(x => x.id.id === task.id.id).additionalInfo.name.toLowerCase().match(this.getSearchTaskText.toLowerCase());
+      });
+    },
+
+    restartModal() {
+      console.log("cambiando isEditModal");
+      this.isEditModal = false;
+      this.initialModalDate = null;
+      this.initialModalEndDate = null;
+    },
+    showNewTaskModal() {
+      //this.setShowNewTaskModal(true);
+      console.log("aqui en el boton");
+      this.$bvModal.show('new_task_form_1');
+    },
 
 
   },

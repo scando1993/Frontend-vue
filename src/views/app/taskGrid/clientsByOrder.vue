@@ -93,7 +93,7 @@ export default {
                 state: 'Without contact',
                 name: 'N/A'
               },
-              last_activity: 'N/A',
+              last_activity: this.getLastActivityDate(client),
               vendor: 'N/A',
               client: list[i],
               company_name: 'N/A'
@@ -105,7 +105,7 @@ export default {
           const tasks = list[i].tasks;
           let tmp = tasks[tasks.length - 1];
           tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
-          tmp['last_activity'] = new Date(tmp.additionalInfo.tui_data.start);
+          tmp['last_activity'] = this.getLastActivityDate(client);
           tmp.activity = {
             state: list[i].additionalInfo.status,
             name: tmp.additionalInfo.name
@@ -154,6 +154,9 @@ export default {
       }
       console.log('state', newStatus);
       return newStatus;
+    },
+    getLastActivityDate(client) {
+      return client.additionalInfo.last_activity ? new Date(client.additionalInfo.last_activity) : 'N/A';
     },
   }
 };
