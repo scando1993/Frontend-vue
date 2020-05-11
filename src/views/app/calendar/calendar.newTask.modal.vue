@@ -256,7 +256,6 @@
                     return ''
                 }
                 return 'Por favor selecciona a un cliente'
-            }
 
             },
             getReminderDisplay: function () {
@@ -456,7 +455,6 @@
                 else {
                     this.hideNewTaskForm();
                 }
-            }
 
             },
             get_Reminder_form_selection: function () {
