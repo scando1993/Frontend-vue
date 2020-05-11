@@ -85,9 +85,26 @@
                             <b-form-group
                                     label="Recordatorio"
                             >
-                                <b-form-timepicker
-                                        :disabled="!durationStateEnable"
-                                        v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+                                <div class="d-flex align-content-between align-items-center">
+                                    <b-form-input
+                                            :disabled="!durationStateEnable"
+                                            type="number"
+                                            min="1"
+                                            trim="true"
+                                            class="px-2"
+                                            placeholder="Ingrese un valor"
+                                            v-model="newTaskForm.reminder_value" locale="en"></b-form-input>
+                                    <b-form-select
+                                                   class="px-2"
+                                                   v-model="newTaskForm.reminder_option_selected"
+                                                   :disabled="!durationStateEnable"
+                                                   placeholder="Escoja una categoria"
+                                                    :options="reminder_options"/>
+                                    <div>
+                                        <h6>{{getReminderDisplay}}</h6>
+                                    </div>
+
+                                </div>
 
                             </b-form-group>
                             <b-form-group
@@ -166,11 +183,21 @@
                     start_time: '',
                     duration: '',
                     reminder: '',
-                    completed: ''
+                    completed: '',
+                    reminder_option_selected: 'minutes',
+                    reminder_value: ''
                 },
                 taskCategories,
                 taskOptions: taskCategories,
-                initial_date: new Date()
+                initial_date: new Date(),
+                reminder_options: [
+                    {value: 'minutes', text: "minutos"},
+                    {value: 'hours', text: "horas"},
+                    {value: 'days', text: "días"},
+                    {value: 'weeks', text: "semanas"}
+                ],
+                reminder_option_selected: '',
+                reminder_value: ''
 
             }
         },
@@ -206,8 +233,13 @@
             },
             getModalTitle: function () {
                 return this.isEditModal ? 'Editar Tarea' : 'Nueva Tarea'
-            }
-
+            },
+            getReminderDisplay: function () {
+                const option_selected = this.newTaskForm.reminder_option_selected;
+                if(!option_selected || !this.newTaskForm.reminder_value )
+                    return '';
+                return this.newTaskForm.reminder_value + " " + this.reminder_options.find( x=> x.value === option_selected).text + " antes"
+            },
         },
         mounted: {
 
@@ -228,6 +260,9 @@
             */
         },
         methods: {
+            get_Reminder_form_selection: function () {
+                return this.reminder_value + ":" + this.reminder_option_selected;
+            },
             getVendorClients() {
                 // console.log('IN getVendors clients', this.newTaskForm.client_id);
                 // console.log('sss', this.newTaskForm);
@@ -244,6 +279,7 @@
             },
             createTask() {
                 this.newTaskForm.category = new Number(this.newTaskForm.category);
+                this.newTaskForm.reminder = this.getReminderPost();
                 // this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
                 // this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
                 console.log('form', this.newTaskForm);
@@ -280,7 +316,9 @@
                     start_time: '',
                     duration: '',
                     reminder: '',
-                    completed: ''
+                    completed: '',
+                    reminder_option_selected: 'minutes',
+                    reminder_value: ''
                 };
             },
             setFormData(taskSelected) {
@@ -303,6 +341,7 @@
             editTask() {
                 const task_id = this.TASK_SELECTED.id.id;
                 this.newTaskForm.category = Number(this.newTaskForm.category);
+                this.newTaskForm.reminder = this.getReminderPost();
                 const payload = {
                     task_id: task_id,
                     data: this.newTaskForm
@@ -333,9 +372,33 @@
             fetchTaskData() {
                 this.$store.dispatch('GET_TASKS_LIST');
                 this.$store.dispatch('GET_TASKS_PROGRESS');
+            },
+            formatReminder(hours, minutes, seconds) {
+                return hours.toString() + ":" +  minutes.toString() + ":"  + seconds.toString();
+            },
+            getReminderPost() {
+                const reminder_value = this.reminder_value;
+                const reminder_selection = this.reminder_option_selected;
+                var minutes = 0;
+                var hours = 0 ;
+                var seconds = 0;
 
+                if(reminder_selection === this.reminder_options[0].value) {
+                    minutes = reminder_value;
+                }
+                else if(reminder_selection === this.reminder_options[1].value) {
+                    hours = reminder_value;
+                }
+                else if(reminder_selection === this.reminder_options[2].value) {
+                    hours = reminder_value * 24;
+                }
+                else if(reminder_selection === this.reminder_options[3].value) {
+                    hours = reminder_value * 24 * 7;
+                }
+                return this.formatReminder(hours, minutes, seconds);
 
             }
+
 
         },
         watch: {
