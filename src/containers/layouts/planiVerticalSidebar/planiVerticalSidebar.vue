@@ -12,19 +12,19 @@
 			:settings="{ suppressScrollX : true ,  wheelPropagation: false}"
 		>
 			<div>
-				<div class="gull-brand text-center d-flex align-items-center pl-2 mb-2 justify-content-between">
-					<!--                <div>-->
-					<!--                    <img src="@/assets/images/logo.png" class="gull-brand-logo"/>-->
-					<!--                    <img :class="['logo', {'vertical-logo': getPlaniVerticalCompact.isItemName}]" src="@/assets/images/logo-name.png"/>-->
-					<!--&lt;!&ndash;                    <img v-if="!getPlaniVerticalCompact.isItemName" style="transition:width .4s ease-in-out; width: 0px; " src="@/assets/images/logo-name.png" />&ndash;&gt;-->
-					<!--                </div>-->
-					<div class="toggle-sidebar-compact">
-						<label class="switch ul-switch switch-primary ml-auto">
-							<input @click="planiSwitchSidebar" type="checkbox"/>
-							<span class="ul-slider o-hidden"></span>
-						</label>
-					</div>
-				</div>
+<!--				<div class="gull-brand text-center d-flex align-items-center pl-2 mb-2 justify-content-between">-->
+<!--					&lt;!&ndash;                <div>&ndash;&gt;-->
+<!--					&lt;!&ndash;                    <img src="@/assets/images/logo.png" class="gull-brand-logo"/>&ndash;&gt;-->
+<!--					&lt;!&ndash;                    <img :class="['logo', {'vertical-logo': getPlaniVerticalCompact.isItemName}]" src="@/assets/images/logo-name.png"/>&ndash;&gt;-->
+<!--					&lt;!&ndash;&lt;!&ndash;                    <img v-if="!getPlaniVerticalCompact.isItemName" style="transition:width .4s ease-in-out; width: 0px; " src="@/assets/images/logo-name.png" />&ndash;&gt;&ndash;&gt;-->
+<!--					&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--					<div class="toggle-sidebar-compact">-->
+<!--						<label class="switch ul-switch switch-primary ml-auto">-->
+<!--							<input @click="planiSwitchSidebar" type="checkbox"/>-->
+<!--							<span class="ul-slider o-hidden"></span>-->
+<!--						</label>-->
+<!--					</div>-->
+<!--				</div>-->
 
 				<div class="close-mobile-menu" @click="planiMobileSidebar">
 					<i class="text-16 text-primary i-Close-Window font-weight-bold"/>
