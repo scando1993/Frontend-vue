@@ -11,7 +11,6 @@ import VueGoodTablePlugin from 'vue-good-table';
 // import VueSlider from "vue-slider-component";
 import Meta from 'vue-meta';
 import FlagIcon from 'vue-flag-icon';
-import '@/assets/styles/sass/theme.scss';
 import '@/plugins/echarts';
 import '@/plugins/apexChart.js';
 import '@/plugins/sweetalert2.js';
@@ -26,6 +25,8 @@ import VueMoment from 'vue-moment';
 
 require('moment/locale/es');
 moment.locale('es');
+
+import '@/assets/styles/sass/theme.scss';
 
 // locale.use(lang);
 export default {

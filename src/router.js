@@ -58,6 +58,15 @@ const routes = [
         ]
       },
       {
+        path: '/app/settings',
+        component: () => import('./views/app/settings'),
+        children: [
+          {
+            path: '',
+            component: () => import('./views/app/settings/settings')
+          }
+        ]
+      },{
         path: '/app/profile',
         component: () => import('./views/app/profile'),
         children: [
