@@ -326,7 +326,7 @@ export default {
     },
     showHistory() {
       const payload = {
-        client_id: this.getFormClientId(),
+        client_id: this.CLIENT_SELECTED.id.id,
         limit: 10000
       };
       this.$store.dispatch('GET_CLIENT_HISTORY', payload);
