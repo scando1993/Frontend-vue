@@ -41,17 +41,7 @@
                         @clickSchedule="onClickSchedule"
                         @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
               />
-              <l-map
-                v-show="showMap"
-                style="height: 800px; width: 100%"
-                :zoom="mapConfigurations.zoom"
-                :center="mapConfigurations.center"
-                @update:zoom="zoomUpdated"
-                @update:center="centerUpdated"
-                @update:bounds="boundsUpdated"
-              >
-                <l-tile-layer :url="mapConfigurations.url"/>
-              </l-map>
+              <calendar_map v-show="showMap"></calendar_map>
             </div>
           </div>
         </b-col>
@@ -99,6 +89,7 @@ import CalendarNavBar from './calendarNavbar/calendarNavBar';
 import { mapGetters, mapActions } from 'vuex';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import calendar_newTask_modal from './calendar.newTask.modal';
+import calendar_map from './calendar.map';
 import {
   calendarList,
   view,
@@ -136,7 +127,8 @@ export default {
     'calendar': Calendar,
     LMap,
     LTileLayer,
-    CalendarTaskWidget
+    CalendarTaskWidget,
+    calendar_map
   },
   computed: {
     ...mapGetters([
