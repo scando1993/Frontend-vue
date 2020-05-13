@@ -8,20 +8,37 @@
             @update:bounds="boundsUpdated"
     >
         <l-tile-layer :url="mapConfigurations.url"/>
-            <l-marker  :lat-lng="item.coords" :name="item.name" v-for="item in mapMarkers" v-bind:key="item"></l-marker>
+            <l-marker :lat-lng="item.coords" :name="item.name" v-for="item in mapMarkers" v-bind:key="item">
+                <l-icon
+                        style="background-color: red;"
+                        :icon-anchor="[0, 240]"
+                        :icon-size="[320, 370]"
+                        :label-anchor="[-6, 0]"
+                        :popupAnchor="[0, -36]"
+                         />
+                <l-tooltip>
+                    Actividad: {{item.name}}
+                    <br>
+                    Direccion: {{item.address}}
+
+                </l-tooltip>
+                >
+            </l-marker>
 
     </l-map>
     
 </template>
 
 <script>
-    import { LMap, LTileLayer } from 'vue2-leaflet';
+    import { LMap, LTileLayer, LIcon, LTooltip} from 'vue2-leaflet';
     import { mapGetters } from 'vuex';
     export default {
         name: "calendar_map",
         components: {
             LMap,
             LTileLayer,
+            LIcon,
+            LTooltip
         },
         data() {
             return {
@@ -51,7 +68,8 @@
                     const name = task.additionalInfo.name;
                     return {
                         coords: coords,
-                        name: name
+                        name: name,
+                        address: task.additionalInfo.address
                     }
 
                 }
@@ -74,5 +92,8 @@
 </script>
 
 <style scoped>
+    .mm {
+        background-color: red;
+    }
 
 </style>
