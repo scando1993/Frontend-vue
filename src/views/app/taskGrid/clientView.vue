@@ -25,6 +25,7 @@
 			</div>
 		</div>
 		<client_new-task_form/>
+		<client_bulkCreation_modal/>
 
 		<div id ="progressBar">
 			<client_progressBar/>
@@ -42,7 +43,7 @@ import ClientForm from './clientForm';
 import ClientTaskHistoryForm from './clientTaskHistoryForm';
 import client_progressBar from './client.progressBar';
 import client_newTask_form from './client.newTask.form';
-
+import client_bulkCreation_modal from './client.bulkCreation-modal'
 export default {
 	name: 'taskGrid',
 	components: {
@@ -53,7 +54,8 @@ export default {
 		ClientsByTask,
 		ClientTaskHistoryForm,
 		client_progressBar,
-		client_newTask_form
+		client_newTask_form,
+		client_bulkCreation_modal
 	},
 	data() {
 		return {};
