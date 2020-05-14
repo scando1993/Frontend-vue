@@ -2,7 +2,7 @@
     <div>
         <b-table striped hover :items="getTableData" :fields="fields" :per-page="perPage" :current-page="currentPage">
             <template v-slot:cell(actions)="row">
-                
+
                 <b-button variant="primary" size="sm" @click="showClientModal(row.item.client)">
                     Ver detalles
                 </b-button>
@@ -85,6 +85,7 @@
                 const clientsFiltered = filters.filter( clientsFilterCallback);
 
                 // mapping data
+                const th = this;
                 function tableMappingCallback(client, index) {
                     return {
                         id: index,
@@ -92,7 +93,7 @@
                         razon_social: client.additionalInfo.social_reason,
                         direccion: client.additionalInfo.address || 'N/A',
                         notas: client.additionalInfo.additionalInfo,
-                        estado: client.additionalInfo.status,
+                        estado: th.mapClientStates(client.additionalInfo.status),
                         client: client
                     }
                 }
@@ -109,6 +110,16 @@
                 'getNotContactClients',
             'showClientForm']),
 
+            mapClientStates(state) {
+                switch (state) {
+                    case 'Active':
+                        return 'Activo';
+                    case 'Inactive':
+                        return 'Inactivo';
+                    case 'Without contact':
+                        return 'Sin Contactar'
+                }
+            },
             showClientModal(client) {
               this.$store.dispatch('SET_CLIENT_SELECTED_ACTION', client);
               const vendorName = client.vendor ? client.vendor.additionalInfo.firstName : 'N/A';
