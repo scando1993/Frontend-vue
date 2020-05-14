@@ -11,6 +11,7 @@
 							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
 							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
 							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
+							<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
 							<div v-else>No hay contenido</div>
 
 					</div>
@@ -42,6 +43,7 @@ import ClientForm from './clientForm';
 import ClientTaskHistoryForm from './clientTaskHistoryForm';
 import client_progressBar from './client.progressBar';
 import client_newTask_form from './client.newTask.form';
+import clientsInTable from './clientsInTable';
 
 export default {
 	name: 'taskGrid',
@@ -53,7 +55,8 @@ export default {
 		ClientsByTask,
 		ClientTaskHistoryForm,
 		client_progressBar,
-		client_newTask_form
+		client_newTask_form,
+		clientsInTable
 	},
 	data() {
 		return {};
