@@ -330,6 +330,7 @@
                     return false
                 }
 
+
                 if(this.isEditModal) {
                     this.editTask();
                 }
