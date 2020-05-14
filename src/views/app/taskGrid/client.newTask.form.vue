@@ -60,9 +60,26 @@
                     <b-form-group
                             label="Recordatorio"
                     >
-                        <b-form-timepicker
-                                :disabled="!durationStateEnable"
-                                v-model="newTaskForm.reminder" locale="en"></b-form-timepicker>
+                        <div class="d-flex align-content-between align-items-center">
+                            <b-form-input
+                                    :disabled="!durationStateEnable"
+                                    type="number"
+                                    min="1"
+                                    trim="true"
+                                    class="px-2"
+                                    placeholder="Ingrese un valor"
+                                    v-model="reminder_value" locale="en"></b-form-input>
+                            <b-form-select
+                                    class="px-2"
+                                    v-model="reminder_option_selected"
+                                    :disabled="!durationStateEnable"
+                                    placeholder="Escoja una categoria"
+                                    :options="reminder_options"/>
+                            <div>
+                                <h6>{{getReminderDisplay}}</h6>
+                            </div>
+
+                        </div>
 
                     </b-form-group>
                     <b-form-group
@@ -115,6 +132,14 @@ import {mapGetters} from 'vuex';
                 },
                 taskCategories, vendors, clients, routines,
                 taskOptions: taskCategories,
+                reminder_options: [
+                    {value: 'minutes', text: "minutos"},
+                    {value: 'hours', text: "horas"},
+                    {value: 'days', text: "días"},
+                    {value: 'weeks', text: "semanas"}
+                ],
+                reminder_option_selected: 'minutes',
+                reminder_value: ''
 
             }
         },
@@ -137,6 +162,12 @@ import {mapGetters} from 'vuex';
                     return true
                 }
                 return false
+            },
+            getReminderDisplay: function () {
+                const option_selected = this.reminder_option_selected;
+                if(!option_selected || !this.reminder_value )
+                    return '';
+                return this.reminder_value + " " + this.reminder_options.find( x=> x.value === option_selected).text + " antes"
             },
         },
         mounted: {
@@ -168,6 +199,8 @@ import {mapGetters} from 'vuex';
                 this.newTaskForm.category = new Number(this.newTaskForm.category);
                 this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
                 this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
+                this.newTaskForm.reminder = this.getReminderPost();
+                this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
                 console.log('form', this.newTaskForm);
                 this.$store.dispatch('POST_TASK', this.newTaskForm)
                     .then(result => {
@@ -195,6 +228,41 @@ import {mapGetters} from 'vuex';
                     reminder: '',
                     completed: ''
                 };
+                this.reminder_option_selected = 'minutes';
+                this.reminder_value = '';
+            },
+
+            formatReminder(hours, minutes, seconds) {
+                if (hours === 0 && minutes === 0 && seconds === 0)
+                    return '';
+                return hours.toString() + ":" +  minutes.toString() + ":"  + seconds.toString();
+            },
+            getReminderPost() {
+                const reminder_value = this.reminder_value;
+                const reminder_selection = this.reminder_option_selected;
+                var minutes = 0;
+                var hours = 0 ;
+                var seconds = 0;
+
+                if(reminder_value) {
+                    if(reminder_selection === this.reminder_options[0].value) {
+                        minutes = reminder_value;
+                    }
+                    else if(reminder_selection === this.reminder_options[1].value) {
+                        hours = reminder_value;
+                    }
+                    else if(reminder_selection === this.reminder_options[2].value) {
+                        hours = reminder_value * 24;
+                    }
+                    else if(reminder_selection === this.reminder_options[3].value) {
+                        hours = reminder_value * 24 * 7;
+                    }
+                }
+                return this.formatReminder(hours, minutes, seconds);
+
+            },
+            get_Reminder_form_selection: function () {
+                return this.reminder_value + ":" + this.reminder_option_selected;
             },
 
         }
