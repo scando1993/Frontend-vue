@@ -50,6 +50,7 @@ import { mapActions, mapGetters } from 'vuex';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
+import {format} from 'date-fns'
 
 export default {
   name: 'report',
@@ -151,9 +152,10 @@ export default {
       'CLIENT_PROGRESS'
     ]),
     generatePDF: function () {
-      let currentDate = this.$moment((new Date()).getTime()).format('DD-MMMM');
+      let currentDate = format(new Date(), 'dd-MMMM');
       /** WITH CSS */
-      domtoimage.toPng(this.$refs.content)
+      var node = document.getElementById('body');
+      domtoimage.toPng(node)
         .then(function (dataUrl) {
           let img = new Image();
           img.src = dataUrl;

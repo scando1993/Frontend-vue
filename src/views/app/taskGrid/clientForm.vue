@@ -26,7 +26,7 @@
                 type="text"
                 v-model="formData.name"
                 required
-                :readonly="editForm"
+                :readonly="!isEditing"
               />
             </b-form-group>
             <b-form-group
@@ -41,7 +41,7 @@
                 type="text"
                 v-model="formData.social_reason"
                 required
-                :readonly="editForm"
+                :readonly="!isEditing"
               />
             </b-form-group>
             <b-form-group
@@ -56,12 +56,12 @@
                 type="text"
                 v-model="formData.address"
                 required
-                :readonly="editForm"
+                :readonly="!isEditing"
               />
             </b-form-group>
 
             <div v-if="loggedInUser.admin">
-              <div v-if="editForm">
+              <div v-if="!isEditing">
                 <b-form-group
                   label-for="showVendor"
                   label="Vendedor"
@@ -105,7 +105,7 @@
                 placeholder="..."
                 rows="3"
                 max-rows="6"
-                :readonly="editForm"
+                :readonly="!isEditing"
               />
             </b-form-group>
 
@@ -124,7 +124,7 @@
                   placeholder="Nombre"
                   type="text"
                   v-model="formData.contacts[0].name"
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
               <b-form-group
@@ -136,7 +136,7 @@
                   placeholder="E-mail"
                   type="email"
                   v-model="formData.contacts[0].email"
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
               <b-form-group
@@ -148,7 +148,7 @@
                   placeholder="Teléfono"
                   type="tel"
                   v-model="formData.contacts[0].phoneNumber"
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
             </div>
@@ -166,7 +166,7 @@
                   type="text"
                   v-model="formData.contacts[1].name"
                   required
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
               <b-form-group
@@ -178,7 +178,7 @@
                   placeholder="E-mail"
                   type="email"
                   v-model="formData.contacts[1].email"
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
               <b-form-group
@@ -190,7 +190,7 @@
                   placeholder="Teléfono"
                   type="number"
                   v-model="formData.contacts[1].phoneNumber"
-                  :readonly="editForm"
+                  :readonly="!isEditing"
                 />
               </b-form-group>
             </div>
@@ -203,13 +203,19 @@
             <button class="btn client-modal-btn" type="submit"> Agregar</button>
           </div>
           <div v-else>
-            <button class="btn client-modal-btn" type="button" @click="deleteClient">Eliminar</button>
-            <button class="btn client-modal-btn"
-                    type="button"
-                    @click="editClient"
-                    :class="{'client-modal-btn-pressed': editButton}">Editar
-            </button>
-            <button class="btn client-modal-btn" type="button" @click="showNewTaskForm()">Crear Tarea</button>
+            <div id="noEditButtons" v-if="!isEditing">
+              <button class="btn client-modal-btn" type="button" @click="deleteClient">Eliminar</button>
+              <button class="btn client-modal-btn"
+                      type="button"
+                      @click="onEditPress"
+                      :class="{'client-modal-btn-pressed': editButton}">Editar
+              </button>
+              <button class="btn client-modal-btn" type="button" @click="showNewTaskForm()">Crear Tarea</button>
+            </div>
+            <div id="Editbuttons" v-else>
+              <button class="btn client-modal-btn" type="button" @click="cancelEdit">Cancelar</button>
+              <button class="btn client-modal-btn" type="button" @click="editClient">Guardar</button>
+            </div>
           </div>
         </div>
       </form>
@@ -225,7 +231,8 @@ export default {
   data: function () {
     return {
       editButton: false,
-      vendorSelected: ''
+      vendorSelected: '',
+      isEditing: false
     };
   },
   computed: {
@@ -254,13 +261,6 @@ export default {
       }
       return options;
     },
-    editForm: function () {
-      if ( !this.getNewClientForm() ) {
-        if ( !this.editButton )
-          return true;
-      }
-      return false;
-    }
   },
   methods: {
     ...mapGetters([ 'getFormClientId', 'getNewClientForm' ]),
@@ -326,7 +326,7 @@ export default {
     },
     showHistory() {
       const payload = {
-        client_id: this.getFormClientId(),
+        client_id: this.CLIENT_SELECTED.id.id,
         limit: 10000
       };
       this.$store.dispatch('GET_CLIENT_HISTORY', payload);
@@ -406,11 +406,17 @@ export default {
       this.hideForm();
     },
     hideForm: function () {
+      this.isEditing = false;
       this.resetModal();
       this.hideClientForm();
     },
+    onEditPress() {
+      this.isEditing = true;
+      var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
+      this.updateTask(task);
+    },
     editClient: function () {
-      if ( this.editButton ) {
+
         // seccond edit
         this.formData.client_id = this.CLIENT_SELECTED.id.id;
         this.$store.dispatch('UPDATE_CLIENT', this.formData)
@@ -431,10 +437,6 @@ export default {
               });
           });
         this.hideForm();
-      }
-      this.editButton = !this.editButton;
-      var task = this.membersTasks[this.vendorSelectedInGrid].tasks[this.clientSelecteIndex];
-      this.updateTask(task);
     },
     resetModal: function () {
       this.editButton = true;
@@ -467,6 +469,10 @@ export default {
       // this.$store.dispatch('SET_SHOW_NEW_TASK_CLIENT_FORM_ACTION', true);
       this.$bvModal.show("new_task_form")
     },
+    cancelEdit() {
+      this.hideForm();
+    },
+
   },
 };
 </script>

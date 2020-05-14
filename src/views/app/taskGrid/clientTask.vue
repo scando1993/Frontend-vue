@@ -5,15 +5,20 @@
         <p class="m-2 client-task-date">{{formatDate(task.last_activity)}}</p>
         <div style="border: 1px solid #D2D4D6;"/>
         <p class="m-2 flex-grow-1">{{task.activity.name}}</p>
-        <button class="btn client-task-btn m-2">Ver</button>
+        <button class="btn client-task-btn m-2" @click="openTaskHistoryModal">Ver</button>
       </div>
     </div>
+    <client_history_detail_modal/>
   </div>
 </template>
 
 <script>
+  import client_history_detail_modal from './client.history.detail.modal'
 export default {
   name: 'clientTaskWidget',
+  components: {
+    client_history_detail_modal
+  },
   props: {
     task: {
       type: Object,
@@ -34,6 +39,11 @@ export default {
       } catch ( e ) {
         return 'N/A';
       }
+    },
+    openTaskHistoryModal() {
+      this.$store.dispatch('SET_TASK_SELECTED_ACTION', this.task);
+      this.$bvModal.show("task_form_history");
+
     }
   }
 
