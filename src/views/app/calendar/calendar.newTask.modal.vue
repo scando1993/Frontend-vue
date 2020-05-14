@@ -455,9 +455,6 @@
                 else {
                     this.hideNewTaskForm();
                 }
-            get_Reminder_form_selection: function () {
-                return this.reminder_value + ":" + this.reminder_option_selected;
-            },
             },
             onShow() {
                 if(this.TASK_SELECTED)
@@ -479,7 +476,10 @@
                     this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
 
                 }
-            }
+            },
+            get_Reminder_form_selection: function () {
+                return this.reminder_value + ":" + this.reminder_option_selected;
+            },
 
         },
         watch: {
