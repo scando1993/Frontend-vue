@@ -67,14 +67,15 @@
 
                     </tab-content>
                     <tab-content title="Revisión de la petición">
+                        {{upload_response}}
                         <b-row>
                             <b-col md="12">
                                 <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes creados" label-for="input-lg">
-                                    <b-form-input readonly id="input-lg" size="lg" ></b-form-input>
+                                    <b-form-input readonly id="input-lg" size="lg" v-model="upload_response.clients_created"></b-form-input>
                                 </b-form-group>
 
                                 <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes no creados" label-for="input-lg">
-                                    <b-form-input readonly id="input-lg" size="lg" ></b-form-input>
+                                    <b-form-input readonly id="input-lg" size="lg" v-model="upload_response.clients_error"></b-form-input>
                                 </b-form-group>
                             </b-col>
                         </b-row>
@@ -113,17 +114,21 @@
                 show_error: false,
                 err_message: null,
                 readyToShow: false,
+                upload_response: {},
                 map_fields: {
                     name: "Nombre",
                     social_reason: "Razón Social",
                     address: "Dirección",
+                    notes: 'Notas',
+                    contact1_name: 'Nombre Contacto',
+                    contact1_email: 'Email Contacto',
+                    contact1_phone: 'Teléfono Contacto'
 
                 }
 
             }
         },
         computed: {
-          ...mapGetters(['CLIENT_BULK_RESPONSE'])
         },
         methods: {
             onShow() {
@@ -140,6 +145,7 @@
                     .then(response => {
                         that.fileUploaded = true;
                         that.show_error = false;
+                        that.upload_response = response.data.data.data;
                     })
                     .catch(error => {
                         that.show_error = true;
