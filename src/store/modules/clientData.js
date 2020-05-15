@@ -8,9 +8,11 @@ export default {
     clients_progress: {},
     client_selected: {},
     show_new_task_client_form: false,
-    client_vendor: null
+    client_vendor: null,
+    client_bulk_response: null,
   },
   getters: {
+    CLIENT_BULK_RESPONSE: state => state.client_bulk_response,
     SHOW_NEW_TASK_CLEINT_FORM: state => state.show_new_task_client_form,
     CLIENT_SELECTED: state => state.client_selected,
     CLIENTS_LIST: state => state.client_list,
@@ -20,6 +22,9 @@ export default {
     CLIENT_VENDOR: state => state.client_vendor
   },
   mutations: {
+    SET_CLIENT_BULK_RESPONSE(state, payload) {
+      this.state.client_bulk_response = payload;
+    },
     SET_CLIENT_VENDOR(state, payload) {
       state.client_vendor = payload
     },
@@ -214,6 +219,26 @@ export default {
         commit('SET_CLIENT_VENDOR', null);
 
       }
+    },
+    POST_BULK_CLIENTS: ({ commit }, data) => {
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          },
+        };
+        axios
+            .post(process.env.VUE_APP_API + '/Client/create/bulk', data, config)
+            .then(({ data, status }) => {
+              console.log(data, status);
+              commit('SET_CLIENT_BULK_RESPONSE', data.data);
+              resolve({ data, status });
+            })
+            .catch(error => {
+              reject(error);
+            });
+      });
     },
 
   }
