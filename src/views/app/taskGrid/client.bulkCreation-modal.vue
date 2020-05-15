@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="bulk_client_modal" @hide="hideForm" hide-footer  centered hide-header size="lg">
+    <b-modal id="bulk_client_modal" @show="onShow" @hide="hideForm" hide-footer  centered hide-header size="lg">
         <div class="client-modal">
             <div id="modal-header">
                 <div class="card-header p-1" style="background: #00b3ee"></div>
@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <div id="client-modal-body">
+            <div id="client-modal-body" v-if="readyToShow">
                 <form-wizard
                         :title="title"
                         :subtitle="subtitle"
@@ -67,7 +67,17 @@
 
                     </tab-content>
                     <tab-content title="Revisión de la petición">
-                        {{file}}
+                        <b-row>
+                            <b-col md="12">
+                                <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes creados" label-for="input-lg">
+                                    <b-form-input readonly id="input-lg" size="lg" ></b-form-input>
+                                </b-form-group>
+
+                                <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes no creados" label-for="input-lg">
+                                    <b-form-input readonly id="input-lg" size="lg" ></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
                     </tab-content>
                     <tab-content title="Finalizar">
                         Yuhuuu! This seems pretty damn simple
@@ -85,6 +95,7 @@
     import {FormWizard, TabContent} from 'vue-form-wizard'
     import 'vue-form-wizard/dist/vue-form-wizard.min.css'
     import { VueCsvImport } from 'vue-csv-import';
+    import  {mapGetters} from 'vuex';
     export default {
         name: "client_bulkCreation_modal",
         components: {
@@ -101,6 +112,7 @@
                 fileUploaded: false,
                 show_error: false,
                 err_message: null,
+                readyToShow: false,
                 map_fields: {
                     name: "Nombre",
                     social_reason: "Razón Social",
@@ -110,11 +122,17 @@
 
             }
         },
+        computed: {
+          ...mapGetters(['CLIENT_BULK_RESPONSE'])
+        },
         methods: {
+            onShow() {
+                this.readyToShow = true;
+            },
             hideForm() {
                 this.$bvModal.hide("bulk_client_modal");
                 this.file = null;
-
+                this.readyToShow = false;
             },
             submit2(a,b ) {
                 const that = this;
