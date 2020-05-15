@@ -23,16 +23,8 @@
                         finish-button-text="Subir"
                 >
                     <tab-content title="Personal details">
-                        <div>
-                            Por favor suba un archivo
-                        </div>
-                        <b-form-file
-                                v-model="file"
-                                accept=".csv"
-                                placeholder="Choose a file or drop it here..."
-                                drop-placeholder="Drop file here..."
-                        ></b-form-file>
-                        <div class="mt-3">Archivo seleccionado: {{ file ? file.name : '' }}</div>
+                        <vue-csv-import url="/url/to/post"  v-model="csv" :map-fields="['name', 'age']"></vue-csv-import>
+
 
                     </tab-content>
                     <tab-content title="Additional Info">
@@ -53,11 +45,13 @@
 <script>
     import {FormWizard, TabContent} from 'vue-form-wizard'
     import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+    import { VueCsvImport } from 'vue-csv-import';
     export default {
         name: "client_bulkCreation_modal",
         components: {
             FormWizard,
-            TabContent
+            TabContent,
+            VueCsvImport
         },
         data() {
             return {
