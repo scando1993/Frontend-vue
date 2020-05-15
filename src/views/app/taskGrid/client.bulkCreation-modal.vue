@@ -19,18 +19,57 @@
                         :color="color"
                         shape="tab"
                         back-button-text="Retroceder"
-                        next-button-text="Siguiente!"
+                        next-button-text="Siguiente Paso"
                         finish-button-text="Subir"
+                        headers="true"
+                        inputClass="client-modal-btn"
                 >
-                    <tab-content title="Personal details">
-                        <vue-csv-import url="/url/to/post"  v-model="csv" :map-fields="['name', 'age']"></vue-csv-import>
+                    <tab-content title="Subir Archivo" :before-change="validateNext">
+                        <div class="mb-32">
+                            <vue-csv-import  v-model="file" :map-fields="map_fields">
+                                <template slot="next" slot-scope="{load}">
+                                    <div  class="d-flex justify-content-end">
+                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="load(); restart_form()">Cargar archivo</button>
+                                    </div>
+                                </template>
+
+                                <template slot="submit" slot-scope="{submit}">
+                                    <div  class="d-flex justify-content-center">
+                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Enviar</button>
+                                    </div>
+                                </template>
+
+                                <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                                    <h4 class="d-flex justify-content-center" style="color: #00b3ee">Escoja el archivo que desee subir</h4>
+                                </template>
+                                <template slot="thead">
+                                    <tr>
+                                        <th>Campos</th>
+                                        <th>Campos en el archivo</th>
+                                    </tr>
+                                </template>
+                            </vue-csv-import>
+
+                            <div v-if="file">
+                                <div  class="d-flex justify-content-center">
+                                    <div>
+
+                                    <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Subir archivo</button>
+
+                                        <h5 v-if="show_error" class="justify-content-center" style="color: darkred">Error al cargar el archivo, aseguerece de tener el formato correcto</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
 
 
                     </tab-content>
-                    <tab-content title="Additional Info">
-                        My second tab content
+                    <tab-content title="Revisión de la petición">
+                        {{file}}
                     </tab-content>
-                    <tab-content title="Last step">
+                    <tab-content title="Finalizar">
                         Yuhuuu! This seems pretty damn simple
                     </tab-content>
                 </form-wizard>
@@ -58,15 +97,44 @@
                 title: "",
                 color: "#00b3ee",
                 subtitle: "",
-                file: null
+                file: null,
+                fileUploaded: false,
+                show_error: false,
+                err_message: null,
+                map_fields: {
+                    name: "Nombre",
+                    social_reason: "Razón Social",
+                    address: "Dirección",
+
+                }
 
             }
         },
         methods: {
             hideForm() {
                 this.$bvModal.hide("bulk_client_modal");
+                this.file = null;
 
             },
+            submit2(a,b ) {
+                const that = this;
+                this.$store.dispatch('POST_BULK_CLIENTS', this.file)
+                    .then(response => {
+                        that.fileUploaded = true;
+                        that.show_error = false;
+                    })
+                    .catch(error => {
+                        that.show_error = true;
+
+                    })
+
+            },
+            validateNext() {
+                return this.fileUploaded;
+            },
+            restart_form() {
+                this.fileUploaded = false;
+            }
         }
     }
 </script>
