@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="bulk_client_modal" @hide="hideForm" hide-footer  centered hide-header size="lg">
+    <b-modal id="bulk_client_modal" @show="onShow" @hide="hideForm" hide-footer  centered hide-header size="lg">
         <div class="client-modal">
             <div id="modal-header">
                 <div class="card-header p-1" style="background: #00b3ee"></div>
@@ -12,35 +12,89 @@
                 </div>
             </div>
 
-            <div id="client-modal-body">
+            <div id="client-modal-body" v-if="readyToShow">
                 <form-wizard
                         :title="title"
                         :subtitle="subtitle"
                         :color="color"
                         shape="tab"
                         back-button-text="Retroceder"
-                        next-button-text="Siguiente!"
-                        finish-button-text="Subir"
+                        next-button-text="Siguiente Paso"
+                        finish-button-text="Finalizar"
+                        headers="true"
+                        inputClass="client-modal-btn"
                 >
-                    <tab-content title="Personal details">
-                        <div>
-                            Por favor suba un archivo
+                    <tab-content title="Subir Archivo" :before-change="validateNext">
+                        <div class="mb-32">
+                            <vue-csv-import  v-model="file" :map-fields="map_fields">
+                                <template slot="next" slot-scope="{load}">
+                                    <div  class="d-flex justify-content-end">
+                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="load(); restart_form()">Cargar archivo</button>
+                                    </div>
+                                </template>
+
+                                <template slot="submit" slot-scope="{submit}">
+                                    <div  class="d-flex justify-content-center">
+                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Enviar</button>
+                                    </div>
+                                </template>
+
+                                <template slot="hasHeaders" slot-scope="{headers, toggle}">
+                                    <h4 class="d-flex justify-content-center" style="color: #00b3ee">Escoja el archivo que desee subir</h4>
+                                </template>
+                                <template slot="thead">
+                                    <tr>
+                                        <th>Campos</th>
+                                        <th>Campos en el archivo</th>
+                                    </tr>
+                                </template>
+                            </vue-csv-import>
+
+                            <div v-if="file">
+                                <div  class="d-flex justify-content-center">
+                                    <div>
+
+                                    <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Subir archivo</button>
+
+                                        <h5 v-if="show_error" class="justify-content-center" style="color: darkred">Error al cargar el archivo, aseguerece de tener el formato correcto</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        <b-form-file
-                                v-model="file"
-                                accept=".csv"
-                                placeholder="Choose a file or drop it here..."
-                                drop-placeholder="Drop file here..."
-                        ></b-form-file>
-                        <div class="mt-3">Archivo seleccionado: {{ file ? file.name : '' }}</div>
+
 
                     </tab-content>
-                    <tab-content title="Additional Info">
-                        My second tab content
+                    <tab-content title="Revisión de la petición">
+                        <b-row>
+                            <b-col md="12">
+                                <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes creados" label-for="input-lg">
+                                    <b-form-input readonly id="input-lg" size="lg" v-model="upload_response.clients_created"></b-form-input>
+                                </b-form-group>
+
+                                <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes no creados" label-for="input-lg">
+                                    <b-form-input readonly id="input-lg" size="lg" v-model="upload_response.clients_error"></b-form-input>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col md="12">
+                                <client_bulkCreation_ErrorTable :errors="upload_response.errors"></client_bulkCreation_ErrorTable>
+                            </b-col>
+                        </b-row>
                     </tab-content>
-                    <tab-content title="Last step">
-                        Yuhuuu! This seems pretty damn simple
-                    </tab-content>
+
+                    <template slot="footer" slot-scope="props">
+                        <div class="wizard-footer-left">
+                            <wizard-button  v-if="props.activeTabIndex > 0 && !props.isLastStep" @click.native="props.prevTab()" :style="props.fillButtonStyle">Retroceder</wizard-button>
+                        </div>
+                        <div class="wizard-footer-right">
+                            <wizard-button v-if="!props.isLastStep && file"@click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Siguiente</wizard-button>
+
+                            <wizard-button v-if="props.isLastStep" @click.native="alert('Done')" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Finalizar' : 'Siguiente'}}</wizard-button>
+                        </div>
+                    </template>
                 </form-wizard>
 
             </div>
@@ -53,26 +107,72 @@
 <script>
     import {FormWizard, TabContent} from 'vue-form-wizard'
     import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+    import { VueCsvImport } from 'vue-csv-import';
+    import  {mapGetters} from 'vuex';
+    import client_bulkCreation_ErrorTable from './client.bulkCreation.ErrorTable'
     export default {
         name: "client_bulkCreation_modal",
         components: {
             FormWizard,
-            TabContent
+            TabContent,
+            VueCsvImport,
+            client_bulkCreation_ErrorTable
         },
         data() {
             return {
                 title: "",
                 color: "#00b3ee",
                 subtitle: "",
-                file: null
+                file: null,
+                fileUploaded: false,
+                show_error: false,
+                err_message: null,
+                readyToShow: false,
+                upload_response: {},
+                map_fields: {
+                    name: "Nombre",
+                    social_reason: "Razón Social",
+                    address: "Dirección",
+                    notes: 'Notas',
+                    contact1_name: 'Nombre Contacto',
+                    contact1_email: 'Email Contacto',
+                    contact1_phone: 'Teléfono Contacto'
+
+                }
 
             }
         },
+        computed: {
+        },
         methods: {
+            onShow() {
+                this.readyToShow = true;
+            },
             hideForm() {
                 this.$bvModal.hide("bulk_client_modal");
+                this.file = null;
+                this.readyToShow = false;
+            },
+            submit2(a,b ) {
+                const that = this;
+                this.$store.dispatch('POST_BULK_CLIENTS', this.file)
+                    .then(response => {
+                        that.fileUploaded = true;
+                        that.show_error = false;
+                        that.upload_response = response.data.data.data;
+                    })
+                    .catch(error => {
+                        that.show_error = true;
+
+                    })
 
             },
+            validateNext() {
+                return this.fileUploaded;
+            },
+            restart_form() {
+                this.fileUploaded = false;
+            }
         }
     }
 </script>
