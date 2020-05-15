@@ -20,7 +20,7 @@
                         shape="tab"
                         back-button-text="Retroceder"
                         next-button-text="Siguiente Paso"
-                        finish-button-text="Subir"
+                        finish-button-text="Finalizar"
                         headers="true"
                         inputClass="client-modal-btn"
                 >
@@ -67,7 +67,6 @@
 
                     </tab-content>
                     <tab-content title="Revisión de la petición">
-                        {{upload_response}}
                         <b-row>
                             <b-col md="12">
                                 <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Clientes creados" label-for="input-lg">
@@ -79,10 +78,23 @@
                                 </b-form-group>
                             </b-col>
                         </b-row>
+                        <b-row>
+                            <b-col md="12">
+                                <client_bulkCreation_ErrorTable :errors="upload_response.errors"></client_bulkCreation_ErrorTable>
+                            </b-col>
+                        </b-row>
                     </tab-content>
-                    <tab-content title="Finalizar">
-                        Yuhuuu! This seems pretty damn simple
-                    </tab-content>
+
+                    <template slot="footer" slot-scope="props">
+                        <div class="wizard-footer-left">
+                            <wizard-button  v-if="props.activeTabIndex > 0 && !props.isLastStep" @click.native="props.prevTab()" :style="props.fillButtonStyle">Retroceder</wizard-button>
+                        </div>
+                        <div class="wizard-footer-right">
+                            <wizard-button v-if="!props.isLastStep && file"@click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Siguiente</wizard-button>
+
+                            <wizard-button v-if="props.isLastStep" @click.native="alert('Done')" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Finalizar' : 'Siguiente'}}</wizard-button>
+                        </div>
+                    </template>
                 </form-wizard>
 
             </div>
@@ -97,12 +109,14 @@
     import 'vue-form-wizard/dist/vue-form-wizard.min.css'
     import { VueCsvImport } from 'vue-csv-import';
     import  {mapGetters} from 'vuex';
+    import client_bulkCreation_ErrorTable from './client.bulkCreation.ErrorTable'
     export default {
         name: "client_bulkCreation_modal",
         components: {
             FormWizard,
             TabContent,
-            VueCsvImport
+            VueCsvImport,
+            client_bulkCreation_ErrorTable
         },
         data() {
             return {
