@@ -9,7 +9,7 @@ export default {
     client_selected: {},
     show_new_task_client_form: false,
     client_vendor: null,
-    client_bulk_response: null,
+    client_bulk_response: {},
   },
   getters: {
     CLIENT_BULK_RESPONSE: state => state.client_bulk_response,
@@ -231,8 +231,8 @@ export default {
         axios
             .post(process.env.VUE_APP_API + '/Client/create/bulk', data, config)
             .then(({ data, status }) => {
-              console.log(data, status);
-              commit('SET_CLIENT_BULK_RESPONSE', data.data);
+              console.log('esta es la data..............................' + data);
+              commit('SET_CLIENT_BULK_RESPONSE', data.data.data);
               resolve({ data, status });
             })
             .catch(error => {
