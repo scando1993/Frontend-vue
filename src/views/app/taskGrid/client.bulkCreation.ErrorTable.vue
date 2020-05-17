@@ -51,7 +51,7 @@
                     return {
                         line: error.line,
                         message: error.message,
-                        errors: error.errors.join('; ')
+                        errors: error.errors.join(', ')
                     }
 
                 }

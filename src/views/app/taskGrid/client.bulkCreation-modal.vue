@@ -26,10 +26,10 @@
                 >
                     <tab-content title="Subir Archivo" :before-change="validateNext">
                         <div class="mb-32">
-                            <vue-csv-import  v-model="file" :map-fields="map_fields">
+                            <vue-csv-import headers="true" v-model="file" :map-fields="map_fields">
                                 <template slot="next" slot-scope="{load}">
                                     <div  class="d-flex justify-content-end">
-                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="load(); restart_form()">Cargar archivo</button>
+                                        <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="reset_basic_upload(); load() ">Cargar archivo</button>
                                     </div>
                                 </template>
 
@@ -54,10 +54,10 @@
                                 <div  class="d-flex justify-content-center">
                                     <div>
 
-                                    <button style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Subir archivo</button>
+                                    <button :disabled="blockWhileUpload" style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Subir archivo</button>
 
                                         <h5 v-if="show_error" class="justify-content-center" style="color: darkred">Error al cargar el archivo, aseguerece de tener el formato correcto</h5>
-
+                                        <h5 v-if="show_success" class="justify-content-center" style="color: seagreen">Archivo enviado correctamente</h5>
                                     </div>
                                 </div>
                             </div>
@@ -87,10 +87,10 @@
 
                     <template slot="footer" slot-scope="props">
                         <div class="wizard-footer-left">
-                            <wizard-button  v-if="props.activeTabIndex > 0 && !props.isLastStep" @click.native="props.prevTab()" :style="props.fillButtonStyle">Retroceder</wizard-button>
+                            <wizard-button  v-if="props.activeTabIndex > 0 " @click.native="props.prevTab()" :style="props.fillButtonStyle">Retroceder</wizard-button>
                         </div>
                         <div class="wizard-footer-right">
-                            <wizard-button v-if="!props.isLastStep && file"@click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Siguiente</wizard-button>
+                            <wizard-button :disabled="blockWhileUpload" v-if="!props.isLastStep && file && show_success"@click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Siguiente</wizard-button>
 
                             <wizard-button v-if="props.isLastStep" @click.native="alert('Done')" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Finalizar' : 'Siguiente'}}</wizard-button>
                         </div>
@@ -126,8 +126,11 @@
                 file: null,
                 fileUploaded: false,
                 show_error: false,
+                show_success: false,
                 err_message: null,
                 readyToShow: false,
+                nextStepValidation: false,
+                blockWhileUpload: false,
                 upload_response: {},
                 map_fields: {
                     name: "Nombre",
@@ -150,29 +153,54 @@
             },
             hideForm() {
                 this.$bvModal.hide("bulk_client_modal");
-                this.file = null;
-                this.readyToShow = false;
+                this.restart_form();
             },
             submit2(a,b ) {
                 const that = this;
+                this.nextStepValidation = false;
+                this.blockWhileUpload = true;
                 this.$store.dispatch('POST_BULK_CLIENTS', this.file)
                     .then(response => {
                         that.fileUploaded = true;
                         that.show_error = false;
+                        that.show_success = true;
+                        that.nextStepValidation = true;
                         that.upload_response = response.data.data.data;
                     })
                     .catch(error => {
+                        that.show_success= false;
                         that.show_error = true;
+                        that.nextStepValidation = true;
 
+                    })
+                    .finally(something => {
+                        that.blockWhileUpload = false;
                     })
 
             },
             validateNext() {
-                return this.fileUploaded;
+                return this.nextStepValidation;
+            },
+            reset_basic_upload(){
+                this.fileUploaded = false;
+                this.file = null;
+                this.show_error = false;
+                this.show_success = false;
+                this.err_message = null;
+                this.nextStepValidation = false;
+
             },
             restart_form() {
                 this.fileUploaded = false;
-            }
+                this.file = null;
+                this.fileUploaded = false;
+                this.show_error = false;
+                this.show_success = false;
+                this.err_message = null;
+                this.readyToShow = false;
+                this.nextStepValidation = false;
+                this.blockWhileUpload = false;
+            },
         }
     }
 </script>
