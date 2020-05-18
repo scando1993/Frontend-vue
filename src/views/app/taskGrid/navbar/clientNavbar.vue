@@ -77,12 +77,14 @@ export default {
         { value: 'vendor', text: 'Vendedores' },
         { value: 'priority', text: 'Prioridad' },
         { value: 'clients', text: 'Clientes' },
-        { value: 'custom', text: 'Customizar' }
-      ],
+		  { value: 'table', text: 'Tabla' },
+		  { value: 'custom', text: 'Customizar' },
+	  ],
       group_options_user: [
         { value: 'priority', text: 'Prioridad' },
         { value: 'clients', text: 'Alfabetico' },
-        { value: 'custom', text: 'Customizar' }
+		  { value: 'table', text: 'Tabla' },
+		  { value: 'custom', text: 'Customizar' }
       ]
     };
   },
