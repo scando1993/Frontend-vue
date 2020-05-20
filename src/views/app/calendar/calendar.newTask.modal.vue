@@ -459,23 +459,7 @@
             onShow() {
                 if(this.TASK_SELECTED)
                     this.setFormData(this.TASK_SELECTED);
-                if(this.initialDate) {
 
-                    // formatting date
-                    const startDate_formated = format(this.initialDate, 'yyyy-MM-dd');
-                    const startTime_formated = format(this.initialDate, 'HH:mm:ss');
-
-                    this.newTaskForm.start_date = startDate_formated;
-                    this.newTaskForm.start_time = startTime_formated
-                }
-                if(this.initialEndDate) {
-                    const differenceInMinutes1 = differenceInMinutes(this.initialEndDate, this.initialDate);
-                    const differencesInHours1 = differenceInHours(this.initialEndDate, this.initialDate);
-                    console.log('differences hours', differencesInHours1 );
-                    console.log('differences minutes', differenceInMinutes1 );
-                    this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
-
-                }
             },
             get_Reminder_form_selection: function () {
                 return this.reminder_value + ":" + this.reminder_option_selected;
@@ -495,6 +479,26 @@
             },
             'CLIENT_VENDOR': function (oldVal, newVal) {
                 this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
+            },
+            'initialDate': function (oldVal, newVal) {
+                if(this.initialDate) {
+
+                    // formatting date
+                    const startDate_formated = format(this.initialDate, 'yyyy-MM-dd');
+                    const startTime_formated = format(this.initialDate, 'HH:mm:ss');
+
+                    this.newTaskForm.start_date = startDate_formated;
+                    this.newTaskForm.start_time = startTime_formated
+                }
+                if(this.initialEndDate) {
+                    const differenceInMinutes1 = differenceInMinutes(this.initialEndDate, this.initialDate);
+                    const differencesInHours1 = differenceInHours(this.initialEndDate, this.initialDate);
+                    console.log('differences hours', differencesInHours1 );
+                    console.log('differences minutes', differenceInMinutes1 );
+                    this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
+
+                }
+
             }
         }
     }
