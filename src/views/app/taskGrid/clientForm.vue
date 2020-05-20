@@ -394,7 +394,7 @@ export default {
     },
     deleteClient: function () {
       // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-      this.$store.dispatch('DELETE_CLIENT', this.getFormClientId())
+      this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
         .then(response => {
           const payload = {
             limit: 1000,
