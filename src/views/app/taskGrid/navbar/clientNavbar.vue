@@ -57,10 +57,17 @@
 				</div>
 			</div>
 
-			<a class="d-flex flex-row" @click="showNewClientForm()">
-        <i class="i-Add mr-1 btn-add-plani align-self-center"/>
-        <span class="text-adjust align-self-center">Agregar nuevo cliente</span>
-			</a>
+				<a class="d-flex flex-row mx-2" @click="showNewClientForm()">
+					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
+					<span class="text-adjust align-self-center">Agregar nuevo cliente</span>
+				</a>
+
+				<a class="d-flex flex-row mx-2" @click="showNewBulkClientForm()">
+					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
+					<span class="text-adjust align-self-center">Importar nuevos clientes</span>
+				</a>
+
+
 
 		</div>
 	</b-card>
@@ -110,6 +117,9 @@ export default {
         'getNotContactClients',
         'getGroupByFilter'
       ]),
+	  showNewBulkClientForm() {
+    	this.$bvModal.show('bulk_client_modal')
+	  }
   },
   computed: {
     search: {
