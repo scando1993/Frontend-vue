@@ -44,6 +44,23 @@
                 :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
+
+            <b-form-group
+                    label-for="clientRUC"
+                    invalid-feedback="Llene este campo"
+                    label="RUC"
+                    class="mb-1"
+            >
+              <b-form-input
+                      id="clientRUC"
+                      placeholder=""
+                      type="text"
+                      v-model="formData.ruc"
+                      required
+                      :readonly="!isEditing && !getNewClientForm()"
+              />
+            </b-form-group>
+
             <b-form-group
               label-for="clientUbication"
               invalid-feedback="Llene este campo"
@@ -146,7 +163,8 @@
                 <b-form-input
                   id="contactNumber1"
                   placeholder="Teléfono"
-                  type="tel"
+                  type="number"
+                  mim="0"
                   v-model="formData.contacts[0].phoneNumber"
                   :readonly="!isEditing && !getNewClientForm()"
                 />
@@ -189,6 +207,7 @@
                   id="contactNumber2"
                   placeholder="Teléfono"
                   type="number"
+                  mim="0"
                   v-model="formData.contacts[1].phoneNumber"
                   :readonly="!isEditing && !getNewClientForm()"
                 />
@@ -287,6 +306,7 @@ export default {
             name: client.name,
             lat: 0,
             lng: 0,
+            ruc: client.ruc || null,
             social_reason: client.social_reason,
             address: client.address,
             vendor: data.vendor === 'N/A' ? { value: 0, text: 'N/A' } : this.VENDOR_LIST.map(x => {
@@ -303,6 +323,7 @@ export default {
         name: '',
         lat: 0,
         lng: 0,
+        ruc: null,
         social_reason: '',
         address: '',
         vendor: {
