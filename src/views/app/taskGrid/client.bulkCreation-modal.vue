@@ -135,11 +135,13 @@
                 map_fields: {
                     name: "Nombre",
                     social_reason: "Razón Social",
+                    ruc: 'RUC',
                     address: "Dirección",
                     notes: 'Notas',
                     contact1_name: 'Nombre Contacto',
                     contact1_email: 'Email Contacto',
-                    contact1_phone: 'Teléfono Contacto'
+                    contact1_phone: 'Teléfono Contacto',
+
 
                 }
 
