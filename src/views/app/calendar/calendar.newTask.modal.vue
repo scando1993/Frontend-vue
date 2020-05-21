@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="new_task_form_1" @hide="hideNewTaskForm" hide-footer  centered hide-header size="lg">
+    <b-modal id="new_task_form_1" @show="onShow" @hide="hideNewTaskForm" hide-footer  centered hide-header size="lg">
         <div class="client-modal">
             <div class="card-header p-1" style="background: #00b3ee"></div>
             <div class="client-modal-header">
@@ -358,6 +358,7 @@
                 this.reminder_option_selected = 'minutes';
                 this.reminder_value = '';
                 this.$store.dispatch('SET_CLIENT_VENDOR_ACTION', null);
+                this.$store.dispatch('SET_TASK_SELECTED_ACTION', null);
             },
             setFormData(taskSelected) {
                 this.newTaskForm = {
@@ -454,6 +455,10 @@
                 else {
                     this.hideNewTaskForm();
                 }
+            },
+            onShow() {
+                if(this.TASK_SELECTED)
+                    this.setFormData(this.TASK_SELECTED);
 
             },
             get_Reminder_form_selection: function () {
@@ -472,14 +477,10 @@
 
                 }
             },
-            'TASK_SELECTED': function (oldVal, newVal) {
-                this.setFormData(this.TASK_SELECTED);
-                // this.getVendorClients();
-            },
             'CLIENT_VENDOR': function (oldVal, newVal) {
                 this.newTaskForm.vendor_id = this.CLIENT_VENDOR.id.id;
             },
-            'initialDate': function(oldVal, newVal) {
+            'initialDate': function (oldVal, newVal) {
                 if(this.initialDate) {
 
                     // formatting date
@@ -497,6 +498,7 @@
                     this.newTaskForm.duration = differencesInHours1 + ":" + differenceInMinutes1 + ":00";
 
                 }
+
             }
         }
     }

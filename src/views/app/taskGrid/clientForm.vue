@@ -26,7 +26,7 @@
                 type="text"
                 v-model="formData.name"
                 required
-                :readonly="!isEditing"
+                :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
             <b-form-group
@@ -41,7 +41,7 @@
                 type="text"
                 v-model="formData.social_reason"
                 required
-                :readonly="!isEditing"
+                :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
             <b-form-group
@@ -56,12 +56,12 @@
                 type="text"
                 v-model="formData.address"
                 required
-                :readonly="!isEditing"
+                :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
 
             <div v-if="loggedInUser.admin">
-              <div v-if="!isEditing">
+              <div v-if="!isEditing && !getNewClientForm()">
                 <b-form-group
                   label-for="showVendor"
                   label="Vendedor"
@@ -105,7 +105,7 @@
                 placeholder="..."
                 rows="3"
                 max-rows="6"
-                :readonly="!isEditing"
+                :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
 
@@ -124,7 +124,7 @@
                   placeholder="Nombre"
                   type="text"
                   v-model="formData.contacts[0].name"
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
               <b-form-group
@@ -136,7 +136,7 @@
                   placeholder="E-mail"
                   type="email"
                   v-model="formData.contacts[0].email"
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
               <b-form-group
@@ -148,7 +148,7 @@
                   placeholder="Teléfono"
                   type="tel"
                   v-model="formData.contacts[0].phoneNumber"
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
             </div>
@@ -166,7 +166,7 @@
                   type="text"
                   v-model="formData.contacts[1].name"
                   required
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
               <b-form-group
@@ -178,7 +178,7 @@
                   placeholder="E-mail"
                   type="email"
                   v-model="formData.contacts[1].email"
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
               <b-form-group
@@ -190,7 +190,7 @@
                   placeholder="Teléfono"
                   type="number"
                   v-model="formData.contacts[1].phoneNumber"
-                  :readonly="!isEditing"
+                  :readonly="!isEditing && !getNewClientForm()"
                 />
               </b-form-group>
             </div>
@@ -394,7 +394,7 @@ export default {
     },
     deleteClient: function () {
       // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-      this.$store.dispatch('DELETE_CLIENT', this.getFormClientId())
+      this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
         .then(response => {
           const payload = {
             limit: 1000,
