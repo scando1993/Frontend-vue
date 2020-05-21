@@ -54,7 +54,7 @@
               <b-form-input
                       id="clientRUC"
                       placeholder=""
-                      type="text"
+                      type="number"
                       v-model="formData.ruc"
                       required
                       :readonly="!isEditing && !getNewClientForm()"
@@ -356,6 +356,7 @@ export default {
 
     },
     addNewClient: function () {
+      this.formData.ruc = Number(this.formData.ruc);
       this.$store.dispatch('POST_CLIENT', this.formData)
         .then(response => {
           const payload = {
@@ -439,6 +440,8 @@ export default {
     editClient: function () {
 
         // seccond edit
+      this.formData.ruc = Number(this.formData.ruc);
+
         this.formData.client_id = this.CLIENT_SELECTED.id.id;
         this.$store.dispatch('UPDATE_CLIENT', this.formData)
           .then(response => {
