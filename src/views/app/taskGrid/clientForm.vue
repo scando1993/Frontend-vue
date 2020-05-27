@@ -104,7 +104,7 @@
                     v-model="vendorSelected"
                     :options="VENDOR_LIST.map(x => { return {value: x.id.id, text: x.additionalInfo.firstName}; })"
                     id="clientVendor"
-                    required>
+                  >
                     <option slot="first" :value="null">Choose...</option>
                   </b-form-select>
                 </b-form-group>
