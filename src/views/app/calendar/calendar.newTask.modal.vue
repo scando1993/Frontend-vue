@@ -52,6 +52,7 @@
                             >
                                 <b-form-textarea
                                         placeholder="..."
+                                        class="pb-4"
                                         v-model="newTaskForm.notes"/>
                             </b-form-group>
 
@@ -105,12 +106,11 @@
                                                    :disabled="!durationStateEnable"
                                                    placeholder="Escoja una categoria"
                                                     :options="reminder_options"/>
-                                    <div>
-                                        <h6>{{getReminderDisplay}}</h6>
-                                    </div>
 
                                 </div>
-
+                                <div class="mt-1 d-flex justify-content-end text-bold">
+                                    <h6>{{getReminderDisplay || 'Sin recordatorio'}}</h6>
+                                </div>
                             </b-form-group>
                             <b-form-group
                                     label="Duracion"
@@ -120,7 +120,6 @@
                                         :required="!durationStateEnable"
                                         :disabled="!durationStateEnable"
                                          v-model="newTaskForm.duration"/>
-
                                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
                             </b-form-group>
