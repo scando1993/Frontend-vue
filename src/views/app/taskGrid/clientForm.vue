@@ -57,7 +57,6 @@
                       type="number"
                       min="0"
                       v-model="formData.ruc"
-                      required
                       :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
@@ -73,7 +72,6 @@
                 placeholder=""
                 type="text"
                 v-model="formData.address"
-                required
                 :readonly="!isEditing && !getNewClientForm()"
               />
             </b-form-group>
@@ -141,7 +139,6 @@
                   id="contactName1"
                   placeholder="Nombre"
                   type="text"
-                  required
                   v-model="formData.contacts[0].name"
                   :readonly="!isEditing && !getNewClientForm()"
                 />
@@ -154,7 +151,6 @@
                   id="contactEmail1"
                   placeholder="E-mail"
                   type="email"
-                  required
                   v-model="formData.contacts[0].email"
                   :readonly="!isEditing && !getNewClientForm()"
                 />
@@ -168,7 +164,6 @@
                   placeholder="Teléfono"
                   type="number"
                   mim="0"
-                  required
                   v-model="formData.contacts[0].phoneNumber"
                   :readonly="!isEditing && !getNewClientForm()"
                 />
