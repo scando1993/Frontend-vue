@@ -56,9 +56,11 @@
 
                                     <button :disabled="blockWhileUpload" style="cursor: pointer;" class="client-modal-btn text-bold" @click.prevent="submit2">Subir archivo</button>
 
-                                        <h5 v-if="show_error" class="justify-content-center" style="color: darkred">Error al cargar el archivo, aseguerece de tener el formato correcto</h5>
-                                        <h5 v-if="show_success" class="justify-content-center" style="color: seagreen">Archivo enviado correctamente</h5>
                                     </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <h5 v-if="show_error" class="justify-content-center" style="color: darkred">Error al cargar el archivo, aseguerece de tener el formato correcto</h5>
+                                    <h5 v-if="show_success" class="justify-content-center" style="color: seagreen">Archivo enviado correctamente</h5>
                                 </div>
                             </div>
 
@@ -92,7 +94,7 @@
                         <div class="wizard-footer-right">
                             <wizard-button :disabled="blockWhileUpload" v-if="!props.isLastStep && file && show_success"@click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Siguiente</wizard-button>
 
-                            <wizard-button v-if="props.isLastStep" @click.native="alert('Done')" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Finalizar' : 'Siguiente'}}</wizard-button>
+                            <wizard-button v-if="props.isLastStep" @click.native="hideForm" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">  {{props.isLastStep ? 'Finalizar' : 'Siguiente'}}</wizard-button>
                         </div>
                     </template>
                 </form-wizard>
