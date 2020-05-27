@@ -116,7 +116,6 @@
                                     label="Duracion"
                             >
                                 <b-form-timepicker
-                                        form="formNewTask"
                                         :required="!durationStateEnable"
                                         :disabled="!durationStateEnable"
                                          v-model="newTaskForm.duration"/>
