@@ -2,8 +2,7 @@ const axios = require('axios');
 
 export default {
   state: {
-    profile: {
-    },
+    profile: null,
     edit: false
   },
   getters: {

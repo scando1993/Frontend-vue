@@ -214,9 +214,13 @@ export default {
     const client_params = {
       limit: 1000
     };
+
+    this.$store.dispatch('GET_PROFILE');
+
     this.$store.dispatch('GET_CLIENTS_LIST', client_params);
 
     this.$store.dispatch('GET_TASKS_LIST');
+
     // this.setTuiCalendarRef();
 
     this.setRangeText();
