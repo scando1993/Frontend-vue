@@ -210,7 +210,7 @@
             }
         },
         computed: {
-            ...mapGetters(['TASK_SELECTED', 'CLIENT_VENDOR', 'CLIENTS_LIST', 'loggedInUser']),
+            ...mapGetters(['TASK_SELECTED', 'CLIENT_VENDOR', 'CLIENTS_LIST', 'loggedInUser', 'PROFILE']),
             timeStateEnable: function () {
                 if (this.newTaskForm.start_date) {
                     return true
@@ -228,7 +228,21 @@
                 const onlyActiveClients = this.CLIENTS_LIST.filter( x => x.additionalInfo.activated);
 
                 if(this.loggedInUser.admin) {
-                    return onlyActiveClients.filter(x => x.additionalInfo.social_reason !== '_private_')
+
+                    var noPrivate = onlyActiveClients.filter(x => x.additionalInfo.social_reason !== '_private_')
+
+                    if(this.PROFILE) {
+                        const profileInfo = this.PROFILE.additionalInfo;
+                        const privateName = '_private_' + this.PROFILE.additionalInfo.firstName + ' ' + this.PROFILE.additionalInfo                                                                                     .lastName;
+                        const ownClient = onlyActiveClients.find(x => x.additionalInfo.name === privateName);
+                        if(ownClient) {
+                            ownClient.additionalInfo.name = '(YO)'
+                            noPrivate.push(ownClient);
+                        }
+                    }
+
+                    return noPrivate
+
                 }
                 else {
                     return onlyActiveClients.map( function (x) {
