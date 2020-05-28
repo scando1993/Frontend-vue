@@ -319,19 +319,52 @@
                 this.clearFormData();
 
             },
-            createTask() {
+            async createTask() {
                 this.newTaskForm.category = new Number(this.newTaskForm.category);
                 this.newTaskForm.reminder = this.getReminderPost();
                 this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
 
-                // this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
-                // this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
-                console.log('form', this.newTaskForm);
-                this.$store.dispatch('POST_TASK', this.newTaskForm)
-                    .then(result => {
-                        console.log(result);
-                        this.fetchTaskData();
-                    });
+                const data = JSON.parse(JSON.stringify(this.newTaskForm));
+                const client_id = this.newTaskForm.client_id;
+                const vendor_id = this.newTaskForm.vendor_id;
+
+                delete data.client_id;
+                delete data.vendor_id;
+
+                var task;
+                try {
+                    task = (await this.$store.dispatch('POST_TASK', data)).data.data;
+                }
+                catch (e) {
+                    return
+                }
+                // setting client
+                var payload = {
+                    task_id: task.id.id,
+                    client_id: client_id
+                };
+                var clientReslation;
+                try {
+                    clientReslation = await this.$store.dispatch('SET_TASK_CLIENT', payload);
+                } catch (e) {
+                    this.deteteTask(task.id.id);
+                    return
+                }
+                if(clientReslation && vendor_id) {
+                    payload = {
+                        task_id: task.id.id,
+                        vendor_id: vendor_id
+                    };
+                    var vendorRelation;
+                    try {
+                        vendorRelation = await this.$store.dispatch('SET_TASK_VENDOR', payload);
+                    } catch (e) {
+                        this.deteteTask(task.id.id);
+                    }
+                }
+                this.fetchTaskData();
+
+
             },
             hideNewTaskForm() {
                 this.$bvModal.hide("new_task_form_1");
@@ -396,30 +429,63 @@
                 this.reminder_value = remiderArray[0];
 
             },
-            editTask() {
+            async editTask() {
                 const task_id = this.TASK_SELECTED.id.id;
                 this.newTaskForm.category = Number(this.newTaskForm.category);
                 this.newTaskForm.reminder = this.getReminderPost();
                 this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
-                const payload = {
+
+                const newData = JSON.parse(JSON.stringify(this.newTaskForm));
+                const vendor_id = this.newTaskForm.vendor_id;
+                const client_id = this.newTaskForm.client_id;
+
+                delete newData.vendor_id;
+                delete  newData.client_id;
+
+                var client_relation_payload = {
                     task_id: task_id,
-                    data: this.newTaskForm
+                    client_id: client_id
                 };
+                const vendor_relation_payload = {
+                    task_id: task_id,
+                    vendor_id: vendor_id
+                };
+                const update_payload = {
+                    task_id: task_id,
+                    data: newData
+                };
+
                 const changeStatusPayload = {
                     task_id: task_id,
                     completed: this.newTaskForm.completed
                 };
-                this.$store.dispatch('UPDATE_TASK', payload)
-                    .then(response => {
 
-                        this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
-                            .then(response2 => {
-                                this.fetchTaskData();
-                            })
-                    });
+                try {
+                    await this.$store.dispatch('UPDATE_TASK', update_payload)
+                } catch (e) {
+                }
+
+                // setting client
+                var clientRelation;
+                try {
+                    clientRelation = await this.$store.dispatch('SET_TASK_CLIENT', client_relation_payload);
+                } catch (e) {
+                }
+                if(clientRelation && vendor_id) {
+                    var vendorRelation;
+                    try {
+                        vendorRelation = await this.$store.dispatch('SET_TASK_VENDOR', vendor_relation_payload);
+                    } catch (e) {
+                    }
+                }
+                this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+                    .then(response2 => {
+                        this.fetchTaskData();
+                    })
+
             },
-            deteteTask() {
-                const task_id = this.TASK_SELECTED.id.id;
+            deteteTask(task_id) {
+                task_id = task_id ? task_id : this.TASK_SELECTED.id.id;
                 this.$store.dispatch('DELETE_TASK', task_id)
                     .then(x => {
                         this.fetchTaskData();
