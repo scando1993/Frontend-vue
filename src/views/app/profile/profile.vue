@@ -17,7 +17,7 @@
       <div id="basicForm">
         <b-row>
           <b-col md="12">
-            <b-form @submit.prevent>
+            <b-form @submit.prevent="save" @reset="GET_PROFILE">
               <div class="mt-3 mb-30 border-top"></div>
               <b-row>
                 <b-form-group
@@ -102,7 +102,6 @@
                   <b-form-input
                     id="input-1"
                     type="text"
-                    required
                     placeholder="Nombre Compañia"
                     v-model="PROFILE.additionalInfo.company"
                   />
@@ -116,7 +115,6 @@
                   <b-form-input
                     id="input-1"
                     type="text"
-                    required
                     placeholder="Dirección Compañia"
                     v-model="PROFILE.additionalInfo.company_address"
                   />
@@ -148,15 +146,14 @@
                   <b-form-input
                     id="input-1"
                     type="number"
-                    required
                     placeholder="Télefono"
                     v-model="PROFILE.additionalInfo.phone"
                   />
                 </b-form-group>
               </b-row>
               <b-col md="12" class="d-flex justify-content-end ">
-                <b-button class="mr-2 " type="submit" v-on:click="save" variant="primary">Guardar</b-button>
-                <b-button class="" type="cancel" variant="outline-secondary">Cancelar</b-button>
+                <b-button class="mr-2 " type="submit" variant="primary">Guardar</b-button>
+                <b-button class="" type="reset" variant="outline-secondary">Cancelar</b-button>
               </b-col>
             </b-form>
           </b-col>
@@ -167,7 +164,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'profile',
@@ -242,6 +239,7 @@ export default {
     this.$store.dispatch('GET_PROFILE');
   },
   methods: {
+    ...mapActions(['GET_PROFILE']),
     changePassword() {
       if ( this.password_new && this.password_old ) {
         const body = {
