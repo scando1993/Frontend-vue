@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-table striped hover :items="getError" :fields="fields" :per-page="perPage" :current-page="currentPage">
+        <b-table striped hover :items="errors.map(mapErrorsCallback)" :fields="fields" :per-page="perPage" :current-page="currentPage">
         </b-table>
         <div id="table_footer" class="d-flex justify-content-center">
             <b-pagination
@@ -46,21 +46,15 @@
             }
         },
         computed: {
-            getError() {
-                function mapErrorsCallback(error) {
-                    return {
-                        line: error.line,
-                        message: error.message,
-                        errors: error.errors.join(', ')
-                    }
-
-                }
-                return this.errors.map(mapErrorsCallback)
-            }
-
         },
         methods: {
-
+            mapErrorsCallback(error) {
+                return {
+                    line: error.line,
+                    message: error.message,
+                    errors: error.errors.join(', ')
+                }
+            },
         }
     }
 </script>
