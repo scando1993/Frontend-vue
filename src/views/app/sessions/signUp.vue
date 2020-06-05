@@ -246,11 +246,24 @@ export default {
       if (this.$v.$invalid) {
         this.submitStatus = 'ERROR';
       } else {
-        this.signUserUp({ email: this.email, password: this.password, firstName: this.fName, lastName: this.LName, username: this.UserName   });
-        this.submitStatus = 'PENDING';
-        setTimeout(() => {
-          this.submitStatus = 'OK';
-        }, 1000);
+        const that = this;
+        this.signUserUp({ email: this.email, password: this.password, firstName: this.fName, lastName: this.LName, username: this.UserName   })
+                .then(response => {
+                  that.$gtag.event('sign_up', { method: 'Google' });
+                  that.submitStatus = 'PENDING';
+                  setTimeout(() => {
+                    that.submitStatus = 'OK';
+                  }, 1000);
+
+                })
+                .catch(error => {
+                  that.$bvToast.toast(`${error.message}`, {
+                    title: 'Some error has ocurred',
+                    noAutoHide: true,
+                    autoHideDelay: 50000
+                  });
+                })
+
       }
     },
     makeToast(variant = null) {
