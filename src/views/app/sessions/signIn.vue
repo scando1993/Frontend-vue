@@ -136,6 +136,7 @@ export default {
     loggedInUser(val) {
       if (val && val.uid && val.uid.length > 0) {
         this.makeToast('success', 'Successfully Logged In');
+        this.$gtag.event('login', { method: 'Google' })
 
         setTimeout(() => {
           // this.$router.push('/');
