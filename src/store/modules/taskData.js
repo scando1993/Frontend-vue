@@ -129,6 +129,51 @@ export default {
         console.log(response);
       }
     },
+    SET_TASK_CLIENT: ({ commit }, data) => {
+      // data = { task_id, client_id }
+
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json' },
+        };
+
+        var endpoint = '/Task/setClient';
+        axios
+            .post(process.env.VUE_APP_API + endpoint, data, config)
+            .then(({ data, status }) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              resolve({ data, status });
+            })
+            .catch( error => {
+              reject(error);
+            });
+      });
+    },
+
+    SET_TASK_VENDOR: ({ commit }, data) => {
+      // data = { task_id, vendor_id }
+
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json' },
+        };
+
+        var endpoint = '/Task/setVendor';
+        axios
+            .post(process.env.VUE_APP_API + endpoint, data, config)
+            .then(({ data, status }) => {
+              console.log(data, status);
+              // commit('ADD_CLIENT', data);
+              resolve({ data, status });
+            })
+            .catch( error => {
+              reject(error);
+            });
+      });
+    },
 
   }
 };
