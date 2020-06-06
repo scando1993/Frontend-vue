@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+const gtag = require('vue-gtag');
 export default {
   state: {
     client_list: [],
@@ -112,6 +112,9 @@ export default {
           .then(({ data, status }) => {
             console.log(data, status);
             // commit('ADD_CLIENT', data);
+            gtag.event('Client', {
+              'event_category': 'Creation',
+            });
             resolve({ data, status });
           })
           .catch(error => {
@@ -149,6 +152,9 @@ export default {
         .delete(process.env.VUE_APP_API + '/Client/delete?client_id=' + client_id, config)
         .then(({ data, status }) => {
           console.log(data, status);
+          gtag.event('Client', {
+            'event_category': 'Delete',
+          });
           resolve({ data, status });
         })
         .catch(error => {
@@ -168,6 +174,9 @@ export default {
           .then(({ data, status }) => {
             console.log(data, status);
             // commit('ADD_CLIENT', data);
+            gtag.event('Client', {
+              'event_category': 'Update',
+            });
             resolve({ data, status });
           })
           .catch(error => {
