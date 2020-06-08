@@ -48,6 +48,13 @@ export default {
       } else {
         return ['settings-nav-items'];
       }
+    },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
     }
   }
 };
