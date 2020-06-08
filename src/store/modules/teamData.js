@@ -82,6 +82,9 @@ const actions = {
             .then(({data, status}) => {
               console.log(data, status);
               // commit('ADD_CLIENT', data);
+              gtag.event('Vendor', {
+                'event_category': 'Invitation',
+              });
               resolve({data, status});
             })
             .catch(error => {
@@ -102,6 +105,9 @@ const actions = {
             .then(({data, status}) => {
               console.log(data, status);
               // commit('ADD_CLIENT', data);
+              gtag.event('TEAM', {
+                'event_category': 'Leave',
+              });
               this.$store.dispatch('signOut');
               resolve({data, status});
             })
@@ -124,6 +130,9 @@ const actions = {
             .then(({data, status}) => {
               console.log(data, status);
               // commit('ADD_CLIENT', data);
+              gtag.event('ADMIN', {
+                'event_category': 'Invitation',
+              });
               resolve({data, status});
             })
             .catch(error => {

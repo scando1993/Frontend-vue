@@ -1,4 +1,5 @@
 const axios = require('axios');
+const gtag = require('vue-gtag');
 
 export default {
   state: {
@@ -43,6 +44,9 @@ export default {
           .then(({ data, status }) => {
             console.log(data, status);
             // commit('ADD_CLIENT', data);
+            gtag.event('RPOFILE', {
+              'event_category': 'UPDATE',
+            });
             commit('SET_PROFILE', data.data.data);
             resolve({ data, status });
           })
@@ -64,6 +68,9 @@ export default {
             .then(({ data, status }) => {
               console.log(data, status);
               // commit('ADD_CLIENT', data);
+              gtag.event('PASSWORD', {
+                'event_category': 'UPDATE',
+              });
               resolve({ data, status });
             })
             .catch(error => {
