@@ -23,6 +23,7 @@
 				v-model="search"
 				class="form-control-rounded col-3 mx-1"
 				placeholder="Buscar cliente"
+				@click="createClickGAEvent('CLIENT_SEARCH', 'FILTER', 'CLIENT')"
 			/>
 			<div class="d-inline-flex
 									flex-nowrap
@@ -57,12 +58,12 @@
 				</div>
 			</div>
 
-				<a class="d-flex flex-row mx-2" @click="showNewClientForm()">
+				<a class="d-flex flex-row mx-2" @click="showNewClientForm(); createClickGAEvent('CLIENT_NEW', 'CLICK', 'CLIENT')">
 					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
 					<span class="text-adjust align-self-center">Agregar nuevo cliente</span>
 				</a>
 
-				<a class="d-flex flex-row mx-2" @click="showNewBulkClientForm()">
+				<a class="d-flex flex-row mx-2" @click="showNewBulkClientForm(); createClickGAEvent('CLIENT_BULK_NEW', 'CLICK', 'CLIENT')">
 					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
 					<span class="text-adjust align-self-center">Importar nuevos clientes</span>
 				</a>
@@ -119,6 +120,13 @@ export default {
       ]),
 	  showNewBulkClientForm() {
     	this.$bvModal.show('bulk_client_modal')
+	  },
+	  createClickGAEvent(action, category, label, value) {
+		  this.$gtag.event(action, {
+			  'event_category': category,
+			  'event_label': label,
+			  'value': value || null
+		  })
 	  }
   },
   computed: {
@@ -136,6 +144,7 @@ export default {
       },
       set() {
         this.toggleActiveClients();
+		  this.createClickGAEvent('CLIENT_ACTIVE', 'FILTER', 'CLIENT', this.getActiveClients())
       }
     },
     inactive: {
@@ -144,6 +153,7 @@ export default {
       },
       set() {
         this.toggleInactiveClients();
+        this.createClickGAEvent('CLIENT_INACTIVE', 'FILTER', 'CLIENT', this.getInactiveClients())
       }
     },
     not_contact: {
@@ -152,7 +162,8 @@ export default {
       },
       set() {
         this.toggleNotContactClients();
-      }
+		  this.createClickGAEvent('CLIENT_WITHOUTCONTACT', 'FILTER', 'CLIENT', this.getNotContactClients());
+	  }
     },
     groupBy: {
       get() {
@@ -162,6 +173,7 @@ export default {
       },
       set(value) {
         this.currentGroupByFilter(value);
+        this.createClickGAEvent('CLIENT_VIEW', 'FILTER', 'CLIENT', value);
       }
     },
     ...mapGetters(['loggedInUser']),

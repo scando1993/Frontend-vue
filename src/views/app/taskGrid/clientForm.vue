@@ -5,7 +5,7 @@
       <div class="d-flex flex-row justify-content-between">
         <button v-on:click="hideForm" class="btn client-modal-close-btn">X</button>
         <p class="client-modal-heading">{{getFormTitle}}</p>
-        <button v-if="!getNewClientForm()" class="btn client-modal-btn-history" v-on:click="showHistory()">Ver
+        <button v-if="!getNewClientForm()" class="btn client-modal-btn-history" v-on:click="showHistory(); createClickGAEvent('CLIENT_FORM_HISTORY', 'CLICK', 'CLIENT')">Ver
           Historial
         </button>
       </div>
