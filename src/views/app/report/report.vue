@@ -6,7 +6,7 @@
         <b-col md="12" sm="12" lg="4">
           <h3 class="text-center">Cumplimiento de tareas</h3>
           <p>Dentro del control de linea roja durante x cantidad de tiempo</p>
-          <div class="chart-wrapper">
+          <div class="chart-wrapper" @click="createClickGAEvent('REPORT_TASK_COMPLETE_CHART', 'CLICK', 'REPORT')">
             <apexchart type="donut" :options="calendarPriorityOptions" :series="calendarPriorityOptions.series"
                        :autoresize="true"/>
           </div>
@@ -14,7 +14,7 @@
         <b-col md="12" sm="12" lg="4">
           <h3 class="text-center">Interacción con el cliente</h3>
           <p>Cantidades de veces que se interactuo con el cliente durante x cantidad de tiempo</p>
-          <div class="chart-wrapper">
+          <div class="chart-wrapper" @click="createClickGAEvent('REPORT_CLIENT_ITERATIONS_CHART', 'CLICK', 'REPORT')">
             <apexchart type="donut" :options="clientPriorityOptions" :series="clientPriorityOptions.series"
                        :autoresize="true"/>
           </div>
@@ -22,7 +22,7 @@
         <b-col md="12" sm="12" lg="4">
           <h3 class="text-center">Tipos de tarea</h3>
           <p>Dentro de las horas de actividad durante x cantidad de tiempo</p>
-          <div class="chart-wrapper">
+          <div class="chart-wrapper" @click="createClickGAEvent('REPORT_TASK_TYPE_CHART', 'CLICK', 'REPORT')">
             <apexchart type="donut" :options="tasksPriorityOptions" :series="tasksPriorityOptions.series"
                        :autoresize="true"/>
           </div>
@@ -32,7 +32,7 @@
         <b-col md="12">
           <h3 class="text-center">Estatus del Cliente</h3>
           <p class="mx-auto">Total de clientes activos o inactivos durante x cantidad de tiempo</p>
-          <div class="chart-wrapper mx-auto" style="width: 50%">
+          <div class="chart-wrapper mx-auto" style="width: 50%" @click="createClickGAEvent('REPORT_CLIENT_STATUS_CHART', 'CLICK', 'REPORT')">
             <apexchart type="bar" :options="clientsColumnOptions" :series="clientsColumnOptions.series"
                        :autoresize="true"/>
           </div>
@@ -178,6 +178,13 @@ export default {
       // });
     },
     sendEmail: function () {
+    },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
     }
   }
 };
