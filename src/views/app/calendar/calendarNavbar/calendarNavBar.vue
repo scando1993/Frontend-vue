@@ -8,16 +8,16 @@
 									flex-md-wrap
 									flex-sm-wrap
 									justify-content-lg-around">
-        <b-form-select v-model="selectedFilter" :options="options" @change="onChangeFilter"/>
+        <b-form-select v-model="selectedFilter" :options="options" @change="onChangeFilter(); createClickGAEvent('CALENDAR_VIEW', 'FILTER', 'TASK')"/>
         <!--				<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>-->
       </div>
 
       <div id="calendar_selection" class="d-inline-flex flex-row flex-nowrap align-items-center">
         <label class="text-range-date flex-grow-0 flex-shrink-1">{{getRangeText}}</label>
-        <button type="button" class="btn btn-icon btn-action" v-on:click="changePrevCalendar()">
+        <button type="button" class="btn btn-icon btn-action" v-on:click="changePrevCalendar(); createClickGAEvent('CALENDAR_PREV', 'FILTER', 'TASK', selectedFilter) ">
           <i class="bx bx-chevron-left" style="font-size: 2em;"/>
         </button>
-        <button type="button" class="btn btn-icon btn-action" v-on:click="changeNextCalendar()">
+        <button type="button" class="btn btn-icon btn-action" v-on:click="changeNextCalendar(); createClickGAEvent('CALENDAR_NEXT', 'FILTER', 'TASK', selectedFilter)">
           <i class="bx bx-chevron-right" style="font-size: 2em;"/>
         </button>
       </div>
@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <a class="d-flex flex-row" style="cursor: pointer;" @click="showNewTaskModal()">
+      <a class="d-flex flex-row" style="cursor: pointer;" @click="showNewTaskModal(); createClickGAEvent('TASK_NEW', 'CLICK', 'TASK');">
         <i class="i-Add mr-1 btn-add-plani align-self-center"/>
         <span class="text-adjust align-self-center">Nueva Tarea</span>
       </a>
@@ -84,6 +84,7 @@
         v-model="search"
         class="form-control-rounded col-2 mx-1"
         placeholder="Buscar tareas"
+        @click="createClickGAEvent('TASK_SEARCH', 'FILTER', 'TASK');"
       />
     </div>
   </b-card>
@@ -127,6 +128,7 @@ export default {
       },
       set() {
         this.toggleNowTasks();
+        this.createClickGAEvent('TASK_NOW', 'FILTER', 'TASK', this.getNowTasks());
       }
     },
     soon: {
@@ -135,6 +137,7 @@ export default {
       },
       set() {
         this.toggleSoonTasks();
+        this.createClickGAEvent('TASK_SOON', 'FILTER', 'TASK', this.getSoonTasks());
       }
     },
     early: {
@@ -143,6 +146,7 @@ export default {
       },
       set() {
         this.toggleEarlyTasks();
+        this.createClickGAEvent('TASK_EARLY', 'FILTER', 'TASK', this.getEarlyTasks());
       }
     },
     pending: {
@@ -151,6 +155,7 @@ export default {
       },
       set() {
         this.togglePendingTasks();
+        this.createClickGAEvent('TASK_PENDING', 'FILTER', 'TASK', this.getPendingTasks());
       }
     },
     search: {
@@ -207,6 +212,14 @@ export default {
     changeNextCalendar(){
       console.log('Next calendar clicked');
       this.toggleNextCalendar();
+    },
+
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+              'value': value || null
+    })
     }
   }
 };

@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-card class="d-flex flex-row p-1">
-      <button class="btn team-navbar-btn" v-b-modal.m-confirm-leave>Abandonar equipo</button>
-      <button class="btn team-navbar-btn mx-2" v-b-modal.m-new-member v-if="loggedInUser.admin">Invitar al equipo</button>
-      <button class="btn team-navbar-btn mx-2" @click="onAdminClick()" v-if="loggedInUser.admin">Crear nuevo admin</button>
+      <button class="btn team-navbar-btn" @click="createClickGAEvent('TEAM_LEAVE', 'CLICK', 'TEAM')" v-b-modal.m-confirm-leave>Abandonar equipo</button>
+      <button class="btn team-navbar-btn mx-2" @click=" createClickGAEvent('TEAM_ADD_MEMBER', 'CLICK', 'TEAM')" v-b-modal.m-new-member v-if="loggedInUser.admin">Invitar al equipo</button>
+      <button class="btn team-navbar-btn mx-2" @click="onAdminClick();  createClickGAEvent('TEAM_ADD_ADMIN', 'CLICK', 'TEAM')" v-if="loggedInUser.admin">Crear nuevo admin</button>
     </b-card>
     <b-modal id="m-confirm-leave" centered title="Confirmar">
       <div class="d-flex justify-content-center text-24">
@@ -127,6 +127,13 @@ export default {
         .catch(error => {
         });
       this.hideNewMemberModal();
+    },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
     }
   },
 };

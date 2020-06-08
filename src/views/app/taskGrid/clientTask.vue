@@ -5,7 +5,7 @@
         <p class="m-2 client-task-date">{{formatDate(task.last_activity)}}</p>
         <div style="border: 1px solid #D2D4D6;"/>
         <p class="m-2 flex-grow-1">{{task.activity.name}}</p>
-        <button class="btn client-task-btn m-2" @click="openTaskHistoryModal">Ver</button>
+        <button class="btn client-task-btn m-2" @click="openTaskHistoryModal(); createClickGAEvent('CLIENT_TASK_EXTRAINFO', 'CLICK', 'CLIENT')">Ver</button>
       </div>
     </div>
     <client_history_detail_modal/>
@@ -44,6 +44,13 @@ export default {
       this.$store.dispatch('SET_TASK_SELECTED_ACTION', this.task);
       this.$bvModal.show("task_form_history");
 
+    },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
     }
   }
 

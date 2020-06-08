@@ -19,6 +19,14 @@ import 'vue-search-select/dist/VueSearchSelect.css'
 import axios from 'axios';
 import { Promise } from 'es6-promise';
 
+import VueGtag from "vue-gtag";
+
+Vue.use(VueGtag, {
+    config: { id: process.env.VUE_APP_GA_ID },
+    appName: 'plani-vue',
+    pageTrackerScreenviewEnabled: true
+}, router);
+
 Vue.use(FunctionalCalendar, {
   dayNames: ['L', 'M', 'Mi', 'J', 'V', 'S', 'D']
 });

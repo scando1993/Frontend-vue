@@ -132,18 +132,22 @@ export default {
       commit('setLoading', true);
       commit('clearError');
         const url = process.env.VUE_APP_API + '/Account/register';
+        return new Promise((resolve, reject) => {
+
 
         axios.post(url, data)
             .then(function (response) {
                 response = response.data;
                 commit('setLoading', false);
+                resolve(response);
 
             })
             .catch(error => {
                 commit('setLoading', false);
                 commit('setError', error);
+                reject(error)
             })
-
+        });
       /*
       firebase
         .auth()

@@ -1,7 +1,7 @@
 <template>
   <b-card>
-    <button class="btn profile-navbar-btn" v-on:click="logout">Cerrar sesion</button>
-    <button class="btn profile-navbar-btn" v-on:click="toggleEditProfile">Editar</button>
+    <button class="btn profile-navbar-btn" v-on:click="logout(); createClickGAEvent('PROFILE_SINGOUT', 'CLICK', 'PROFILE')">Cerrar sesion</button>
+    <button class="btn profile-navbar-btn" v-on:click="toggleEditProfile(); createClickGAEvent('PROFILE_EDIT', 'CLICK', 'PROFILE')">Editar</button>
   </b-card>
 </template>
 
@@ -15,6 +15,13 @@ export default {
       this.signOut();
       this.$router.push('/app/sessions/signIn');
     },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
+    }
   }
 };
 </script>

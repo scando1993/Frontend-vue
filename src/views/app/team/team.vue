@@ -17,15 +17,15 @@
             </div>
             <div class="d-inline-flex flex-row flex-nowrap align-items-stretch">
               <label class="align-self-center">{{getMemberType(item)}}</label>
-              <b-dropdown v-if="showDropDown(item)" size="lg" variant="link" toggle-class="text-decoration-none"
+              <b-dropdown @click="createClickGAEvent('TEAM_MEMBER_DROPDOWN', 'CLICK', 'TEAM')" v-if="showDropDown(item)" size="lg" variant="link" toggle-class="text-decoration-none"
                           no-caret>
                 <template slot="button-content">
                   <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
                 </template>
-                <b-dropdown-item @click="changeToCalendar">Ver calendario</b-dropdown-item>
-                <b-dropdown-item @click="changeToClients">Ver cliente</b-dropdown-item>
-                <b-dropdown-item @click="changeToReports">Ver reportes</b-dropdown-item>
-                <b-dropdown-item class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
+                <b-dropdown-item @click="changeToCalendar(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_CALENDAR', 'CLICK', 'TEAM')">Ver calendario</b-dropdown-item>
+                <b-dropdown-item @click="changeToClients(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_CLIENTS', 'CLICK', 'TEAM')">Ver cliente</b-dropdown-item>
+                <b-dropdown-item @click="changeToReports(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_REPORT', 'CLICK', 'TEAM')">Ver reportes</b-dropdown-item>
+                <b-dropdown-item @click="createClickGAEvent('TEAM_MEMBER_DROPDOWN_DELETE', 'CLICK', 'TEAM')" class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
               </b-dropdown>
             </div>
           </div>
@@ -167,6 +167,13 @@ export default {
       const condition2 = this.loggedInUser.admin;
       return condition1 && condition2;
     },
+    createClickGAEvent(action, category, label, value) {
+      this.$gtag.event(action, {
+        'event_category': category,
+        'event_label': label,
+        'value': value || null
+      })
+    }
   }
 };
 
