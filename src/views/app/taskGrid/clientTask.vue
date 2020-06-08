@@ -5,7 +5,7 @@
         <p class="m-2 client-task-date">{{formatDate(task.last_activity)}}</p>
         <div style="border: 1px solid #D2D4D6;"/>
         <p class="m-2 flex-grow-1">{{task.activity.name}}</p>
-        <button class="btn client-task-btn m-2" @click="openTaskHistoryModal; createClickGAEvent('CLIENT_TASK_EXTRAINFO', 'CLICK', 'CLIENT')">Ver</button>
+        <button class="btn client-task-btn m-2" @click="openTaskHistoryModal(); createClickGAEvent('CLIENT_TASK_EXTRAINFO', 'CLICK', 'CLIENT')">Ver</button>
       </div>
     </div>
     <client_history_detail_modal/>

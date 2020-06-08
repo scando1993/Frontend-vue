@@ -1,7 +1,7 @@
 <template>
   <b-card>
-    <button class="btn profile-navbar-btn" v-on:click="logout; createClickGAEvent('PROFILE_SINGOUT', 'CLICK', 'PROFILE')">Cerrar sesion</button>
-    <button class="btn profile-navbar-btn" v-on:click="toggleEditProfile; createClickGAEvent('PROFILE_EDIT', 'CLICK', 'PROFILE')">Editar</button>
+    <button class="btn profile-navbar-btn" v-on:click="logout(); createClickGAEvent('PROFILE_SINGOUT', 'CLICK', 'PROFILE')">Cerrar sesion</button>
+    <button class="btn profile-navbar-btn" v-on:click="toggleEditProfile(); createClickGAEvent('PROFILE_EDIT', 'CLICK', 'PROFILE')">Editar</button>
   </b-card>
 </template>
 

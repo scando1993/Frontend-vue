@@ -5,7 +5,7 @@
 				<h3 class="text-center">Expiradas</h3>
 				<b-card body-class="mx-1">
 					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'expired')">
-						<calendar-task-widget v-on:chip_click="onClickChip; createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')"  :task="task" :key="taskIndex" class="mx-auto"/>
+						<calendar-task-widget v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')"  :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
@@ -13,7 +13,7 @@
 				<h3 class="text-center">Agendadas</h3>
 				<b-card body-class="mx-1">
 					<template v-for="(task, taskIndex) in getTopTasks()">
-						<calendar-task-widget  style=" cursor: pointer" v-on:chip_click="onClickChip; createClickGAEvent('CALENDAR_SCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+						<calendar-task-widget  style=" cursor: pointer" v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_SCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
@@ -21,7 +21,7 @@
 				<h3 class="text-center">Pendientes</h3>
 				<b-card body-class="mx-1">
 					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'pending')">
-						<calendar-task-widget v-on:chip_click="onClickChip; createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+						<calendar-task-widget v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>

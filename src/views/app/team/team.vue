@@ -22,9 +22,9 @@
                 <template slot="button-content">
                   <i class="i-Arrow-Down" @click="setIndexMember(index)" style="font-size: 30px; color: #00b3ee"/>
                 </template>
-                <b-dropdown-item @click="changeToCalendar; createClickGAEvent('TEAM_MEMBER_DROPDOWN_CALENDAR', 'CLICK', 'TEAM')">Ver calendario</b-dropdown-item>
-                <b-dropdown-item @click="changeToClients; createClickGAEvent('TEAM_MEMBER_DROPDOWN_CLIENTS', 'CLICK', 'TEAM')">Ver cliente</b-dropdown-item>
-                <b-dropdown-item @click="changeToReports; createClickGAEvent('TEAM_MEMBER_DROPDOWN_REPORT', 'CLICK', 'TEAM')">Ver reportes</b-dropdown-item>
+                <b-dropdown-item @click="changeToCalendar(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_CALENDAR', 'CLICK', 'TEAM')">Ver calendario</b-dropdown-item>
+                <b-dropdown-item @click="changeToClients(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_CLIENTS', 'CLICK', 'TEAM')">Ver cliente</b-dropdown-item>
+                <b-dropdown-item @click="changeToReports(); createClickGAEvent('TEAM_MEMBER_DROPDOWN_REPORT', 'CLICK', 'TEAM')">Ver reportes</b-dropdown-item>
                 <b-dropdown-item @click="createClickGAEvent('TEAM_MEMBER_DROPDOWN_DELETE', 'CLICK', 'TEAM')" class="bg-danger" v-b-modal.m-confirm-delete>Eliminar del equipo</b-dropdown-item>
               </b-dropdown>
             </div>
