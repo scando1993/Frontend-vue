@@ -22,7 +22,7 @@ import { Promise } from 'es6-promise';
 import VueGtag from "vue-gtag";
 
 Vue.use(VueGtag, {
-    config: { id: "UA-164412845-1" },
+    config: { id: process.env.VUE_APP_GA_ID },
     appName: 'plani-vue',
     pageTrackerScreenviewEnabled: true
 }, router);
