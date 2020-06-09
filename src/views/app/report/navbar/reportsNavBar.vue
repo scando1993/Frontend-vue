@@ -1,7 +1,8 @@
 <template>
   <b-card body-class="p-2">
     <div id="calendar" class="d-flex flex-row flex-nowrap align-items-stretch">
-      <b-form-select v-model="selectedFilter"
+      <b-form-select style="cursor: pointer;"
+                     v-model="selectedFilter"
                      :options="options"
                      @change="onChangeFilter(); createClickGAEvent('REPORT_DATE_VIEW', 'FILTER', 'REPORT')"
                      class="report-navbar-select"/>

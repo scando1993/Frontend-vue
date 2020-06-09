@@ -8,7 +8,7 @@
 									flex-md-wrap
 									flex-sm-wrap
 									justify-content-lg-around">
-        <b-form-select v-model="selectedFilter" :options="options" @change="onChangeFilter(); createClickGAEvent('CALENDAR_VIEW', 'FILTER', 'TASK')"/>
+        <b-form-select style="cursor: pointer;" v-model="selectedFilter" :options="options" @change="onChangeFilter(); createClickGAEvent('CALENDAR_VIEW', 'FILTER', 'TASK')"/>
         <!--				<button v-if="loggedInUser.admin" class="client-navbar-btn-equip btn mx-1">Ver Equipo</button>-->
       </div>
 

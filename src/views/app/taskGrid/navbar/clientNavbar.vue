@@ -9,6 +9,7 @@
 									flex-sm-wrap
 									justify-content-lg-around">
 				<b-form-select
+                    style="cursor: pointer"
 					variant="outline-primary"
 					text="Día"
 					class="mx-1 mb-sm-1 mb-md-1 w-auto"
@@ -58,12 +59,12 @@
 				</div>
 			</div>
 
-				<a class="d-flex flex-row mx-2" @click="showNewClientForm(); createClickGAEvent('CLIENT_NEW', 'CLICK', 'CLIENT')">
+				<a style="cursor: pointer" class="d-flex flex-row mx-2" @click="showNewClientForm(); createClickGAEvent('CLIENT_NEW', 'CLICK', 'CLIENT')">
 					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
 					<span class="text-adjust align-self-center">Agregar nuevo cliente</span>
 				</a>
 
-				<a class="d-flex flex-row mx-2" @click="showNewBulkClientForm(); createClickGAEvent('CLIENT_BULK_NEW', 'CLICK', 'CLIENT')">
+				<a style="cursor: pointer" class="d-flex flex-row mx-2" @click="showNewBulkClientForm(); createClickGAEvent('CLIENT_BULK_NEW', 'CLICK', 'CLIENT')">
 					<i class="i-Add mr-1 btn-add-plani align-self-center"/>
 					<span class="text-adjust align-self-center">Importar nuevos clientes</span>
 				</a>
