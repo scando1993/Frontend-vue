@@ -249,6 +249,15 @@ export default {
             });
       });
     },
+    RESET_CLIENT_STORE: ({commit}) => {
+      commit('SET_CLIENTS', []);
+      commit('SET_CLIENT_HISTORY', null);
+      commit('SET_VENDOR_TASKS', []);
+      commit('SET_CLIENTS_PROGRESS', null);
+      commit('SET_CLIENT_SELECTED', null);
+      commit('SET_CLIENT_VENDOR', null);
+
+    }
 
   }
 };

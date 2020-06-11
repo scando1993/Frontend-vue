@@ -41,6 +41,9 @@ export default {
   computed: {
     ...mapGetters(['loggedInUser'])
   },
+  destroyed() {
+    this.$store.dispatch('RESET_PROFILE_STORE');
+  },
   methods: {
     linkClass( idx ){
       if (this.selectedView === idx){
