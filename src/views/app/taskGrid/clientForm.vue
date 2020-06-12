@@ -100,7 +100,7 @@
                   class="mb-1">
                   <b-form-select
                     v-model="vendorSelected"
-                    :options="VENDOR_LIST.map(x => { return {value: x.id.id, text: x.additionalInfo.firstName}; })"
+                    :options="vendorList"
                     id="clientVendor"
                   >
                     <option slot="first" :value="null">Choose...</option>
@@ -253,7 +253,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([ 'getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST', 'CLIENT_SELECTED' ]),
+    ...mapGetters([ 'PROFILE', 'getShowClientForm', 'getFormTitle', 'loggedInUser', 'CLIENTS_LIST', 'VENDOR_LIST', 'CLIENT_SELECTED' ]),
     formData: {
       get() {
         if ( this.getFormClientId() === '' ) {
@@ -278,6 +278,23 @@ export default {
       }
       return options;
     },
+    vendorList: function () {
+      const profile_email = this.PROFILE.additionalInfo.email
+
+
+      function vendorDisplayMap(vendor) {
+        if(vendor.additionalInfo.email === profile_email) {
+          vendor.additionalInfo.firstName = '(YO)';
+          vendor.additionalInfo.lastName = '';
+        }
+        return {
+          value: vendor.id.id,
+          text: vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName
+        }
+      }
+      return this.VENDOR_LIST.map(vendorDisplayMap)
+
+    }
   },
   methods: {
     ...mapGetters([ 'getFormClientId', 'getNewClientForm' ]),

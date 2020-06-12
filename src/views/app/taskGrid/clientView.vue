@@ -64,7 +64,7 @@ export default {
 		return {};
 	},
 	mounted() {
-		this.a();
+		this.$store.dispatch('GET_PROFILE');
 	},
 	created() {
 
