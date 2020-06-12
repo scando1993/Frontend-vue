@@ -521,6 +521,14 @@ export default {
     }
 
   },
+  mounted() {
+    if(this.vendorList) {
+      if(this.vendorList.length === 1) {
+        this.vendorSelected = this.vendorList[0].value;
+      }
+    }
+
+  }
 };
 </script>
 
