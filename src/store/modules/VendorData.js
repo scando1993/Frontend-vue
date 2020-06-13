@@ -54,19 +54,23 @@ export default {
       }
     },
     GET_VENDOR_CLIENTS: async ({ commit }, payload) => {
-      const { vendor_id, limit, textSearch } = payload;
+      const { vendor_id, limit, textSearch, addTasks } = payload;
       const config = {
         headers: { 'x-authorization': 'Bearer ' + localStorage.getItem('token') }
       };
       var endponit = `/Vendor/getClients?vendorID=${vendor_id}&limit=${limit}`;
       if (textSearch) {
-        endponit += '?textSearch=' + textSearch;
+        endponit += '&textSearch=' + textSearch;
+      }
+      if(addTasks) {
+        endponit += '&addTasks=' +  addTasks
       }
 
       const response = await axios.get(process.env.VUE_APP_API + endponit, config);
       if (!response.data.error) {
-        console.log('vendors', response.data.data.data);
+        console.log('vendor"s clients', response.data.data.data);
         commit('SET_CLIENTS', response.data.data.data);
+        return response.data.data.data;
       } else {
         console.log(response);
       }
