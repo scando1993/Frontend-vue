@@ -1,5 +1,5 @@
 <template>
-  <div v-if="renderComponent" :key="countRender" >
+  <div v-if="renderComponent">
     <vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
       <div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
         <template  v-for="(vendor, indexVendor) in orderVendors(vendorList)">
