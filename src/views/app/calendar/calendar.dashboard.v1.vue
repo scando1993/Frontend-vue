@@ -65,7 +65,7 @@
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
                 <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                  <calendar-task-widget style="cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
             </div>
