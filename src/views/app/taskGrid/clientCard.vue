@@ -1,5 +1,5 @@
 <template>
-  <div class="client-card shadow mb-2 mr-0"
+  <div style="cursor: pointer" class="client-card shadow mb-2 mr-0"
        v-on:click="showClientInfo({vendor: task.vendor, client: client.additionalInfo}, client); createClickGAEvent('CLIENT_CARD', 'CLICK', 'CLIENT')">
     <div class="lock-overlay" v-if="lock" >
       <img src="@/assets/images/svg/lock.png" class="lock-image"/>
@@ -12,8 +12,8 @@
             <b>{{client.additionalInfo.social_reason}}</b>
             <p>{{client.additionalInfo.name}}</p>
           </div>
-          <div class="">
-            <button class="client-task-btn-history" v-on:click="showClientHistoryForm(); createClickGAEvent('CLIENT_CARD_HISTORY', 'CLICK', 'CLIENT')">Historial</button>
+          <div style="cursor: pointer">
+            <button style="cursor: pointer" class="btn btn-primary client-task-btn-history" v-on:click="showClientHistoryForm(); createClickGAEvent('CLIENT_CARD_HISTORY', 'CLICK', 'CLIENT')">Historial</button>
           </div>
         </div>
         <div v-if="show_vendor" class="row mb-2">
