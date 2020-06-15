@@ -7,10 +7,10 @@
     <div class="task-body align-self-strech mr-auto">
       <p>{{task.additionalInfo.name}}</p>
     </div>
-    <span class="align-self-stretch mx-2"
+    <span class=" avatar align-self-stretch mx-2"
           :style="{ 'background': task.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1',
                     'color' : task.additionalInfo.status === 'expired' ? '#e1e4e1':'#FFFFFF'}">
-        {{!task.vendedor ? 'N/A' : task.vendedor.additionalInfo.firstName.slice(0,1) + task.vendedor.additionalInfo.lastName.slice(0,1)}}
+        {{!task.additionalInfo.vendor_data ? 'N/A' : task.additionalInfo.vendor_data.additionalInfo.firstName.slice(0,1) +  task.additionalInfo.vendor_data.additionalInfo.lastName.slice(0,1)}}
     </span>
   </div>
 </template>
