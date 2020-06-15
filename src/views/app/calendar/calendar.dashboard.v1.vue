@@ -215,6 +215,8 @@ export default {
       limit: 1000
     };
 
+    this.$store.dispatch('RESET_PROFILE_STORE');
+
     this.$store.dispatch('GET_PROFILE');
 
     this.$store.dispatch('GET_CLIENTS_LIST', client_params);

@@ -74,6 +74,11 @@ export default {
 	computed: {
 		...mapGetters(['getShowClientForm', 'getGroupByFilter', 'getShowHistoryForm', 'SHOW_NEW_TASK_CLEINT_FORM']),
 	},
+	destroyed() {
+		// reseting store data
+		this.$store.dispatch('RESET_CLIENT_STORE');
+		this.$store.dispatch('RESET_PROFILE_STORE');
+	},
 	methods: {}
 };
 </script>

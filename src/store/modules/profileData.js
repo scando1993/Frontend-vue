@@ -80,6 +80,9 @@ export default {
     },
     toggleEditProfile: ({ commit }) => {
       commit('toggleEditProfile');
+    },
+    RESET_PROFILE_STORE: ({commit}) => {
+      commit('SET_PROFILE', null);
     }
   }
 };
