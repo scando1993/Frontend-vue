@@ -10,7 +10,7 @@
             </div>
 
         </div>
-            <form ref="formNewTask" @submit.stop.prevent @submit="createTask" @reset="hideForm">
+            <form id="formNewTask" ref="formNewTask" @submit.stop.prevent @submit="createTask" @reset="hideForm">
             <div>
             <b-row>
                 <b-col md="7">
@@ -75,10 +75,9 @@
                                     :disabled="!durationStateEnable"
                                     placeholder="Escoja una categoria"
                                     :options="reminder_options"/>
-                            <div>
-                                <h6>{{getReminderDisplay}}</h6>
-                            </div>
-
+                        </div>
+                        <div class="mt-1 d-flex justify-content-end text-bold">
+                            <h6>{{getReminderDisplay || 'Sin recordatorio'}}</h6>
                         </div>
 
                     </b-form-group>
@@ -88,7 +87,10 @@
                         <b-form-timepicker
                                 :required="!durationStateEnable"
                                 :disabled="!durationStateEnable"
-                                id="ex-disabled-readonly" v-model="newTaskForm.duration"></b-form-timepicker>
+                                id="ex-disabled-readonly" v-model="newTaskForm.duration"
+                                :hour12="false"
+
+                        ></b-form-timepicker>
 
                         <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
@@ -195,77 +197,123 @@ import {mapGetters} from 'vuex';
                 }
                 return 'N/A';
             },
-            createTask() {
+            async createTask() {
                 this.newTaskForm.category = new Number(this.newTaskForm.category);
                 this.newTaskForm.client_id = this.CLIENT_SELECTED.id.id;
-                this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
+                var vendor_id;
+                if(this.CLIENT_SELECTED.vendor) {
+                    this.newTaskForm.vendor_id = this.CLIENT_SELECTED.vendor.id.id;
+                    vendor_id = this.newTaskForm.vendor_id;
+                }
+                else
+
                 this.newTaskForm.reminder = this.getReminderPost();
                 this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
                 console.log('form', this.newTaskForm);
-                this.$store.dispatch('POST_TASK', this.newTaskForm)
-                    .then(result => {
-                        console.log(result);
-                        this.$store.dispatch('GET_TASKS_LIST');
-                    });
-                this.hideForm();
-            },
-            hideNewTaskForm() {
-                this.$bvModal.hide("new_task_form");
-            },
-            clearFormData() {
-                this.newTaskForm = {
-                    category: '',
-                    name: '',
-                    address: '',
-                    lat: 0,
-                    lng: 0,
-                    vendor_id: '',
-                    notes: '',
-                    client_id: '',
-                    start_date: '',
-                    start_time: '',
-                    duration: '',
-                    reminder: '',
-                    completed: ''
+
+                const data = JSON.parse(JSON.stringify(this.newTaskForm));
+                const client_id = this.newTaskForm.client_id;
+
+                delete data.client_id;
+                delete data.vendor_id;
+
+                var task;
+                try {
+                    task = (await this.$store.dispatch('POST_TASK', data)).data.data;
+                } catch (e) {
+                    return
+                }
+                // setting client
+                var payload = {
+                    task_id: task.id.id,
+                    client_id: client_id
                 };
-                this.reminder_option_selected = 'minutes';
-                this.reminder_value = '';
-            },
-
-            formatReminder(hours, minutes, seconds) {
-                if (hours === 0 && minutes === 0 && seconds === 0)
-                    return '';
-                return hours.toString() + ":" +  minutes.toString() + ":"  + seconds.toString();
-            },
-            getReminderPost() {
-                const reminder_value = this.reminder_value;
-                const reminder_selection = this.reminder_option_selected;
-                var minutes = 0;
-                var hours = 0 ;
-                var seconds = 0;
-
-                if(reminder_value) {
-                    if(reminder_selection === this.reminder_options[0].value) {
-                        minutes = reminder_value;
-                    }
-                    else if(reminder_selection === this.reminder_options[1].value) {
-                        hours = reminder_value;
-                    }
-                    else if(reminder_selection === this.reminder_options[2].value) {
-                        hours = reminder_value * 24;
-                    }
-                    else if(reminder_selection === this.reminder_options[3].value) {
-                        hours = reminder_value * 24 * 7;
+                var clientReslation;
+                try {
+                    clientReslation = await this.$store.dispatch('SET_TASK_CLIENT', payload);
+                } catch (e) {
+                    this.deteteTask(task.id.id);
+                    return
+                }
+                if (clientReslation && vendor_id) {
+                    payload = {
+                        task_id: task.id.id,
+                        vendor_id: vendor_id
+                    };
+                    var vendorRelation;
+                    try {
+                        vendorRelation = await this.$store.dispatch('SET_TASK_VENDOR', payload);
+                    } catch (e) {
+                        this.deteteTask(task.id.id);
                     }
                 }
-                return this.formatReminder(hours, minutes, seconds);
+                this.hideForm();
 
-            },
-            get_Reminder_form_selection: function () {
-                return this.reminder_value + ":" + this.reminder_option_selected;
-            },
+            }
+            ,
+                hideNewTaskForm()
+                {
+                    this.$bvModal.hide("new_task_form");
+                }
+            ,
+                clearFormData()
+                {
+                    this.newTaskForm = {
+                        category: '',
+                        name: '',
+                        address: '',
+                        lat: 0,
+                        lng: 0,
+                        vendor_id: '',
+                        notes: '',
+                        client_id: '',
+                        start_date: '',
+                        start_time: '',
+                        duration: '',
+                        reminder: '',
+                        completed: ''
+                    };
+                    this.reminder_option_selected = 'minutes';
+                    this.reminder_value = '';
+                }
+            ,
 
-        }
+                formatReminder(hours, minutes, seconds)
+                {
+                    if (hours === 0 && minutes === 0 && seconds === 0)
+                        return '';
+                    return hours.toString() + ":" + minutes.toString() + ":" + seconds.toString();
+                }
+            ,
+                getReminderPost()
+                {
+                    const reminder_value = this.reminder_value;
+                    const reminder_selection = this.reminder_option_selected;
+                    var minutes = 0;
+                    var hours = 0;
+                    var seconds = 0;
+
+                    if (reminder_value) {
+                        if (reminder_selection === this.reminder_options[0].value) {
+                            minutes = reminder_value;
+                        } else if (reminder_selection === this.reminder_options[1].value) {
+                            hours = reminder_value;
+                        } else if (reminder_selection === this.reminder_options[2].value) {
+                            hours = reminder_value * 24;
+                        } else if (reminder_selection === this.reminder_options[3].value) {
+                            hours = reminder_value * 24 * 7;
+                        }
+                    }
+                    return this.formatReminder(hours, minutes, seconds);
+
+                }
+            ,
+                get_Reminder_form_selection: function () {
+                    return this.reminder_value + ":" + this.reminder_option_selected;
+                }
+            ,
+
+            }
     }
 </script>
 
