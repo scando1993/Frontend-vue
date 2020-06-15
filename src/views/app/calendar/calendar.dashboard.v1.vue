@@ -409,11 +409,12 @@ export default {
       this.refreshScheduleVisibility();
     },
     refreshScheduleVisibility() {
+      const self = this;
       console.log('en render refresh');
       var calendarElements = Array.prototype.slice.call(document.querySelectorAll('#calendarList input'));
 
       this.calendarList.forEach((calendar) => {
-        this.tuiCalendar.invoke('toggleSchedules', [ calendar.id, !calendar.checked, false ]);
+        self.$refs.tuiCalendar.invoke('toggleSchedules', [ calendar.id, !calendar.checked, false ]);
       });
 
       this.$refs.tuiCalendar.invoke('render', true);
