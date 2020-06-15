@@ -1,26 +1,29 @@
 <template>
-  <vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
-    <div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
-      <template v-for="(vendor, indexVendor) in orderVendors(VENDOR_LIST)">
-        <div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
-             class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
-        <div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
-          <h3 class="text-center">{{vendor_name(vendor)}}</h3>
-          <div>
-            <b-row>
-              <b-col md="6" sm="6" xl="6" lg="6"
-                     v-for="(task, indextask) in filterSearch(prepareTask(vendor.clients, vendor))"
-                     :key="indexVendor + '_' + indextask">
-                <client-card-widget :task_id="indextask"
-                                    :task="task"
-                                    :client="task.client"/>
-              </b-col>
-            </b-row>
+  <div v-if="renderComponent">
+    <vue-perfect-scrollbar class="scrollable" ref="scrollable_content">
+      <div class="d-flex flex-lg-row flex-xl-row flex-sm-column flex-md-column">
+        <template  v-for="(vendor, indexVendor) in orderVendors(vendorList)">
+          <div v-bind:key="'_' + indexVendor" v-if="indexVendor !== 0"
+               class="mx-xl-3 mx-lg-3 my-md-3 my-sm-3" style="border: 1px solid gray;"/>
+          <div v-bind:key="indexVendor" class="flex-grow col-lg-6 col-xl-6">
+            <h3 class="text-center">{{vendor_name(vendor)}}</h3>
+            <div>
+              <b-row>
+                <b-col md="6" sm="6" xl="6" lg="6"
+                       v-for="(task, indextask) in filterSearch(prepareTask(vendor.Clients, vendor))"
+                       :key="indexVendor + '_' + indextask">
+                  <client-card-widget :task_id="indextask"
+                                      :task="task"
+                                      :client="task.client"/>
+                </b-col>
+              </b-row>
+            </div>
           </div>
-        </div>
-      </template>
-    </div>
-  </vue-perfect-scrollbar>
+        </template>
+      </div>
+    </vue-perfect-scrollbar>
+  </div>
+
 </template>
 
 <script>
@@ -32,32 +35,58 @@ export default {
   components: { ClientCardWidget },
   data() {
     return {
+      vendorList: [],
+      renderComponent: false,
     };
   },
   created() {
   },
+  asyncComputed: {
+
+  },
   computed: {
     ...mapGetters(['CLIENTS_LIST', 'VENDOR_LIST']),
 
+
+  },
+  watch: {
+    'VENDOR_LIST': function ()  {
+      if(this.VENDOR_LIST.length !== 0) {
+        this.addVendosClients();
+      }
+    },
   },
   mounted() {
-    console.log('mounted in client by vendor');
     const vendorPayload = {
       limit: 1000,
-      addClients: true
+      addClients: false
     };
     const clientPayload = {
       limit: 1000
     };
     this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
-    this.$store.dispatch('GET_CLIENTS_LIST', clientPayload);
   },
   methods: {
     ...mapGetters(['getSearchText',
       'getActiveClients',
       'getInactiveClients',
       'getNotContactClients']),
+    rerender() {
+      this.renderComponent = true;
+    },
+    addVendosClients: async function () {
+      if (this.VENDOR_LIST) {
+        var newVendorList = JSON.parse(JSON.stringify(this.VENDOR_LIST));
+        for (var i = 0; i < newVendorList.length; i++) {
+          const vendor = newVendorList[i];
+          await this.addVendorsClient(vendor);
+        }
+        this.vendorList =  newVendorList
+        this.rerender();
 
+      }
+
+    },
     vendor_name(vendor) {
       try {
         return vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName;
@@ -98,8 +127,7 @@ export default {
         if(client.additionalInfo.social_reason === '_private_'){
           continue
         }
-        const tasks = client.tasks;
-        const aaa = tasks.length;
+        const tasks = client.Tasks;
         if(tasks.length === 0) {
           const empty = {
             vendor: vendor.additionalInfo.firstName,
@@ -159,23 +187,32 @@ export default {
         }
           break;
         }
-        return this.CLIENTS_LIST.find(x => x.id.id === task.client.id.id).additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
+        return task.client.additionalInfo.social_reason.toLowerCase().match(this.getSearchText().toLowerCase());
       });
     },
 
     orderVendors(list) {
-      return list.slice().sort(function (a, b) {
+      const listCopy = JSON.parse(JSON.stringify(list))
+      return listCopy.slice().sort(function (a, b) {
         let textA = a.additionalInfo.firstName.toUpperCase();
         let textB = b.additionalInfo.firstName.toUpperCase();
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
       }).filter(vendor => {
-        return vendor.clients.length !== 0;
+        return vendor.Clients.length !== 0;
       });
     },
     getLastActivityDate(client) {
       return client.additionalInfo.last_activity ? new Date(client.additionalInfo.last_activity) : 'N/A';
     },
-  }
+    async addVendorsClient(vendor) {
+      const clients = await this.$store.dispatch('GET_VENDOR_CLIENTS', {
+        vendor_id: vendor.id.id,
+        limit: 10000,
+        addTasks: true
+      });
+      vendor['Clients'] = clients;
+    }
+  },
 };
 </script>
 
