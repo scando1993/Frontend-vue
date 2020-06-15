@@ -118,7 +118,9 @@
                                 <b-form-timepicker
                                         :required="!durationStateEnable"
                                         :disabled="!durationStateEnable"
-                                         v-model="newTaskForm.duration"/>
+                                         v-model="newTaskForm.duration"
+                                        :hour12="false"
+                                />
                                 <!--<vue-timepicker v-model="newTaskForm.duration" ></vue-timepicker>-->
 
                             </b-form-group>
@@ -126,9 +128,13 @@
                                           label="Tarea completada"
                             >
                                 <div class="d-flex d-inline  justify-content-center">
-                                    <b-form-checkbox v-model="newTaskForm.completed"/>
-                                    <div class="text-21 align-items-center justify-content-center" >
-                                        {{newTaskForm.completed ? 'Completado!' : 'Sin completar'}}
+                                    <div class="align-items-center justify-content-center" >
+                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="true">
+                                            <p class="text-13">Tarea completada</p>
+                                        </b-form-radio>
+                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="false">
+                                            <p class="text-13">Tarea sin completar</p>
+                                        </b-form-radio>
                                     </div>
                                 </div>
                             </b-form-group>
@@ -136,7 +142,7 @@
                         </b-col>
                     </b-row>
                 </div>
-                <div class="mt-5 d-flex justify-content-around">
+                <div class=" d-flex justify-content-around">
                     <div v-if="!isEditModal">
                         <button class="btn client-modal-btn" type="reset" >Cancelar</button>
                         <button class="btn client-modal-btn" type="submit" >Crear Tarea</button>
