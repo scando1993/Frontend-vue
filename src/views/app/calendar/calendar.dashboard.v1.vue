@@ -8,7 +8,7 @@
         <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
           <template
             v-for="(task, taskIndex) in getTopTasks()">
-            <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_UNSCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+            <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_UNSCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
           </template>
         </div>
       </div>
@@ -53,7 +53,7 @@
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
                 <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired')">
-                  <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+                  <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
             </div>
@@ -65,7 +65,7 @@
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
                 <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending')">
-                  <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                  <calendar-task-widget v-on:chip_click="onClickChip(); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
             </div>
