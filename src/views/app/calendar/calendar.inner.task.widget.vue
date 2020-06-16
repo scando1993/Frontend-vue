@@ -1,16 +1,23 @@
 <template>
   <div class="task" :style="{'background-color': getBackgroundColor()}">
-    <span id="banner" class="banner align-self-strech"
+    <span id="banner" class="rounded banner align-self-strech text-bold d-flex align-items-center"
           :style="{'background-color': getTaskColor(), 'color': '#FFFFFF'}">
       <p>{{ startDate }}</p>
     </span>
-    <div class="task-body align-self-strech mr-auto">
-      <p>{{task.additionalInfo.name}}</p>
+    <div class="task-body align-self-strech mr-auto d-flex align-items-center">
+      <b-row>
+        <b-col>
+          <p>{{task.additionalInfo.client_data.name}}</p>
+          <p>{{task.additionalInfo.name}}</p>
+        </b-col>
+      </b-row>
     </div>
-    <span class="align-self-stretch mx-2"
+    <span class="avatar mx-2 d-flex align-items-center"
           :style="{ 'background': task.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1',
                     'color' : task.additionalInfo.status === 'expired' ? '#e1e4e1':'#FFFFFF'}">
-        {{!task.vendedor ? 'N/A' : task.vendedor.additionalInfo.firstName.slice(0,1) + task.vendedor.additionalInfo.lastName.slice(0,1)}}
+      <div class="avatar-content">
+          {{!task.additionalInfo.vendor_data ? 'N/A' : task.additionalInfo.vendor_data.additionalInfo.firstName.slice(0,1) +  task.additionalInfo.vendor_data.additionalInfo.lastName.slice(0,1)}}
+      </div>
     </span>
   </div>
 </template>
