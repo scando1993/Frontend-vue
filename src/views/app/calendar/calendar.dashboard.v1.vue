@@ -513,7 +513,7 @@ export default {
       return value1 - value2
     },
     getTopTasks() {
-      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date);
+      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date && x.additionalInfo.status !== 'expired');
       console.log('newArray--------------', newArray);
       //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
       const final = newArray.sort(this.sortTop);
