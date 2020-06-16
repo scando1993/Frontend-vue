@@ -148,7 +148,7 @@
                         <button class="btn client-modal-btn" type="submit" >Crear Tarea</button>
                     </div>
                     <div v-else>
-                        <button class="btn client-modal-btn" @click="deteteTask">Eliminar</button>
+                        <button class="btn client-modal-btn" @click="deteteTask()">Eliminar</button>
                         <button class="btn client-modal-btn" type="submit" >Editar</button>
                     </div>
                 </div>
