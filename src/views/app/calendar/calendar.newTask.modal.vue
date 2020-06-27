@@ -223,9 +223,14 @@
             },
             durationStateEnable: function () {
                 if (this.newTaskForm.start_time) {
+                    if (this.newTaskForm.duration===''){
+                        this.newTaskForm.duration = '01:00:00';
+                    }
                     return true
+                }else {
+                    return false
                 }
-                return false
+
             },
             clientsFiltered: function () {
                 // filter no active clients
