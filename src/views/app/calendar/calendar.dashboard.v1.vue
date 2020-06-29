@@ -52,7 +52,7 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
-                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired')">
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired' && !x.additionalInfo.completed)">
                   <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
@@ -64,7 +64,7 @@
             </div>
             <div class="card-body p-2">
               <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
-                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending')">
+                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending' && !x.additionalInfo.completed)">
                   <calendar-task-widget style="cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
                 </template>
               </vue-perfect-scrollbar>
@@ -498,15 +498,15 @@ export default {
       var value = 0;
       if(x === 'now')
         value = 1;
-      else if(x==="soon")
-        value = 2
-      else if (x==="early")
-        value = 3
-      else if(x==="expired")
+      else if(x === "soon")
+        value = 2;
+      else if (x === "early")
+        value = 3;
+      else if(x === "expired")
         value = 4;
       else
-        value = 5
-      return value
+        value = 5;
+      return value;
     },
     sortTop(a, b ) {
       var value1 = this.categoryCoder(a.additionalInfo.status);
@@ -514,7 +514,7 @@ export default {
       return value1 - value2
     },
     getTopTasks() {
-      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date && x.additionalInfo.status !== 'expired');
+      const newArray = this.tasksFiltered.filter( x => !x.additionalInfo.start_time && x.additionalInfo.start_date && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed);
       console.log('newArray--------------', newArray);
       //const a = this.TASKS_LIST.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
       const final = newArray.sort(this.sortTop);
