@@ -318,11 +318,11 @@ export default {
             });
           }
           return {
-            name: client.name,
+            name: client.name || 'N/A',
             lat: 0,
             lng: 0,
             ruc: client.ruc || null,
-            social_reason: client.social_reason,
+            social_reason: client.social_reason || 'N/A',
             address: client.address,
             vendor: data.vendor === 'N/A' ? { value: 0, text: 'N/A' } : this.VENDOR_LIST.map(x => {
               return { value: x.id.id, text: x.additionalInfo.firstName };
