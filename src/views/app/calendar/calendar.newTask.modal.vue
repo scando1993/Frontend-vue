@@ -160,8 +160,12 @@
 <script>
     import {taskCategories} from './data/formData';
     import {mapGetters} from 'vuex';
-    import { ModelSelect } from 'vue-search-select'
+    import { ModelSelect } from 'vue-search-select';
     import {format, differenceInHours, differenceInMinutes} from 'date-fns';
+    import Vue from 'vue';
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+    Vue.use(Loading);
     export default {
         name: "calendar_newTask_modal",
         props: {
@@ -392,8 +396,6 @@
                 }
                 else
                     this.createTask();
-                this.hideNewTaskForm();
-
             },
             clearFormData() {
                 this.newTaskForm = {
@@ -512,13 +514,18 @@
                     .then(x => {
                         this.fetchTaskData();
                     });
-                this.hideForm();
-
                 // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
             },
             async fetchTaskData() {
+                let loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.$refs.formNewTask,
+                    canCancel: false,
+                    color: "#00b3ee",
+                });
                await this.$store.dispatch('GET_TASKS_LIST').then(response12 => {
                    console.log("YA SE TERMINO DE HACER");
+                   loader.hide()
                    this.hideNewTaskForm();
                });
                await  this.$store.dispatch('GET_TASKS_PROGRESS');
