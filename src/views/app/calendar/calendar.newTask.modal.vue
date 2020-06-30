@@ -149,7 +149,7 @@
                     </div>
                     <div v-else>
                         <button class="btn client-modal-btn" @click="deteteTask()">Eliminar</button>
-                        <button class="btn client-modal-btn" type="submit" >Editar</button>
+                        <button class="btn client-modal-btn" type="submit" v-if="!newTaskForm.completed">Editar</button>
                     </div>
                 </div>
             </b-form>
@@ -499,9 +499,11 @@
                 };
                 await this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
                     .then(response2 => {
+                        this.fetchTaskData();
                     });
-                this.hideNewTaskForm();
-                this.fetchTaskData();
+                //this.fetchTaskData();
+                //this.hideNewTaskForm();
+
 
             },
             deteteTask(task_id) {
@@ -514,9 +516,12 @@
 
                 // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
             },
-            fetchTaskData() {
-                this.$store.dispatch('GET_TASKS_LIST');
-                this.$store.dispatch('GET_TASKS_PROGRESS');
+            async fetchTaskData() {
+               await this.$store.dispatch('GET_TASKS_LIST').then(response12 => {
+                   console.log("YA SE TERMINO DE HACER");
+                   this.hideNewTaskForm();
+               });
+               await  this.$store.dispatch('GET_TASKS_PROGRESS');
             },
             formatReminder(hours, minutes, seconds) {
                 if (hours === 0 && minutes === 0 && seconds === 0)
