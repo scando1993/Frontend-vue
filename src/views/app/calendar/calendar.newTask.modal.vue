@@ -129,10 +129,10 @@
                             >
                                 <div class="d-flex d-inline  justify-content-center">
                                     <div class="align-items-center justify-content-center" >
-                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="true">
+                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="true" v-on:input="setTaskState()">
                                             <p class="text-13">Tarea completada</p>
                                         </b-form-radio>
-                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="false">
+                                        <b-form-radio v-model="newTaskForm.completed" name="completed_radios" :value="false" v-on:input="setTaskState()">
                                             <p class="text-13">Tarea sin completar</p>
                                         </b-form-radio>
                                     </div>
@@ -464,10 +464,10 @@
                     data: newData
                 };
 
-                const changeStatusPayload = {
+                /*const changeStatusPayload = {
                     task_id: task_id,
                     completed: this.newTaskForm.completed
-                };
+                };*/
 
                 try {
                     await this.$store.dispatch('UPDATE_TASK', update_payload)
@@ -487,10 +487,21 @@
                     } catch (e) {
                     }
                 }
-                this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
+                this.fetchTaskData();
+
+
+            },
+            async setTaskState(){
+                const task_id = this.TASK_SELECTED.id.id;
+                const changeStatusPayload = {
+                    task_id: task_id,
+                    completed: this.newTaskForm.completed
+                };
+                await this.$store.dispatch('SET_TASK_STATE', changeStatusPayload)
                     .then(response2 => {
-                        this.fetchTaskData();
-                    })
+                    });
+                this.hideNewTaskForm();
+                this.fetchTaskData();
 
             },
             deteteTask(task_id) {
