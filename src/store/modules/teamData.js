@@ -158,7 +158,51 @@ const actions = {
   },
   setNewAdminTeam: ({ commit }, data) => {
     commit('setNewAdminTeam', data);
-  }
+  },
+    RESPONSE_TICKET_INVITATION: ({commit}, data) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+            };
+            axios
+                .post(process.env.VUE_APP_API + '/Team/ticket/response' , data, config)
+                .then(({data, status}) => {
+                    console.log(data, status);
+                    // commit('ADD_CLIENT', data);
+                    gtag.event('Vendor', {
+                        'event_category': 'Invitation',
+                    });
+                    resolve({data, status});
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    },
+    GET_TICKET_INVITATION: async ({commit}, data) => {
+        return new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                    'x-authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+            };
+            const {idTenant, idTicket} = data;
+            const endpoint = `/Ticket/${idTenant}/${idTicket}`;
+            axios
+                .get(process.env.VUE_APP_API + endpoint , config)
+                .then(({data, status}) => {
+                    console.log(data, status);
+                    resolve({data, status});
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    }
 };
 export default {
   state,
