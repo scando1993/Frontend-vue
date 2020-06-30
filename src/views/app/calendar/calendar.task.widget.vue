@@ -3,7 +3,7 @@
     <span id="banner" class="banner" :style="{'background-color': getTaskColor()}"/>
     <div class="task-body mr-auto">
       <p><strong>{{!task.additionalInfo.client_data ? 'N/A'
-        :task.additionalInfo.client_data.additionalInfo.social_reason}}</strong></p>
+        : task.additionalInfo.client_data.additionalInfo.social_reason || task.additionalInfo.client_data.additionalInfo.name}}</strong></p>
       <p>{{task.additionalInfo.name}}</p>
       <p>Último contacto: {{task.additionalInfo.start_date || 'N/A'}}</p>
     </div>
