@@ -7,7 +7,7 @@
       <p>{{task.additionalInfo.name}}</p>
       <p>Último contacto: {{task.additionalInfo.start_date || 'N/A'}}</p>
     </div>
-    <div class="avatar mr-2"
+    <div v-if="loggedInUser.admin"  class="avatar mr-2"
          :style="{  'background': task.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1',
                     'color' : task.additionalInfo.status === 'expired' ? '#e1e4e1':'#FFFFFF'}">
       <div class="avatar-content">
@@ -19,6 +19,7 @@
 
 <script>
 import { calendarTasksColors } from './data/calendarConfiguration';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'calendarTaskWidget',
@@ -30,6 +31,9 @@ export default {
   },
   data: function () {
     return {};
+  },
+  computed: {
+    ...mapGetters(['loggedInUser'])
   },
   methods: {
     getTaskColor() {

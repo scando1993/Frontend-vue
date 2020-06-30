@@ -12,19 +12,20 @@
         </b-col>
       </b-row>
     </div>
-    <span class="avatar mx-2 d-flex align-items-center"
+    <span v-if="showAvatar" class="avatar mx-2 d-flex align-items-center"
           :style="{ 'background': task.additionalInfo.status === 'expired' ? '#FFFFFF': '#e1e4e1',
                     'color' : task.additionalInfo.status === 'expired' ? '#e1e4e1':'#FFFFFF'}">
-      <div class="avatar-content">
+      <div  class="avatar-content">
           {{!task.additionalInfo.vendor_data ? 'N/A' : task.additionalInfo.vendor_data.additionalInfo.firstName.slice(0,1) +  task.additionalInfo.vendor_data.additionalInfo.lastName.slice(0,1)}}
       </div>
     </span>
+
   </div>
 </template>
 
 <script>
 import { calendarTasksColors } from './data/calendarConfiguration';
-
+import { mapGetters } from 'vuex';
 export default {
   name: 'calendarInnerTaskWidget',
   props: {
@@ -35,6 +36,10 @@ export default {
     startDate: {
       required: true,
       type: String
+    },
+    showAvatar: {
+      type: Boolean,
+      default: true
     }
   },
   data: function () {
