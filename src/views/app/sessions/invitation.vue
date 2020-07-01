@@ -31,7 +31,7 @@
                     </div>
                 </b-row>
                 <b-row class="mt-12" >
-                    <b-button class="col-6" variant="success">{{'Acceptar'}}</b-button>
+                    <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
                     <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
                 </b-row>
             </div>
@@ -73,8 +73,9 @@
         methods: {
             sendResponse(value) {
                 const data = {
-                    token: this.ticket,
-                    accepted: value
+                    accepted: value,
+                    ticketId: this.ticket_id,
+                    tenantId: this.ticket_tenant
                 }
                 this.$store.dispatch('RESPONSE_TICKET_INVITATION', data)
                 .then(response => {

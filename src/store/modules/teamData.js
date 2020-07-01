@@ -167,8 +167,13 @@ const actions = {
                     'Content-Type': 'application/json'
                 },
             };
+            const { accepted, ticketId, tenantId } = data;
+            const payload = {
+                accepted: accepted
+            };
+            const endpoint = `/Team/invitation/${tenantId}/${ticketId}/response`;
             axios
-                .post(process.env.VUE_APP_API + '/Team/ticket/response' , data, config)
+                .post(process.env.VUE_APP_API + endpoint , payload, config)
                 .then(({data, status}) => {
                     console.log(data, status);
                     // commit('ADD_CLIENT', data);
