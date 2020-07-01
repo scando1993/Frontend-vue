@@ -91,7 +91,7 @@
                     idTenant: idTenant,
                     idTicket: idTicket
                 }
-                this.$store.dispatch('GET_TICKET_INVITATION', payload)
+                this.$store.dispatch('VERIFY_TICKET_INVITATION', payload)
                 .then(response  => {
                    this.ticket = response.data.data;
                 })

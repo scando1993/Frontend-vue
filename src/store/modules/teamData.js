@@ -182,7 +182,7 @@ const actions = {
                 });
         });
     },
-    GET_TICKET_INVITATION: async ({commit}, data) => {
+    VERIFY_TICKET_INVITATION: async ({commit}, data) => {
         return new Promise((resolve, reject) => {
             const config = {
                 headers: {
@@ -191,7 +191,7 @@ const actions = {
                 },
             };
             const {idTenant, idTicket} = data;
-            const endpoint = `/Ticket/${idTenant}/${idTicket}`;
+            const endpoint = `/Ticket/verify/${idTenant}/${idTicket}`;
             axios
                 .get(process.env.VUE_APP_API + endpoint , config)
                 .then(({data, status}) => {
