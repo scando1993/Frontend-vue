@@ -7,7 +7,7 @@
     <div class="task-body align-self-strech mr-auto d-flex align-items-center">
       <b-row>
         <b-col>
-          <p>{{task.additionalInfo.client_data.name}}</p>
+          <p>{{task.additionalInfo.client_data.social_reason || task.additionalInfo.client_data.name}}</p>
           <p>{{task.additionalInfo.name}}</p>
         </b-col>
       </b-row>

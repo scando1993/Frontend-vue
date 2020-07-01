@@ -89,8 +89,8 @@
                 function tableMappingCallback(client, index) {
                     return {
                         id: index,
-                        nombre: client.additionalInfo.name,
-                        razon_social: client.additionalInfo.social_reason,
+                        nombre: client.additionalInfo.name || 'N/A',
+                        razon_social: client.additionalInfo.social_reason || 'N/A',
                         direccion: client.additionalInfo.address || 'N/A',
                         notas: client.additionalInfo.additionalInfo,
                         estado: th.mapClientStates(client.additionalInfo.status),
