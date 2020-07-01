@@ -3,22 +3,27 @@ image: node:10.15.3
 pipelines:
   default:
     - step:
-        name: Build and test
+        name: Build
         caches:
           - node
         script:
           - npm install
-          - npm test
           - npm run build
         artifacts:
-          - build/**
+          - dist/**
     - step:
-        name: Deploy artifacts using SCP to PROD
-        deployment: production
+        name: Deploy
+        image: google/cloud-sdk:alpine
+        caches:
+          - node
         script:
-          - pipe: atlassian/scp-deploy:0.3.3
-            variables:
-              USER: $SERVER_USER
-              SERVER: $SERVER_IP
-              REMOTE_PATH: '/var/www/html'
-              LOCAL_PATH: 'build/*'
+          - echo $GCLOUD_KEYFILE > ./gcloud-api-key.json
+          - gcloud auth activate-service-account --key-file gcloud-api-key.json
+          - gcloud config set project $GCLOUD_PROJECT
+          - gsutil -m rsync -d -r dist gs://plani-dev
+          - gsutil web set -m index.html -e index.html gs://plani-dev
+          - gsutil acl -R ch -u AllUsers:R gs://plani-dev
+          - gsutil -m setmeta -h "Cache-Control:private, max-age=0, no-transform" gs://plani-dev/index.html
+        
+             
+   
