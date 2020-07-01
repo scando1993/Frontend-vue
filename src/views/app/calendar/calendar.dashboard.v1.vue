@@ -132,6 +132,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+            'loggedInUser',
       'getSelectedMapView',
       'getSelectedComponentView',
       'getShowNewTaskModal',
@@ -321,7 +322,7 @@ export default {
 
       let ComponentClass = Vue.extend(CalendarInnerTaskWidget);
       let instance = new ComponentClass({
-        propsData: { task: taskSelected, startDate: start.format('HH:mm') }
+        propsData: { task: taskSelected, startDate: start.format('HH:mm'), showAvatar: this.loggedInUser.admin }
       });
       instance.$mount();
       let tmpNode = document.createElement( 'div' );
