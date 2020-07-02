@@ -246,8 +246,8 @@
 
                     if(this.PROFILE) {
                         const profileInfo = this.PROFILE.additionalInfo;
-                        const privateName = '_private_' + this.PROFILE.additionalInfo.firstName + ' ' + this.PROFILE.additionalInfo                                                                                     .lastName;
-                        const ownClient = onlyActiveClients.find(x => x.additionalInfo.name === privateName);
+                        const privateName = '_private_' + this.PROFILE.additionalInfo.firstName + ' ' + this.PROFILE.additionalInfo.lastName;
+                        const ownClient = onlyActiveClients.find(x => x.name === privateName);
                         if(ownClient) {
                             ownClient.additionalInfo.name = '(YO)'
                             noPrivate.push(ownClient);
