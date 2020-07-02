@@ -422,6 +422,7 @@ export default {
       return dateToFormat.toString().split(' ', 4).join(' ');
     },
     deleteClient: function () {
+      const self = this;
       // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
       this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
         .then(response => {
@@ -430,7 +431,9 @@ export default {
             addTasks: true,
             addVendor: true
           };
-          this.$store.dispatch('GET_CLIENTS_LIST', payload);
+          setTimeout(function() {
+            self.$store.dispatch('GET_CLIENTS_LIST', payload);
+          }, 500)
         });
       this.hideForm();
     },
