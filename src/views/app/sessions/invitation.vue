@@ -45,7 +45,7 @@
                         </div>
 
                         <div v-else-if="showSuccessMessage">
-                            <h2>{{'Gracias por su respuesta afirmativa! Te envimos el resto de la infomacion por correo electronico'}}</h2>
+                            <h2>{{'Gracias por su respuesta afirmativa!'}}</h2>
                             <h3>{{'Te envimos el resto de la infomacion por correo electronico'}}</h3>
 
                         </div>
