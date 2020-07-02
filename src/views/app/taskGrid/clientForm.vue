@@ -386,22 +386,14 @@ export default {
             vendor_id: this.vendorSelected
           };
           this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
-                  .then(response2 => {
+                  .finally(response2 => {
                     const payload = {
                       limit: 1000,
                       addTasks: true,
                       addVendor: true
                     };
-                    this.$store.dispatch('GET_VENDOR_LIST', payload);
+                    this.$store.dispatch('GET_CLIENTS_LIST', payload);
                   })
-                  .catch( e => {
-                    const payload = {
-                      limit: 1000,
-                      addTasks: true,
-                      addVendor: true
-                    };
-                    this.$store.dispatch('GET_VENDOR_LIST', payload);
-                  });
         });
       this.hideForm();
     },
@@ -465,14 +457,13 @@ export default {
               vendor_id: this.vendorSelected
             };
             this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
-              .then(response2 => {
+              .finally(response2 => {
                 const payload = {
-                  limit: 1000,
                   limit: 1000,
                   addTasks: true,
                   addVendor: true
                 };
-                this.$store.dispatch('GET_VENDOR_LIST', payload);
+                this.$store.dispatch('GET_CLIENTS_LIST', payload);
               });
           });
         this.hideForm();
