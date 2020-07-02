@@ -172,7 +172,7 @@ import {mapGetters} from 'vuex';
                 return this.reminder_value + " " + this.reminder_options.find( x=> x.value === option_selected).text + " antes"
             },
         },
-        mounted: {
+        mounted() {
 
         },
         methods: {
