@@ -1,4 +1,5 @@
 const axios = require('axios');
+const gtag = require('vue-gtag');
 
 const state = {
   team_list: [],

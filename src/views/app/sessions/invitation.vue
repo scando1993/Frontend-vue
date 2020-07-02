@@ -14,43 +14,45 @@
                 </b-col>
             </b-row>
         </div>
-        <div v-if="showNotFoundMessage" id="TicketNotFound" class="body w-50 mx-auto">
-            <b-row>
-                <b-col>
-                    <h3>{{'Ticket Invalido'}}</h3>
-                    <p>{{'Este ticket no existe o ya ha expirado'}}</p>
-                </b-col>
-
-            </b-row>
-        </div>
-        <div v-else id="body" class="body w-50 mx-auto">
-            <div v-if="!showDeleteMessage && !showSuccessMessage">
+        <div id="body" class="body w-50 mx-auto" ref="bodyCard">
+            <div v-if="showNotFoundMessage">
+                <b-row>
+                    <b-col>
+                        <h3>{{'Ticket Invalido'}}</h3>
+                        <p>{{'Este ticket no existe o ya ha expirado'}}</p>
+                    </b-col>
+                </b-row>
+            </div>
+            <div v-else>
                 <b-card class="h-75 shadow-bottom box-shadow-1">
                     <b-card-body>
-                        <b-row>
-                            <div class="">
-                                <h3>{{'Ticket de invitacion'}}</h3>
-                            </div>
-                        </b-row>
-                        <b-row class="mt-12" >
-                            <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
-                            <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
-                        </b-row>
+                        <div v-if="!showDeleteMessage && !showSuccessMessage" ref="bodyActions">
+
+                            <b-row>
+                                <div class="">
+                                    <h3>{{'Ticket de invitacion'}}</h3>
+                                </div>
+                            </b-row>
+                            <b-row class="mt-12" >
+                                <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
+                                <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
+                            </b-row>
+                        </div>
+
+                        <div v-else-if="showDeleteMessage">
+                            <h2>{{'Has rechazado la invitación'}}</h2>
+                            <h4>{{'Gracias por tu respuesta!'}}</h4>
+                        </div>
+
+                        <div v-else-if="showSuccessMessage">
+                            <h2>{{'Gracias por su respuesta afirmativa! Te envimos el resto de la infomacion por correo electronico'}}</h2>
+                            <h3>{{'Te envimos el resto de la infomacion por correo electronico'}}</h3>
+
+                        </div>
+
                     </b-card-body>
                 </b-card>
-
             </div>
-
-            <div v-if="showDeleteMessage">
-                <h2>{{'Has rechazado la invitación'}}</h2>
-                <h4>{{'Gracias por tu respuesta'}}</h4>
-            </div>
-
-            <div v-if="showSuccessMessage">
-                <h2>{{'Gracias por su respuesta Afirmatica'}}</h2>
-            </div>
-
-
         </div>
     </div>
 
@@ -69,7 +71,8 @@
                 deleteMessage: 'Gracias por tu respuesta',
                 showSuccessMessage: false,
                 showDeleteMessage: false,
-                showNotFoundMessage: false
+                showNotFoundMessage: false,
+                loader: null
             }
         },
         created() {
@@ -82,14 +85,17 @@
                     ticketId: this.ticket_id,
                     tenantId: this.ticket_tenant
                 }
+                // this.showLoaderOn('bodyActions');
+                let self = this;
                 this.$store.dispatch('RESPONSE_TICKET_INVITATION', data)
                 .then(response => {
                     if(!value) {
-                        this.showDeleteMessage = true;
+                        self.showDeleteMessage = true;
                     }
                     else {
-                        this.showSuccessMessage = true;
+                        self.showSuccessMessage = true;
                     }
+                    // this.hideLoader();
                 })
             },
             getInvitationTicket(idTenant, idTicket) {
@@ -104,8 +110,21 @@
                 .catch(err => {
                     this.showNotFoundMessage = true;
                 })
-            }
+            },
+            showLoaderOn(referenceHTML) {
+                this.loader = this.$loading.show({
+                    // Optional parameters
+                    container: this.$refs['referenceHTML'],
+                    canCancel: false,
+                    color: "#00b3ee",
+                });
+            },
+            hideLoader() {
+                if(this.loader)
+                    this.loader.hide
+            },
         }
+
     }
 </script>
 
