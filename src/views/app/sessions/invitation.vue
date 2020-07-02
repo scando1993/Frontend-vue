@@ -2,11 +2,11 @@
     <div>
         <div id="header" class="header">
             <b-row>
-                <b-col class="col-2">
-                    <b-img :src="require('../../../assets/images/logo.png')" block style="height: 50px; width: 50px" rounded="circle"></b-img>
+                <b-col class="col-3">
+                    <b-img :src="require('../../../assets/images/logo.png')" block style="height: 50px; width: 50px; margin-left: 20px" rounded="circle"></b-img>
                 </b-col>
 
-                <b-col class="col-10 d-flex justify-content-end align-items-center">
+                <b-col class="col-9 d-flex justify-content-end align-items-center">
                     <div class="">
                         <b-button variant="primary">Login</b-button>
                         <b-button variant="secondary">Register</b-button>
@@ -25,15 +25,20 @@
         </div>
         <div v-else id="body" class="body w-50 mx-auto">
             <div v-if="!showDeleteMessage && !showSuccessMessage">
-                <b-row>
-                    <div class="">
-                        <h3>{{'Ticket de invitacion'}}</h3>
-                    </div>
-                </b-row>
-                <b-row class="mt-12" >
-                    <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
-                    <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
-                </b-row>
+                <b-card class="h-75 shadow-bottom box-shadow-1">
+                    <b-card-body>
+                        <b-row>
+                            <div class="">
+                                <h3>{{'Ticket de invitacion'}}</h3>
+                            </div>
+                        </b-row>
+                        <b-row class="mt-12" >
+                            <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
+                            <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
+                        </b-row>
+                    </b-card-body>
+                </b-card>
+
             </div>
 
             <div v-if="showDeleteMessage">
@@ -106,13 +111,13 @@
 
 <style scoped>
     .header {
-        background-color: #0d7aff;
         padding-top: 10px;
         padding-bottom: 10px;
+        box-shadow: 5px 5px #888888
     }
     .body {
         margin-bottom: 30px;
-        margin-top: 30px;
+        margin-top: 90px;
     }
 
 </style>
