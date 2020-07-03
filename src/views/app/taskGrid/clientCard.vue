@@ -24,12 +24,17 @@
         <div class="row mb-2">
           <div class="col-12">
             <b>Proxima actividad</b>
-            <span v-if="task.hasNextTask" class="client-dot-activity" :style="{'background-color': getTaskColor(task.additionalInfo.status)}"/>
+            <span v-if="task.hasNextTask" class="client-dot-activity" :style="{'background-color': getTaskColor(task.activity.status)}"/>
           </div>
         </div>
-        <div class="row mb-1">
-          <div class="col-12">
-            <p>{{task.activity.name}}</p>
+        <div class="mb-1 ml-0">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p>{{task.activity.name}}</p>
+            </div>
+            <div>
+              <p>{{formatDate(task.activity.date)}}</p>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -127,8 +132,14 @@ export default {
     },
 
     formatDate: function (dateToFormat) {
+      if(!dateToFormat) {
+        return  ''
+      }
+      if(dateToFormat === 'N/A') {
+       return 'N/A';
+      }
     	try {
-        return dateToFormat.toString().split(' ', 4).join(' ');
+        return this.$moment(dateToFormat).format('MMM DD,YYYY');
       }
       catch (e) {
         return 'N/A';
