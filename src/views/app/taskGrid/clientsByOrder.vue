@@ -111,7 +111,9 @@ export default {
           tmp['last_activity'] = this.getLastActivityDate(client);
           tmp.activity = {
             state: list[i].additionalInfo.status,
-            name: tmp.additionalInfo ? tmp.additionalInfo.name : 'N/A',
+            name: tmp.hasNextTask ? tmp.additionalInfo.name : 'N/A',
+            status: tmp.hasNextTask ? tmp.additionalInfo.status : null,
+            date: tmp.hasNextTask ? tmp.additionalInfo.start : null
 
           };
           tmp.client = list[i];

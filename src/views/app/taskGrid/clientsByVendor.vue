@@ -149,7 +149,9 @@ export default {
 
         task.activity = {
           state: client.additionalInfo.status,
-          name: task.additionalInfo ? task.additionalInfo.name : 'N/A'
+          name: task.hasNextTask ? task.additionalInfo.name : 'N/A',
+          status: task.hasNextTask ? task.additionalInfo.status : null,
+          date: task.hasNextTask ? task.additionalInfo.start : null
         };
         task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
         task['last_activity'] = this.getLastActivityDate(client);
