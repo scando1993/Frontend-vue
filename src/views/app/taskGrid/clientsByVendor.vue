@@ -216,8 +216,11 @@ export default {
     },
     getNextTask(fromDate, taskList) {
       return taskList
-              .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+              .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed && !this.isFloatingTask(x))
               .sort( x => new Date(x.additionalInfo.start) )[0];
+    },
+    isFloatingTask(task) {
+      return !task.additionalInfo.start_time && task.additionalInfo.start_date
     }
   },
 };
