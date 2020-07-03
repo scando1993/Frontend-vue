@@ -178,13 +178,6 @@ export default {
 		overflow-y: scroll;
 		text-align: center;
 	}
-	/*.scroll-container::-webkit-scrollbar {
-		display: none;
-	}
-	.scroll-container {
-		-ms-overflow-style: none;  !* IE and Edge *!
-		scrollbar-width: none;  !* Firefox *!
-	}*/
 
 	::-webkit-scrollbar {
 		width: 10px;
