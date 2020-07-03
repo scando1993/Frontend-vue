@@ -143,11 +143,13 @@ export default {
         }
         //for (var j = 0; j < tasks.length; j++) {
         //const task = tasks[j];
-        const task = tasks[tasks.length -1];
+        let task = this.getNextTask(new Date(), tasks);
+        if(!task) task = { hasNextTask: false}
+        else task['hasNextTask'] = true;
 
         task.activity = {
           state: client.additionalInfo.status,
-          name: task.additionalInfo.name
+          name: task.additionalInfo ? task.additionalInfo.name : 'N/A'
         };
         task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
         task['last_activity'] = this.getLastActivityDate(client);
@@ -211,6 +213,11 @@ export default {
         addTasks: true
       });
       vendor['Clients'] = clients;
+    },
+    getNextTask(fromDate, taskList) {
+      return taskList
+              .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+              .sort( x => new Date(x.additionalInfo.start) )[0];
     }
   },
 };

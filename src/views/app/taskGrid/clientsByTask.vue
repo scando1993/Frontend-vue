@@ -102,10 +102,9 @@ export default {
 			// for(let j = 0; j < list[i].tasks.length; j++){
 			const tasks = list[i].tasks;
 			let tmp = this.getNextTask(new Date(), tasks);
-			if(!tmp)
-				tmp = { hasNextTask: false}
-			else
-				tmp['hasNextTask'] = true;
+			if(!tmp) tmp = { hasNextTask: false}
+			else tmp['hasNextTask'] = true;
+
 			tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
 			tmp['last_activity'] = this.getLastActivityDate(client);
 			tmp.activity = {
