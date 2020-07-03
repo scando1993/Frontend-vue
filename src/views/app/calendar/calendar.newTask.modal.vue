@@ -10,7 +10,7 @@
                 </div>
 
             </div>
-            <b-form ref="formNewTask" @submit.stop.prevent @submit="getConditionalSubmit" @reset="hideNewTaskForm">
+            <b-form ref="formNewTask" @submit.stop.prevent  @reset="hideNewTaskForm">
                 <div>
                     <b-row>
                         <b-col md="7">
@@ -145,11 +145,11 @@
                 <div class=" d-flex justify-content-around">
                     <div v-if="!isEditModal">
                         <button class="btn client-modal-btn" type="reset" >Cancelar</button>
-                        <button class="btn client-modal-btn" type="submit" >Crear Tarea</button>
+                        <button class="btn client-modal-btn" v-on:click="getConditionalSubmit()" >Crear Tarea</button>
                     </div>
                     <div v-else>
                         <button class="btn client-modal-btn" @click="deteteTask()">Eliminar</button>
-                        <button class="btn client-modal-btn" type="submit" v-if="!newTaskForm.completed">Editar</button>
+                        <button class="btn client-modal-btn" v-on:click="getConditionalSubmit()" v-if="!newTaskForm.completed">Editar</button>
                     </div>
                 </div>
             </b-form>
@@ -162,10 +162,6 @@
     import {mapGetters} from 'vuex';
     import { ModelSelect } from 'vue-search-select';
     import {format, differenceInHours, differenceInMinutes} from 'date-fns';
-    import Vue from 'vue';
-    import Loading from 'vue-loading-overlay';
-    import 'vue-loading-overlay/dist/vue-loading.css';
-    Vue.use(Loading);
     export default {
         name: "calendar_newTask_modal",
         props: {
@@ -311,7 +307,6 @@
             */
         },
         methods: {
-
             getVendorClients() {
                 // console.log('IN getVendors clients', this.newTaskForm.client_id);
                 // console.log('sss', this.newTaskForm);
@@ -490,8 +485,6 @@
                     }
                 }
                 this.fetchTaskData();
-
-
             },
             async setTaskState(){
                 const task_id = this.TASK_SELECTED.id.id;
@@ -508,13 +501,14 @@
 
 
             },
-            deteteTask(task_id) {
+            async deteteTask(task_id) {
                 task_id = task_id ? task_id : this.TASK_SELECTED.id.id;
-                this.$store.dispatch('DELETE_TASK', task_id)
-                    .then(x => {
-                        this.fetchTaskData();
-                    });
-                // this.$refs.tuiCalendar.invoke('deleteSchedule', schedule.id, schedule.calendarId);
+                this.$confirm("Confirmar eliminar tarea").then(() => {
+                    this.$store.dispatch('DELETE_TASK', task_id)
+                        .then(x => {
+                            this.fetchTaskData();
+                        });
+                });
             },
             async fetchTaskData() {
                 let loader = this.$loading.show({
@@ -682,5 +676,6 @@
         font-size: 1.3rem;
         text-align: center;
     }
+
 
 </style>
