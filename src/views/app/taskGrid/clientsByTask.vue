@@ -160,7 +160,6 @@ export default {
     	return taskList
 				.filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
 				.sort( x => new Date(x.additionalInfo.start) )[0];
-
 	  }
   }
 };
