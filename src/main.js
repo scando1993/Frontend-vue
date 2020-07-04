@@ -20,6 +20,8 @@ import axios from 'axios';
 import { Promise } from 'es6-promise';
 
 import VueGtag from "vue-gtag";
+import {BootstrapVue, BootstrapVueIcons, IconsPlugin} from 'bootstrap-vue';
+
 
 Vue.use(VueGtag, {
     config: { id: process.env.VUE_APP_GA_ID },
@@ -62,6 +64,9 @@ firebase.initializeApp(firebaseSettings);
 
 Vue.config.productionTip = false;
 
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
+Vue.use(IconsPlugin)
 
 axios.interceptors.response.use( (response) => {
     // Return a successful response back to the calling service
