@@ -3,75 +3,91 @@
     <calendar-nav-bar/>
     <calendar-task-view v-if="showTaskView" class="view-content"/>
     <div v-else class="view-content">
-
-      <div class="wrapper">
-        <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
-          <template
-            v-for="(task, taskIndex) in getTopTasks()">
-            <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_UNSCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
-          </template>
+      <b-overlay
+              :show="loading"
+              variant="transparent"
+              opacity="0.80"
+              spinner-variant="danger"
+              spinner-type="grow"
+              rounded="sm">
+        <div class="wrapper">
+          <div class="no-card-shadow d-flex flex-row flex-wrap " id="card-drag-area-1" v-dragula bag="first-bag">
+            <template
+                    v-for="(task, taskIndex) in getTopTasks()">
+              <calendar-task-widget style=" cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_UNSCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+            </template>
+          </div>
         </div>
-      </div>
 
-      <div class="row" style="height: 100%">
-        <b-col lg="8" xl="8" md="12" sm="12">
-          <div class="card d-flex flex-row mb-1">
-            <div class="card-body p-1">
-              <calendar class="w-100"
-                        ref="tuiCalendar"
-                        :calendars="calendarList"
-                        :schedules="scheduleList"
-                        :view="view"
-                        :taskView="taskView"
-                        :scheduleView="scheduleView"
-                        :theme="theme"
-                        :week="week"
-                        :month="month"
-                        :timezones="timezones"
-                        :disableDblClick="disableDblClick"
-                        :isReadOnly="isReadOnly"
-                        :template="template"
-                        :useCreationPopup="useCreationPopup"
-                        :useDetailPopup="useDetailPopup"
-                        @afterRenderSchedule="onAfterRenderSchedule"
-                        @beforeCreateSchedule="onBeforeCreateSchedule"
-                        @beforeDeleteSchedule="onBeforeDeleteSchedule"
-                        @beforeUpdateSchedule="onBeforeUpdateSchedule"
-                        @clickDayname="onClickDayname"
-                        @clickSchedule="onClickSchedule"
-                        @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
-              />
-              <calendar_map v-show="showMap"></calendar_map>
+        <div class="row" style="height: 100%">
+          <b-col lg="8" xl="8" md="12" sm="12">
+            <div class="card d-flex flex-row mb-1">
+              <div class="card-body p-1">
+                <calendar class="w-100"
+                          ref="tuiCalendar"
+                          :calendars="calendarList"
+                          :schedules="scheduleList"
+                          :view="view"
+                          :taskView="taskView"
+                          :scheduleView="scheduleView"
+                          :theme="theme"
+                          :week="week"
+                          :month="month"
+                          :timezones="timezones"
+                          :disableDblClick="disableDblClick"
+                          :isReadOnly="isReadOnly"
+                          :template="template"
+                          :useCreationPopup="useCreationPopup"
+                          :useDetailPopup="useDetailPopup"
+                          @afterRenderSchedule="onAfterRenderSchedule"
+                          @beforeCreateSchedule="onBeforeCreateSchedule"
+                          @beforeDeleteSchedule="onBeforeDeleteSchedule"
+                          @beforeUpdateSchedule="onBeforeUpdateSchedule"
+                          @clickDayname="onClickDayname"
+                          @clickSchedule="onClickSchedule"
+                          @clickTimezonesCollapseBtn="onClickTimezonesCollapseBtn"
+                />
+                <calendar_map v-show="showMap"></calendar_map>
+              </div>
             </div>
+          </b-col>
+          <b-col lg="4" xl="4" md="12" sm="12" class="d-flex flex-column pl-0">
+            <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-1" style="flex-basis: 50%;">
+              <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
+                <p class="text-center mb-0 card-task-header-text">Expiradas</p>
+              </div>
+              <div class="card-body p-2">
+                <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
+                  <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired' && !x.additionalInfo.completed)">
+                    <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
+                  </template>
+                </vue-perfect-scrollbar>
+              </div>
+            </div>
+            <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-0" style="flex-basis: 50%;">
+              <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
+                <p class="text-center mb-0 card-task-header-text">Pendientes</p>
+              </div>
+              <div class="card-body p-2">
+                <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
+                  <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending' && !x.additionalInfo.completed)">
+                    <calendar-task-widget style="cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
+                  </template>
+                </vue-perfect-scrollbar>
+              </div>
+            </div>
+          </b-col>
+        </div>
+
+        <template v-slot:overlay>
+          <div class="text-center">
+            <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+            <p id="cancel-label">Please wait...</p>
           </div>
-        </b-col>
-        <b-col lg="4" xl="4" md="12" sm="12" class="d-flex flex-column pl-0">
-          <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-1" style="flex-basis: 50%;">
-            <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
-              <p class="text-center mb-0 card-task-header-text">Expiradas</p>
-            </div>
-            <div class="card-body p-2">
-              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_2">
-                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'expired' && !x.additionalInfo.completed)">
-                  <calendar-task-widget style="cursor: pointer;" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
-                </template>
-              </vue-perfect-scrollbar>
-            </div>
-          </div>
-          <div class="box-shadow-1 card flex-grow-0 flex-shrink-1 mb-0" style="flex-basis: 50%;">
-            <div class="card-header align-items-center py-2" :style="{background: '#ffffff'}">
-              <p class="text-center mb-0 card-task-header-text">Pendientes</p>
-            </div>
-            <div class="card-body p-2">
-              <vue-perfect-scrollbar class="card-scrollable" ref="scrollable_content_3">
-                <template v-for="(task, taskIndex) in tasksFiltered.filter(x => x.additionalInfo.status === 'pending' && !x.additionalInfo.completed)">
-                  <calendar-task-widget style="cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="box-shadow-1 mx-auto"/>
-                </template>
-              </vue-perfect-scrollbar>
-            </div>
-          </div>
-        </b-col>
-      </div>
+        </template>
+      </b-overlay>
+
+
     </div>
     <calendar_newTask_modal :initialDate="initialModalDate" :initialEndDate="initialModalEndDate" :isEditModal="isEditModal" v-on:close2="restartModal"/>
 
@@ -207,6 +223,7 @@ export default {
       template: this.calendarTemplate(),
       useCreationPopup,
       useDetailPopup,
+      loading: false
     };
   },
   created() {
@@ -223,6 +240,7 @@ export default {
     this.$store.dispatch('GET_CLIENTS_LIST', client_params);
 
     this.$store.dispatch('GET_TASKS_LIST');
+    this.loading = true
 
     // this.setTuiCalendarRef();
 
@@ -248,6 +266,8 @@ export default {
         setTimeout(() => {
           this.changeViewPrev();
         }, 0);
+      } else if (mutation.type === 'SET_TASK_LIST') {
+        this.loading = false;
       }
     });
   },

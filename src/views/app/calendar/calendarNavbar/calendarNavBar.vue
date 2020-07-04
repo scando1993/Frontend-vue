@@ -167,6 +167,10 @@ export default {
       }
     },
   },
+  destroyed() {
+    this.setSelectedComponentView('month');
+    this.setSelectedMapView('month');
+  },
   methods: {
     ...mapGetters([
       'getExpiredTasks',
