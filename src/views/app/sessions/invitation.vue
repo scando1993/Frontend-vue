@@ -16,41 +16,62 @@
         </div>
         <div id="body" class="body w-50 mx-auto" ref="bodyCard">
             <div v-if="showNotFoundMessage">
-                <b-row>
-                    <b-col>
-                        <h3>{{'Ticket Invalido'}}</h3>
-                        <p>{{'Este ticket no existe o ya ha expirado'}}</p>
-                    </b-col>
-                </b-row>
+                <b-card>
+                    <b-card-body>
+                        <b-row>
+                            <b-col>
+                                <h3>{{'Ticket Invalido'}}</h3>
+                                <p>{{'Este ticket no existe o ya ha expirado'}}</p>
+                            </b-col>
+                        </b-row>
+                    </b-card-body>
+                </b-card>
             </div>
             <div v-else>
                 <b-card class="h-75 shadow-bottom box-shadow-1">
-                    <b-card-body>
-                        <div v-if="!showDeleteMessage && !showSuccessMessage" ref="bodyActions">
+                    <b-overlay
+                            :show="loading"
+                            variant="transparent"
+                            opacity="0.80"
+                            spinner-variant="danger"
+                            spinner-type="grow"
+                            rounded="sm">
+                        <b-card-body>
 
-                            <b-row>
-                                <div class="">
-                                    <h3>{{'Ticket de invitacion'}}</h3>
+                            <div v-if="!showDeleteMessage && !showSuccessMessage" ref="bodyActions">
+
+                                <b-row>
+                                    <div class="">
+                                        <h3>{{'Ticket de invitacion'}}</h3>
+                                    </div>
+                                </b-row>
+                                <b-row class="mt-12" >
+                                    <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
+                                    <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
+                                </b-row>
+                            </div>
+
+                            <div v-else-if="showDeleteMessage">
+                                <h2>{{'Has rechazado la invitación'}}</h2>
+                                <h4>{{'Gracias por tu respuesta!'}}</h4>
+                            </div>
+
+                            <div v-else-if="showSuccessMessage">
+                                <h2>{{'Gracias por su respuesta afirmativa!'}}</h2>
+                                <h3>{{'Te enviamos el resto de la infomacion por correo electronico'}}</h3>
+
+                            </div>
+
+                            <template v-slot:overlay>
+                                <div class="text-center">
+                                    <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+                                    <p id="cancel-label">Please wait...</p>
                                 </div>
-                            </b-row>
-                            <b-row class="mt-12" >
-                                <b-button class="col-6" variant="success" v-on:click="sendResponse(true)">{{'Acceptar'}}</b-button>
-                                <b-button class="col-6" variant="danger" v-on:click="sendResponse(false)">{{'Rechazar'}}</b-button>
-                            </b-row>
-                        </div>
+                            </template>
 
-                        <div v-else-if="showDeleteMessage">
-                            <h2>{{'Has rechazado la invitación'}}</h2>
-                            <h4>{{'Gracias por tu respuesta!'}}</h4>
-                        </div>
+                        </b-card-body>
+                    </b-overlay>
 
-                        <div v-else-if="showSuccessMessage">
-                            <h2>{{'Gracias por su respuesta afirmativa!'}}</h2>
-                            <h3>{{'Te envimos el resto de la infomacion por correo electronico'}}</h3>
-
-                        </div>
-
-                    </b-card-body>
                 </b-card>
             </div>
         </div>
@@ -72,7 +93,7 @@
                 showSuccessMessage: false,
                 showDeleteMessage: false,
                 showNotFoundMessage: false,
-                loader: null
+                loading: false
             }
         },
         created() {
@@ -87,6 +108,7 @@
                 }
                 // this.showLoaderOn('bodyActions');
                 let self = this;
+                this.loading = true;
                 this.$store.dispatch('RESPONSE_TICKET_INVITATION', data)
                 .then(response => {
                     if(!value) {
@@ -96,6 +118,9 @@
                         self.showSuccessMessage = true;
                     }
                     // this.hideLoader();
+                })
+                .finally(() => {
+                    this.loading = false;
                 })
             },
             getInvitationTicket(idTenant, idTicket) {
