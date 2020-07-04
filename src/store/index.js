@@ -19,7 +19,7 @@ import teamData from './modules/teamData';
 import profileData from './modules/profileData';
 import reportData from './modules/reportData';
 import reportsNavbar from './modules/reportsNavbar';
-
+import shared from './modules/shared';
 // Load Vuex
 Vue.use(Vuex);
 
@@ -44,7 +44,8 @@ export default new Vuex.Store({
     teamData,
     profileData,
     reportsNavbar,
-    reportData
+    reportData,
+    shared
 }
 });
 
