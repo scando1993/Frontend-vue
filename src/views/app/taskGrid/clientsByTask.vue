@@ -2,10 +2,10 @@
 	<div class="d-flex flex-row flex-wrap" style="justify-content: space-between;">
 		<template v-for="(task, indexTask) in filterSearch(orderClientByPriority(orderClientByVendors(CLIENTS_LIST)))">
 			<client-card-widget :task_id="indexTask"
-			                    :show_vendor="true"
-			                    :task="task"
-			                    :client="task.client"
-			                    v-bind:key="indexTask"/>
+								:show_vendor="true"
+								:task="task"
+								:client="task.client"
+								v-bind:key="indexTask"/>
 			<span v-bind:key="'_span_' + indexTask" class="mx-auto"/>
 		</template>
 	</div>
@@ -35,9 +35,16 @@ export default {
     };
      this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
     this.$store.dispatch('GET_CLIENTS_LIST', clientPayload);
+    this.$store.dispatch('ADD_LOADING_ACTION', 'clientByTasks');
+
+    this.$store.subscribe((mutation, state) => {
+    	if(mutation.type === 'SET_CLIENTS') {
+    		this.$store.dispatch('REMOVE_LOADING_ACTION', 'clientByTasks' );
+		}
+	})
   },
   computed: {
-  	...mapGetters(['VENDOR_LIST', 'CLIENTS_LIST'])
+  	...mapGetters(['VENDOR_LIST', 'CLIENTS_LIST', 'FULL_LOADED'])
   },
   methods: {
     ...mapGetters(['getSearchText',

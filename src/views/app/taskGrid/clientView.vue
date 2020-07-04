@@ -2,28 +2,45 @@
 	<div class="box">
 		<client-navbar/>
 		<div id="body" class="view-content">
-			<div ref ="cards_container" class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
-<!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
+			<b-overlay
+					:show="loading"
+					variant="transparent"
+					opacity="0.80"
+					spinner-variant="danger"
+					spinner-type="grow"
+					rounded="sm"
+			>
+				<div ref ="cards_container" class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
+					<!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
+					<b-overlay :show="!FULL_LOADED">
+						<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
+							 v-if="!getShowHistoryForm">
+								<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
+								<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
+								<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
+								<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
+								<div v-else>No hay contenido</div>
 
-					<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-						 v-if="!getShowHistoryForm">
+						</div>
 
-							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
-							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
-							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
-							<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
-							<div v-else>No hay contenido</div>
+					<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
+											  v-else
+											  :tasks_list_id="0"/>
 
+					</b-overlay>
+
+					<div v-if="getShowClientForm" class="client-content order-lg-last order-xl-last order-sm-first order-md-first">
+						<client-form/>
 					</div>
-				<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-										  v-else
-										  :tasks_list_id="0"/>
-
-
-				<div v-if="getShowClientForm" class="client-content order-lg-last order-xl-last order-sm-first order-md-first">
-					<client-form/>
 				</div>
-			</div>
+
+				<template v-slot:overlay>
+					<div class="text-center">
+						<b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+						<p id="cancel-label">Please wait...</p>
+					</div>
+				</template>
+			</b-overlay>
 		</div>
 		<client_new-task_form/>
 		<client_bulkCreation_modal/>
@@ -72,7 +89,7 @@ export default {
 		console.log('grouby', this.getGroupByFilter)
 	},
 	computed: {
-		...mapGetters(['getShowClientForm', 'getGroupByFilter', 'getShowHistoryForm', 'SHOW_NEW_TASK_CLEINT_FORM']),
+		...mapGetters(['getShowClientForm', 'getGroupByFilter', 'getShowHistoryForm', 'SHOW_NEW_TASK_CLEINT_FORM', 'FULL_LOADED']),
 	},
 	destroyed() {
 		// reseting store data
