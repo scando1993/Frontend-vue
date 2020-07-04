@@ -8,8 +8,12 @@
 
                 <b-col class="col-9 d-flex justify-content-end align-items-center">
                     <div class="">
-                        <b-button variant="primary">Login</b-button>
-                        <b-button variant="secondary">Register</b-button>
+                        <router-link to="/app/sessions/signIn">
+                            <b-button variant="primary">Login</b-button>
+                        </router-link>
+                        <router-link to="/app/sessions/signUp">
+                            <b-button variant="secondary">Register</b-button>
+                        </router-link>
                     </div>
                 </b-col>
             </b-row>
