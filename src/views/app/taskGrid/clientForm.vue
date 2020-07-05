@@ -325,7 +325,7 @@ export default {
             social_reason: client.social_reason || '',
             address: client.address,
             vendor: data.vendor === 'N/A' ? { value: 0, text: 'N/A' } : this.VENDOR_LIST.map(x => {
-              return { value: x.id.id, text: x.additionalInfo.firstName };
+              return { value: x.id.id, text: x.additionalInfo.firstName  + ' ' + x.additionalInfo.lastName};
             }).find(x => x.text === data.vendor),
             notes: client.notes,
             contacts: contacts

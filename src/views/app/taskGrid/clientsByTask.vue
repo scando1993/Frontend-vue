@@ -92,7 +92,7 @@ export default {
 					client: list[i]
 				};
 				if(list[i].vendor) {
-					tmp.vendor = list[i].vendor.additionalInfo.firstName;
+					tmp.vendor = list[i].vendor.additionalInfo.firstName + ' ' + list[i].vendor.additionalInfo.lastName;
 				}
 				else {
 					tmp.vendor = 'N/A';
@@ -103,7 +103,7 @@ export default {
 			// for(let j = 0; j < list[i].tasks.length; j++){
 			const tasks = list[i].tasks;
 			let tmp = tasks[tasks.length -1];
-			tmp['vendor'] = list[i].vendor ? list[i].vendor.additionalInfo.firstName : 'N/A';
+			tmp['vendor'] = list[i].vendor ? list[i].vendor.additionalInfo.firstName + ' ' + list[i].vendor.additionalInfo.lastName : 'N/A';
 			tmp['last_activity'] = this.getLastActivityDate(client);
 			tmp.activity = {
 				state: list[i].additionalInfo.status,
