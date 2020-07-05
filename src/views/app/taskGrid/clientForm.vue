@@ -386,22 +386,14 @@ export default {
             vendor_id: this.vendorSelected
           };
           this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
-                  .then(response2 => {
+                  .finally(response2 => {
                     const payload = {
                       limit: 1000,
                       addTasks: true,
                       addVendor: true
                     };
-                    this.$store.dispatch('GET_VENDOR_LIST', payload);
+                    this.$store.dispatch('GET_CLIENTS_LIST', payload);
                   })
-                  .catch( e => {
-                    const payload = {
-                      limit: 1000,
-                      addTasks: true,
-                      addVendor: true
-                    };
-                    this.$store.dispatch('GET_VENDOR_LIST', payload);
-                  });
         });
       this.hideForm();
     },
@@ -430,6 +422,7 @@ export default {
       return dateToFormat.toString().split(' ', 4).join(' ');
     },
     deleteClient: function () {
+      const self = this;
       // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
       this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
         .then(response => {
@@ -438,7 +431,9 @@ export default {
             addTasks: true,
             addVendor: true
           };
-          this.$store.dispatch('GET_CLIENTS_LIST', payload);
+          setTimeout(function() {
+            self.$store.dispatch('GET_CLIENTS_LIST', payload);
+          }, 500)
         });
       this.hideForm();
     },
@@ -465,14 +460,13 @@ export default {
               vendor_id: this.vendorSelected
             };
             this.$store.dispatch('SET_CLIENT_VENDOR', setClientVendorPayload)
-              .then(response2 => {
+              .finally(response2 => {
                 const payload = {
-                  limit: 1000,
                   limit: 1000,
                   addTasks: true,
                   addVendor: true
                 };
-                this.$store.dispatch('GET_VENDOR_LIST', payload);
+                this.$store.dispatch('GET_CLIENTS_LIST', payload);
               });
           });
         this.hideForm();

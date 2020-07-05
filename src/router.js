@@ -106,6 +106,10 @@ const routes = [
       {
         path: 'forgot',
         component: () => import('./views/app/sessions/forgot')
+      },
+      {
+        path: 'join/:idTenant/:idTicket',
+        component: () => import('./views/app/sessions/invitation')
       }
     ]
   },
