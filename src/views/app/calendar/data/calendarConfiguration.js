@@ -6,35 +6,35 @@ export const calendarList = [
     name: 'expired',
     bgColor: '#e8e6e7',
     color: '#2b2b2b',
-    borderColor: '#2b2b2b'
+    borderColor: '#ffffff'
   },
   {
     id: '1',
     name: 'now',
     bgColor: '#eab5a9',
     color: '#d45454',
-    borderColor: '#d45454'
+    borderColor: '#ffffff'
   },
   {
     id: '2',
     name: 'early',
     bgColor: '#fae9b8',
     color: '#f5ce54',
-    borderColor: '#f5ce54'
+    borderColor: '#ffffff'
   },
   {
     id: '3',
     name: 'soon',
     bgColor: '#e7edc0',
     color: '#c7db5f',
-    borderColor: '#C7D963'
+    borderColor: '#ffffff'
   },
   {
     id: '4',
     name: 'pending',
     bgColor: '#FFFFFF',
     color: '#d2d4d8',
-    borderColor: '#d2d4d8'
+    borderColor: '#ffffff'
   }
 ];
 export const calendarTasksColors = {
@@ -107,6 +107,7 @@ export var theme = {
   'week.timegridSchedule.paddingLeft': '2px',
 
 };
+
 export var week = {
   narrowWeekend: false,
   showTimezoneCollapseButton: true,
