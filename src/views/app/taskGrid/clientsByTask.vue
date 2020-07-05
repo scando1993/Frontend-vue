@@ -157,10 +157,18 @@ export default {
         return a.last_activity - b.last_activity;
       });
     },
+	  settingDateFloatingTask(task) {
+		  if (this.isFloatingTask(task)) {
+			  const start = this.$moment(task.additionalInfo.start_date, 'YYYY-MM-DD').endOf('date').toDate();
+			  task.additionalInfo.start = start;
+		  }
+		  return task
+	  },
 	  getNextTask(fromDate, taskList) {
-    	return taskList
-				.filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed && !this.isFloatingTask(x))
-				.sort( x => new Date(x.additionalInfo.start) )[0];
+		  return  taskList
+				  .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+				  .map(this.settingDateFloatingTask)
+				  .sort( x => new Date(x.additionalInfo.start) )[0];
 	  },
 	  isFloatingTask(task) {
     	return !task.additionalInfo.start_time && task.additionalInfo.start_date
