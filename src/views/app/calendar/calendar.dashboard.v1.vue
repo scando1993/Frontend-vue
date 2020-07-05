@@ -164,17 +164,18 @@ export default {
         }
         scheduleId = scheduleId.id;
         const schedule = {
-          id: i,
+          id: i + 1,
           calendarId: scheduleId,
           title: taskInfo.name,
           category: 'time',
           location: `${ taskInfo.lat }, ${ taskInfo.lng }`,
-          dueDateClass: '',
+          dueDateClass: task.id.id, // using this property as link
           start: taskInfo.start,
           end: taskInfo.end
         };
         schedules.push(schedule);
       }
+      console.log('estos son los schedules', schedules)
       return schedules;
     },
     tasksFiltered: function () {
@@ -319,7 +320,8 @@ export default {
     // Create Event according to their Template
     getTimeTemplate(schedule, isAllDay) {
       const id = schedule.id;
-      const taskSelected = this.TASKS_LIST.find(x => {return x.additionalInfo.name === schedule.title; });
+      console.log('template', schedule)
+      const taskSelected = this.TASKS_LIST.find(x => x.id.id === schedule.dueDateClass);
       console.log('taskTemplate', taskSelected);
       let start = this.$moment(schedule.start.toUTCString());
 
