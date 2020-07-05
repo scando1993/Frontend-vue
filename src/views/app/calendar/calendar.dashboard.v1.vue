@@ -152,23 +152,30 @@ export default {
       return this.getSelectedComponentView === 'Tasks';
     },
     scheduleList() {
-      return this.tasksFiltered.map(x => {return x.additionalInfo.tui_data;});
-      let scheduleList = this.TASKS_LIST.map(x => {
-        let schedule = x.additionalInfo;
-        let calendarId = calendarList.find(x => x.name === schedule.status).id;
-        return {
-          id: schedule.tui_data.id,
-          calendarId: calendarId,
-          title: schedule.name,
-          category: taskCategories[schedule.category],
-          location: `${ schedule.lat }, ${ schedule.lng }`,
+      const schedules = [];
+      const calendarTask = this.tasksFiltered.filter( x => x.additionalInfo.duration);
+      for(var i = 0; i < calendarTask.length; i ++ ) {
+        const task = calendarTask[i];
+        const taskInfo = task.additionalInfo;
+        var scheduleId = this.calendarList.find( x => x.name === taskInfo.status);
+        if(!scheduleId) {
+          console.log('calendarId not found', taskInfo);
+          continue
+        }
+        scheduleId = scheduleId.id;
+        const schedule = {
+          id: i,
+          calendarId: scheduleId,
+          title: taskInfo.name,
+          category: 'time',
+          location: `${ taskInfo.lat }, ${ taskInfo.lng }`,
           dueDateClass: '',
-          start: schedule.start,
-          end: schedule.end
+          start: taskInfo.start,
+          end: taskInfo.end
         };
-      });
-      console.log(scheduleList);
-      return scheduleList;
+        schedules.push(schedule);
+      }
+      return schedules;
     },
     tasksFiltered: function () {
       return this.filterTASKSearch(this.TASKS_LIST);
