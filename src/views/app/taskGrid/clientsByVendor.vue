@@ -76,6 +76,7 @@ export default {
     },
     addVendosClients: async function () {
       if (this.VENDOR_LIST) {
+        this.$store.dispatch('ADD_LOADING_ACTION', 'loadingVendorsClient');
         var newVendorList = JSON.parse(JSON.stringify(this.VENDOR_LIST));
         for (var i = 0; i < newVendorList.length; i++) {
           const vendor = newVendorList[i];
@@ -83,8 +84,9 @@ export default {
         }
         this.vendorList =  newVendorList
         this.rerender();
-
+        this.$store.dispatch('REMOVE_LOADING_ACTION', 'loadingVendorsClient' );
       }
+
 
     },
     vendor_name(vendor) {

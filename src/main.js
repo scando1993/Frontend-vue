@@ -20,6 +20,8 @@ import axios from 'axios';
 import { Promise } from 'es6-promise';
 
 import VueGtag from "vue-gtag";
+import {BootstrapVue, BootstrapVueIcons, IconsPlugin} from 'bootstrap-vue';
+
 
 import VueSimpleAlert from "vue-simple-alert";
 import Loading from 'vue-loading-overlay';
@@ -67,6 +69,9 @@ firebase.initializeApp(firebaseSettings);
 
 Vue.config.productionTip = false;
 
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
+Vue.use(IconsPlugin)
 
 axios.interceptors.response.use( (response) => {
     // Return a successful response back to the calling service
