@@ -109,7 +109,7 @@ export default {
 			// const newArray = this.TASKS_LIST.filter( x => !x.additionalInfo.start_time);
 			/// console.log('newArray--------------', newArray);
 			const a = this.tasksFiltered.filter(x => x.additionalInfo.status === 'early' || x.additionalInfo.status === 'now' || x.additionalInfo.status === 'soon');
-			const b = a.filter( x=> x.additionalInfo.start_date && x.additionalInfo.start_time);
+			const b = a.filter( x=> x.additionalInfo.start_date);
 			const final = b.sort(this.sortTop);
 			console.log('final!!!!!!!!!!!!!!!!!!!!!!!!!', final);
 			return final;
