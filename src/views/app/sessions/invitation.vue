@@ -40,6 +40,13 @@
                             spinner-variant="danger"
                             spinner-type="grow"
                             rounded="sm">
+                        <template v-slot:overlay>
+                            <div class="text-center">
+                                <b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+                                <p id="cancel-label">Please wait...</p>
+                            </div>
+                        </template>
+
                         <b-card-body>
 
                             <div v-if="!showDeleteMessage && !showSuccessMessage" ref="bodyActions">
