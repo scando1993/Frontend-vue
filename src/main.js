@@ -23,6 +23,11 @@ import VueGtag from "vue-gtag";
 import {BootstrapVue, BootstrapVueIcons, IconsPlugin} from 'bootstrap-vue';
 
 
+import VueSimpleAlert from "vue-simple-alert";
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+Vue.use(Loading);
+Vue.use(VueSimpleAlert);
 Vue.use(VueGtag, {
     config: { id: process.env.VUE_APP_GA_ID },
     appName: 'plani-vue',

@@ -95,13 +95,13 @@ export default {
     },
     onAdminClick() {
       this.isAdminModal = true;
-      this.$bvModal.show('m-new-admin');
+      this.$bvModal.show('m-new-member');
     },
     hideNewMemberModal() {
       console.log('en hide');
+      this.$bvModal.hide('m-new-member');
       this.isAdminModal = false;
       this.newMemberForm.email = '';
-      this.$bvModal.hide('m-new-admin');
     },
     addNewMember() {
       if ( this.isAdminModal ) {

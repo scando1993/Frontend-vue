@@ -122,7 +122,7 @@
             },
             showClientModal(client) {
               this.$store.dispatch('SET_CLIENT_SELECTED_ACTION', client);
-              const vendorName = client.vendor ? client.vendor.additionalInfo.firstName : 'N/A';
+              const vendorName = client.vendor ? client.vendor.additionalInfo.firstName + ' ' + client.vendor.additionalInfo.lastName : 'N/A';
               this.$store.dispatch('showClientForm', {vendor: vendorName, client: client.additionalInfo});
             },
 

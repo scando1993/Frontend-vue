@@ -3,30 +3,26 @@
 		<client-navbar/>
 		<div id="body" class="view-content">
 
-				<div ref ="cards_container" class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
+			<div ref ="cards_container" class="client-view flex-lg-row flex-xl-row flex-md-column flex-sm-column">
+<!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
+					<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
+						 v-if="!getShowHistoryForm">
+						<div class="scroll-container">
 
-					<!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
-						<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-							 v-if="!getShowHistoryForm">
-								<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
-								<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
-								<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
-								<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
-								<div v-else>No hay contenido</div>
-
+							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
+							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
+							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
+							<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
+							<div v-else>No hay contenido</div>
 						</div>
-
-					<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
-											  v-else
-											  :tasks_list_id="0"/>
-
-
-					<div v-if="getShowClientForm" class="client-content order-lg-last order-xl-last order-sm-first order-md-first">
-						<client-form/>
 					</div>
-
+				<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
+										  v-else
+										  :tasks_list_id="0"/>
+				<div v-if="getShowClientForm" class="client-content order-lg-last order-xl-last order-sm-first order-md-first">
+					<client-form/>
 				</div>
-
+			</div>
 		</div>
 		<client_new-task_form/>
 		<client_bulkCreation_modal/>
@@ -105,5 +101,30 @@ export default {
 
 	.client-modal {
 		flex-grow: 1;
+	}
+
+	.scroll-container{
+		max-height: 70vh;
+		overflow-y: scroll;
+		text-align: center;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	/* Track */
+	::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: #888;
+	}
+
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
 	}
 </style>

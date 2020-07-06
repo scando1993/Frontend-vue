@@ -1,36 +1,32 @@
 <template>
 	<div>
 		<b-row>
-			<b-col sm="12" md="12" lg="4" xl="4" class="mx-auto">
+			<b-col sm="12" md="12" lg="4" xl="4" class="mx-auto" >
 				<h3 class="text-center">Expiradas</h3>
-				<b-card body-class="mx-1">
+				<b-card body-class="mx-1" class="scroll-container">
 					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'expired')">
 						<calendar-task-widget v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_EXPIRED_CHIP', 'CLICK', 'TASK')"  :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
-			<b-col sm="12" md="12" lg="4" xl="4">
+			<b-col sm="12" md="12" lg="4" xl="4" class="mx-auto">
 				<h3 class="text-center">Agendadas</h3>
-				<b-card body-class="mx-1">
+				<b-card body-class="mx-1" class="scroll-container">
 					<template v-for="(task, taskIndex) in getTopTasks()">
 						<calendar-task-widget  style=" cursor: pointer" v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_SCHEDULED_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
-			<b-col sm="12" md="12" lg="4" xl="4">
+			<b-col sm="12" md="12" lg="4" xl="4" class="mx-auto">
 				<h3 class="text-center">Pendientes</h3>
-				<b-card body-class="mx-1">
+				<b-card body-class="mx-1" class="scroll-container">
 					<template v-for="(task, taskIndex) in tasksFiltered.filter(x=> x.additionalInfo.status === 'pending')">
 						<calendar-task-widget v-on:chip_click="onClickChip(task); createClickGAEvent('CALENDAR_PENDING_CHIP', 'CLICK', 'TASK')" :task="task" :key="taskIndex" class="mx-auto"/>
 					</template>
 				</b-card>
 			</b-col>
 		</b-row>
-
-
 		<calendar_newTask_modal :isEditModal="isEditModal" v-on:close2="toggleIsEditModal"/>
-
-
 	</div>
 </template>
 
@@ -176,5 +172,30 @@ export default {
 </script>
 
 <style scoped>
+
+	.scroll-container{
+		max-height: 60vh;
+		overflow-y: scroll;
+		text-align: center;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	/* Track */
+	::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: #888;
+	}
+
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
 
 </style>
