@@ -36,6 +36,14 @@ export default {
     };
     // this.$store.dispatch('GET_VENDOR_LIST', vendorPayload);
     this.$store.dispatch('GET_CLIENTS_LIST', clientPayload);
+
+    this.$store.dispatch('ADD_LOADING_ACTION', 'clientByTasks');
+
+    this.$store.subscribe((mutation, state) => {
+      if(mutation.type === 'SET_CLIENTS') {
+        this.$store.dispatch('REMOVE_LOADING_ACTION', 'clientByTasks' );
+      }
+    })
   },
   created() {
   },

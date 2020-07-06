@@ -69,6 +69,14 @@
         mounted() {
             this.$store.dispatch('GET_CLIENTS_LIST', {limit: 10000, addVendor: true});
             this.$store.dispatch('GET_VENDOR_LIST', {limit: 10000});
+
+            this.$store.dispatch('ADD_LOADING_ACTION', 'clientByTasks');
+
+            this.$store.subscribe((mutation, state) => {
+                if(mutation.type === 'SET_CLIENTS') {
+                    this.$store.dispatch('REMOVE_LOADING_ACTION', 'clientByTasks' );
+                }
+            })
         },
         computed: {
             ...mapGetters(['CLIENTS_LIST', 'loggedInUser']),
