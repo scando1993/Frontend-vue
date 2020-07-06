@@ -423,19 +423,20 @@ export default {
     },
     deleteClient: function () {
       const self = this;
-      // this.membersTasks[this.vendorSelectedInGrid].tasks.splice(this.clientSelecteIndex, 1);
-      this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
-        .then(response => {
-          const payload = {
-            limit: 1000,
-            addTasks: true,
-            addVendor: true
-          };
-          setTimeout(function() {
-            self.$store.dispatch('GET_CLIENTS_LIST', payload);
-          }, 500)
-        });
-      this.hideForm();
+      this.$confirm("Confirmar eliminar tarea").then(() => {
+        this.$store.dispatch('DELETE_CLIENT', this.CLIENT_SELECTED.id.id)
+                .then(response => {
+                  const payload = {
+                    limit: 1000,
+                    addTasks: true,
+                    addVendor: true
+                  };
+                  setTimeout(function() {
+                    self.$store.dispatch('GET_CLIENTS_LIST', payload);
+                  }, 500)
+                });
+        this.hideForm();
+      });
     },
     hideForm: function () {
       this.isEditing = false;
