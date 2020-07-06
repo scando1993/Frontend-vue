@@ -103,12 +103,17 @@ export default {
           }
           //for (let j = 0; j < list[i].tasks.length; j++) {
           const tasks = list[i].tasks;
-          let tmp = tasks[tasks.length - 1];
+          let tmp = this.getNextTask(new Date(), tasks);
+          if(!tmp) tmp = { hasNextTask: false}
+          else tmp['hasNextTask'] = true;
           tmp['vendor'] = list[i].vendor ? list[i].vendor.additionalInfo.firstName + ' ' + list[i].vendor.additionalInfo.lastName : 'N/A';
           tmp['last_activity'] = this.getLastActivityDate(client);
           tmp.activity = {
             state: list[i].additionalInfo.status,
-            name: tmp.additionalInfo.name
+            name: tmp.hasNextTask ? tmp.additionalInfo.name : 'N/A',
+            status: tmp.hasNextTask ? tmp.additionalInfo.status : null,
+            date: tmp.hasNextTask ? tmp.additionalInfo.start : null
+
           };
           tmp.client = list[i];
           tmp.company_name = list[i].additionalInfo.social_reason;
@@ -158,6 +163,22 @@ export default {
     getLastActivityDate(client) {
       return client.additionalInfo.last_activity ? new Date(client.additionalInfo.last_activity) : 'N/A';
     },
+    settingDateFloatingTask(task) {
+      if (this.isFloatingTask(task)) {
+        const start = this.$moment(task.additionalInfo.start_date, 'YYYY-MM-DD').endOf('date').toDate();
+        task.additionalInfo.start = start;
+      }
+      return task
+    },
+    getNextTask(fromDate, taskList) {
+      return  taskList
+              .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+              .map(this.settingDateFloatingTask)
+              .sort( x => new Date(x.additionalInfo.start) )[0];
+    },
+    isFloatingTask(task) {
+      return !task.additionalInfo.start_time && task.additionalInfo.start_date
+    }
   }
 };
 </script>

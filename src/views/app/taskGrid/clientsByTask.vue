@@ -78,11 +78,11 @@ export default {
       for(let i = 0; i < list.length; i++){
       	try {
 			const client = list[i];
-			if(client.additionalInfo.social_reason === '_private_'){
+			if (client.additionalInfo.social_reason === '_private_') {
 				continue
 			}
 
-			if(list[i].tasks.length === 0) {
+			if (list[i].tasks.length === 0) {
 				let tmp = {
 					activity: {
 						state: 'Without contact',
@@ -102,17 +102,22 @@ export default {
 			}
 			// for(let j = 0; j < list[i].tasks.length; j++){
 			const tasks = list[i].tasks;
-			let tmp = tasks[tasks.length -1];
+			let tmp = this.getNextTask(new Date(), tasks);
+			if(!tmp) tmp = { hasNextTask: false}
+			else tmp['hasNextTask'] = true;
 			tmp['vendor'] = list[i].vendor ? list[i].vendor.additionalInfo.firstName + ' ' + list[i].vendor.additionalInfo.lastName : 'N/A';
 			tmp['last_activity'] = this.getLastActivityDate(client);
 			tmp.activity = {
 				state: list[i].additionalInfo.status,
-				name: tmp.additionalInfo.name
+				name: tmp.hasNextTask ? tmp.additionalInfo.name : 'N/A',
+				status: tmp.hasNextTask ? tmp.additionalInfo.status : null,
+				date: tmp.hasNextTask ? tmp.additionalInfo.start : null
 			};
 			tmp.client = list[i];
 			console.log('tem2', tmp);
 			clients.push(tmp);
 		} catch (e) {
+      		console.log('crash in ', list[i])
 			continue
 		}
 
@@ -152,6 +157,22 @@ export default {
         return a.last_activity - b.last_activity;
       });
     },
+	  settingDateFloatingTask(task) {
+		  if (this.isFloatingTask(task)) {
+			  const start = this.$moment(task.additionalInfo.start_date, 'YYYY-MM-DD').endOf('date').toDate();
+			  task.additionalInfo.start = start;
+		  }
+		  return task
+	  },
+	  getNextTask(fromDate, taskList) {
+		  return  taskList
+				  .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+				  .map(this.settingDateFloatingTask)
+				  .sort( x => new Date(x.additionalInfo.start) )[0];
+	  },
+	  isFloatingTask(task) {
+    	return !task.additionalInfo.start_time && task.additionalInfo.start_date
+	  }
   }
 };
 </script>

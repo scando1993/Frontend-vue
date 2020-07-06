@@ -143,11 +143,15 @@ export default {
         }
         //for (var j = 0; j < tasks.length; j++) {
         //const task = tasks[j];
-        const task = tasks[tasks.length -1];
+        let task = this.getNextTask(new Date(), tasks);
+        if(!task) task = { hasNextTask: false}
+        else task['hasNextTask'] = true;
 
         task.activity = {
           state: client.additionalInfo.status,
-          name: task.additionalInfo.name
+          name: task.hasNextTask ? task.additionalInfo.name : 'N/A',
+          status: task.hasNextTask ? task.additionalInfo.status : null,
+          date: task.hasNextTask ? task.additionalInfo.start : null
         };
         task['vendor'] = vendor ? vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName :  'N/A';
         task['last_activity'] = this.getLastActivityDate(client);
@@ -211,6 +215,22 @@ export default {
         addTasks: true
       });
       vendor['Clients'] = clients;
+    },
+    settingDateFloatingTask(task) {
+      if (this.isFloatingTask(task)) {
+        const start = this.$moment(task.additionalInfo.start_date, 'YYYY-MM-DD').endOf('date').toDate();
+        task.additionalInfo.start = start;
+      }
+      return task
+    },
+    getNextTask(fromDate, taskList) {
+      return  taskList
+              .filter( x => x.additionalInfo.status !== 'pending' && x.additionalInfo.status !== 'expired' && !x.additionalInfo.completed)
+              .map(this.settingDateFloatingTask)
+              .sort( x => new Date(x.additionalInfo.start) )[0];
+    },
+    isFloatingTask(task) {
+      return !task.additionalInfo.start_time && task.additionalInfo.start_date
     }
   },
 };

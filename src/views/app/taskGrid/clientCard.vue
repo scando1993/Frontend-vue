@@ -24,12 +24,17 @@
         <div class="row mb-2">
           <div class="col-12">
             <b>Proxima actividad</b>
-            <span class="client-dot-activity" :style="{'background-color': getHeaderNgVariant(task.activity.state)}"/>
+            <span v-if="task.hasNextTask" class="client-dot-activity" :style="{'background-color': getTaskColor(task.activity.status)}"/>
           </div>
         </div>
-        <div class="row mb-1">
-          <div class="col-12">
-            <p>{{task.activity.name}}</p>
+        <div class="mb-1 ml-0">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p>{{task.activity.name}}</p>
+            </div>
+            <div>
+              <p>{{formatDate(task.activity.date)}}</p>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -42,6 +47,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { calendarTasksColors } from '../calendar/data/calendarConfiguration';
 
 export default {
   name: 'clientCardWidget',
@@ -92,6 +98,9 @@ export default {
   },
   methods:{
     ...mapActions(['showClientForm', 'setFormClientId', 'hideClientForm','GET_CLIENTS_TASK', 'showClientHistoryForm']),
+    showNewTaskState() {
+      return this.task.activity.state !== 'N/A'
+    },
 
     getTaskName(tasks) {
       let name = 'N/A';
@@ -123,8 +132,14 @@ export default {
     },
 
     formatDate: function (dateToFormat) {
+      if(!dateToFormat) {
+        return  ''
+      }
+      if(dateToFormat === 'N/A') {
+       return 'N/A';
+      }
     	try {
-        return dateToFormat.toString().split(' ', 4).join(' ');
+        return this.$moment(dateToFormat).format('MMM DD,YYYY');
       }
       catch (e) {
         return 'N/A';
@@ -141,7 +156,10 @@ export default {
         'event_label': label,
         'value': value || null
       })
-    }
+    },
+    getTaskColor(state) {
+      return calendarTasksColors[state].color;
+    },
   }
 };
 </script>
