@@ -106,8 +106,7 @@ export default {
           let tmp = this.getNextTask(new Date(), tasks);
           if(!tmp) tmp = { hasNextTask: false}
           else tmp['hasNextTask'] = true;
-
-          tmp['vendor'] = list[i].vendor.additionalInfo.firstName || 'N/A';
+          tmp['vendor'] = list[i].vendor ? list[i].vendor.additionalInfo.firstName + ' ' + list[i].vendor.additionalInfo.lastName : 'N/A';
           tmp['last_activity'] = this.getLastActivityDate(client);
           tmp.activity = {
             state: list[i].additionalInfo.status,

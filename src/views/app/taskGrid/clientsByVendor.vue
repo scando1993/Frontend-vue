@@ -130,7 +130,7 @@ export default {
         const tasks = client.Tasks;
         if(tasks.length === 0) {
           const empty = {
-            vendor: vendor.additionalInfo.firstName,
+            vendor: vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName,
             last_activity: this.getLastActivityDate(client),
             client: client,
             activity: {
@@ -153,7 +153,7 @@ export default {
           status: task.hasNextTask ? task.additionalInfo.status : null,
           date: task.hasNextTask ? task.additionalInfo.start : null
         };
-        task['vendor'] = vendor.additionalInfo ? vendor.additionalInfo.firstName :  'N/A';
+        task['vendor'] = vendor ? vendor.additionalInfo.firstName + ' ' + vendor.additionalInfo.lastName :  'N/A';
         task['last_activity'] = this.getLastActivityDate(client);
         task['client'] = client;
         console.log('task', task);

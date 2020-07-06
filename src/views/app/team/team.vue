@@ -10,7 +10,7 @@
                   <img class="profile-picture mr-2" :src="getImageForUser(index + 1)" alt="">
                 </div>
                 <div class="ul-contact-page__info">
-                  <p class="m-0 text-24">{{item.additionalInfo.firstName}} {{item.additionalInfo.lastname}}</p>
+                  <p class="m-0 text-24">{{item.additionalInfo.firstName}} {{item.additionalInfo.lastName}}</p>
                   <p class="text-muted mt-3">{{item.additionalInfo.email}}</p>
                 </div>
               </div>

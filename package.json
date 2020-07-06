@@ -55,6 +55,7 @@
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.6",
     "vue-search-select": "^2.9.3",
+    "vue-simple-alert": "^1.1.1",
     "vue-simple-calendar": "^4.2.2",
     "vue-slider-component": "^3.0.33",
     "vue-spinner": "^1.0.3",

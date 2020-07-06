@@ -152,23 +152,31 @@ export default {
       return this.getSelectedComponentView === 'Tasks';
     },
     scheduleList() {
-      return this.tasksFiltered.map(x => {return x.additionalInfo.tui_data;});
-      let scheduleList = this.TASKS_LIST.map(x => {
-        let schedule = x.additionalInfo;
-        let calendarId = calendarList.find(x => x.name === schedule.status).id;
-        return {
-          id: schedule.tui_data.id,
-          calendarId: calendarId,
-          title: schedule.name,
-          category: taskCategories[schedule.category],
-          location: `${ schedule.lat }, ${ schedule.lng }`,
-          dueDateClass: '',
-          start: schedule.start,
-          end: schedule.end
+      const schedules = [];
+      const calendarTask = this.tasksFiltered.filter( x => x.additionalInfo.duration);
+      for(var i = 0; i < calendarTask.length; i ++ ) {
+        const task = calendarTask[i];
+        const taskInfo = task.additionalInfo;
+        var scheduleId = this.calendarList.find( x => x.name === taskInfo.status);
+        if(!scheduleId) {
+          console.log('calendarId not found', taskInfo);
+          continue
+        }
+        scheduleId = scheduleId.id;
+        const schedule = {
+          id: i + 1,
+          calendarId: scheduleId,
+          title: taskInfo.name,
+          category: 'time',
+          location: `${ taskInfo.lat }, ${ taskInfo.lng }`,
+          dueDateClass: task.id.id, // using this property as link
+          start: taskInfo.start,
+          end: taskInfo.end
         };
-      });
-      console.log(scheduleList);
-      return scheduleList;
+        schedules.push(schedule);
+      }
+      console.log('estos son los schedules', schedules)
+      return schedules;
     },
     tasksFiltered: function () {
       return this.filterTASKSearch(this.TASKS_LIST);
@@ -312,7 +320,8 @@ export default {
     // Create Event according to their Template
     getTimeTemplate(schedule, isAllDay) {
       const id = schedule.id;
-      const taskSelected = this.TASKS_LIST.find(x => {return x.additionalInfo.name === schedule.title; });
+      console.log('template', schedule)
+      const taskSelected = this.TASKS_LIST.find(x => x.id.id === schedule.dueDateClass);
       console.log('taskTemplate', taskSelected);
       let start = this.$moment(schedule.start.toUTCString());
 
