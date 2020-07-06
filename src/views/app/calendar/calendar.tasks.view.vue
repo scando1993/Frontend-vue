@@ -90,9 +90,9 @@ export default {
 			var value = 0;
 			if(x === 'now')
 				value = 1;
-			else if(x==="soon")
+			else if(x==="early")
 				value = 2
-			else if (x==="early")
+			else if (x==="soon")
 				value = 3
 			else if(x==="expired")
 				value = 4;
