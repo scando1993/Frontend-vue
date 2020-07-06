@@ -328,7 +328,7 @@
 
             },
             async createTask() {
-                this.newTaskForm.category = new Number(this.newTaskForm.category);
+                this.newTaskForm.category = Number(this.newTaskForm.category);
                 this.newTaskForm.reminder = this.getReminderPost();
                 this.newTaskForm.reminder_form_selection = this.get_Reminder_form_selection();
 
