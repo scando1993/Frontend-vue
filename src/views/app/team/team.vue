@@ -115,8 +115,9 @@ export default {
     },
     deleteMember() {
       console.log('deleting', this.indexMember);
-      this.TEAM.splice(this.indexMember, 1);
+      // this.TEAM.splice(this.indexMember, 1);
       const selectedMember_id = this.TEAM[this.indexMember].id.id;
+      console.log('deleting id memmber', selectedMember_id);
       this.$store.dispatch('DELETE_MEMBER', selectedMember_id)
         .then(response => {
           this.$store.dispatch('GET_TEAM');
