@@ -7,14 +7,29 @@
 <!--				:class="[ getShowClientForm ? 'col-sm-6 col-md-6 col-xl-7 col-lg-7' : '', 'col-12' ]"-->
 					<div class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
 						 v-if="!getShowHistoryForm">
-						<div class="scroll-container">
+						<b-overlay :show="!FULL_LOADED"
+								   variant="transparent"
+								   opacity="0.80"
+								   spinner-variant="danger"
+								   spinner-type="grow"
+								   rounded="sm">
 
-							<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
-							<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
-							<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
-							<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
-							<div v-else>No hay contenido</div>
-						</div>
+							<template v-slot:overlay>
+								<div class="text-center">
+									<b-icon icon="stopwatch" font-scale="3" animation="cylon"></b-icon>
+									<p id="cancel-label">Please wait...</p>
+								</div>
+							</template>
+
+							<div class="scroll-container">
+
+								<clients-by-vendor v-if="getGroupByFilter === 'vendor'"/>
+								<clients-by-task v-else-if="getGroupByFilter === 'priority'"/>
+								<clients-by-order v-else-if="getGroupByFilter === 'clients'"/>
+								<clientsInTable v-else-if="getGroupByFilter === 'table'"/>
+								<div v-else>No hay contenido</div>
+							</div>
+						</b-overlay>
 					</div>
 				<client-task-history-form class="client-content order-lg-first order-xl-first order-sm-last order-sm-last"
 										  v-else
@@ -105,8 +120,8 @@ export default {
 
 	.scroll-container{
 		max-height: 70vh;
+		height: 70vh;
 		overflow-y: scroll;
-		text-align: center;
 	}
 
 	::-webkit-scrollbar {
